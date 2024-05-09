@@ -1,0 +1,52 @@
+#calculator {
+    width: 300px; /* Adjust width as needed */
+    margin: 50px auto; /* Center the calculator on the page */
+    font-family: Arial, sans-serif; /* Change font if needed */
+    border: 1px solid #ccc; /* Add border */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius: 5px; /* Add border radius */
+}
+
+#screen {
+    width: calc(100% - 10px); /* Adjust width to accommodate padding */
+    height: 40px;
+    font-size: 20px;
+    text-align: right;
+    padding: 5px;
+    border: none;
+    border-radius: 5px; /* Add border radius */
+}
+
+#btn-a {
+    margin-top: 10px;
+}
+
+#bmath {
+    float: left;
+}
+
+#smath {
+    float: left;
+    margin-left: 20px; /* Adjust margin as needed */
+}
+
+.bmc-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border radius */
+    background-color: #f2f2f2; /* Button background color */
+}
+
+.bmc-btn.o {
+    background-color: #FF6347; /* Change operator button color */
+    color: white;
+}
+
+.bmc-btn.c {
+    background-color: #808080; /* Change clear button color */
+    color: white;
+}
