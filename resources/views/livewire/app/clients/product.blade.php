@@ -36,9 +36,9 @@
           <td>{{ $Product->status }}</td>
           <td>
             <button class="btn btn-info"
-              wire:click='edit_product_category_modal("{{ write($Product->id) }}")'>{{ _app('update') }}</button>
+              wire:click='edit_product_modal("{{ write($Product->id) }}")'>{{ _app('update') }}</button>
             <button class="btn btn-danger"
-              wire:click='delete_product_category("{{ write($Product->id) }}")'>{{ _app('Delete') }}</button>
+              wire:click='delete_product_modal("{{ write($Product->id) }}")'>{{ _app('Delete') }}</button>
           </td>
         </tr>
       @endforeach
@@ -185,7 +185,42 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('product_modal', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-primary" type="button" wire:click="create_product">{{ _app('add') }}</button>
+            @if ($is_edit)
+              <button class="btn btn-primary" type="button"
+                wire:click="update_product">{{ _app('update') }}</button>
+            @else
+              <button class="btn btn-primary" type="button"
+                wire:click="create_product">{{ _app('add') }}</button>
+            @endif
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+  @if ($product_delete_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Deletion</h5>
+            <button class="close" type="button" wire:click="$set('product_delete_modal', false)">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>{{ _app('msg_delete') }}?</p>
+            <h3 class="text-primary text-center">{{ $product->name }}</h3>
+            <input class="form-control" type="password" wire:model.live="password"
+              placeholder="Enter your password to confirm">
+            @error($password)
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="$set('product_delete_modal', false)">{{ _app('cancel') }}</button>
+            <button class="btn btn-danger" type="button"
+              wire:click="confirm_delete_product">{{ _app('delete') }}</button>
           </div>
         </div>
       </div>
