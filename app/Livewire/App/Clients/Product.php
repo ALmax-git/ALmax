@@ -25,6 +25,8 @@ class Product extends Component
     public $product_view_modal = false;
     public $product_image_modal = false;
     public $product_image_delete_modal = false;
+    public $product_variant_modal = false;
+    public $product_variant_delete_modal = false;
     public $password = '';
     public $product,
         $name,
@@ -391,6 +393,66 @@ class Product extends Component
         $this->product_delete_modal = false;
         $this->password = '';
     }
+    public function open_add_variant_modal()
+    {
+        $this->product_variant_modal = true;
+        $this->product_view_modal = false;
+    }
+    public function close_add_variant_modal()
+    {
+        $this->product_variant_modal = false;
+        $this->product_view_modal = true;
+    }
+    public function create_product_variant()
+    {
+        $validatedData = $this->validate([
+            'size'              => 'required|numeric',
+            'color'             => 'required|string|max:100',
+            'si_unit'           => 'nullable|string',
+            'weight'            => 'required|numeric|min:0',
+            'stock_price'       => 'required|numeric',
+            'sale_price'        => 'required|numeric',
+            'available_stock'   => 'required|numeric',
+        ]);
+        if ($this->sale_price <= $this->stock_price) {
+            $this->alert(
+                'info',
+                'Oops! Sale price most be greater than the stock price.',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+            return;
+        }
+        DB::beginTransaction();
+        try {
+            // Save new product variant
+            $this->product = ModelsProduct::find($this->product->id);
+            $this->product->variants()->create([
+                'size' => $this->size,
+                'color' => $this->color,
+                'si_unit' => $this->si_unit,
+                'weight' => $this->weight,
+                'stock_price' => $this->stock_price,
+                'sale_price' => $this->sale_price,
+                'available_stock' => $this->available_stock,
+                'client_id' => Auth::user()->client_id,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            DB::commit(); // Commit transaction if everything is successful
+            $this->alert('success', 'Product variant successfully added', ['position' => 'center']);
+            $this->product_variant_modal = false;
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e);
+            DB::rollback(); // Rollback transaction on failure
+            $this->alert('error', 'Failed to add product variant: ' . $e->getMessage(), ['position' => 'center']);
+        }
+    }
+
     public function render()
     {
 

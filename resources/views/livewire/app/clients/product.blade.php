@@ -265,7 +265,7 @@
 
   @if ($product_view_modal)
     <div class="modal" tabindex="-1" style="display:block;">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
             <h5 class="modal-title">{{ _app('Product') }}</h5>
@@ -297,14 +297,14 @@
             <hr>
             <div class="d-flex" style="justify-content:  space-between;">
               <p><strong>{{ _app('variant') }}</strong></p>
-              <button class="btn btn-sm btn-primary">{{ _app('add') }}</button>
+              <button class="btn btn-sm btn-primary" wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
             </div>
             <table class="table-hover table">
               <thead>
                 <tr>
-                  <th>{{ _app('size') }}</th>
+                  <th>#</th>
                   <th>{{ _app('color') }}</th>
-                  <th>{{ _app('si_unit') }}</th>
+                  <th>{{ _app('size') }}</th>
                   <th>{{ _app('weight') }}</th>
                   <th>{{ _app('stock_price') }}</th>
                   <th>{{ _app('sale_price') }}</th>
@@ -315,16 +315,21 @@
                 </tr>
               </thead>
               <tbody>
+                @php
+                  $count = 0;
+                @endphp
                 @foreach ($product->variants as $Variant)
                   <tr>
+                    <td>{{ ++$count }}</td>
+                    <td>
+                      <div style="width: 15px; height: 15px; background-color: {{ $Variant->color }};"></div>
+                    </td>
                     <td>{{ $Variant->size }}</td>
-                    <td>{{ $Variant->color }}</td>
-                    <td>{{ $Variant->si_unit }}</td>
-                    <td>{{ $Variant->weight }}</td>
+                    <td>{{ $Variant->weight }} {{ $Variant->si_unit }}</td>
                     <td>{{ $Variant->stock_price }}</td>
                     <td>{{ $Variant->sale_price }}</td>
                     <td>{{ $Variant->available_stock }}</td>
-                    <td>{{ $Variant->sold }}</td>
+                    <td>{{ $Variant->sold ?? 0 }}</td>
                     {{-- <td>{{ $Variant->status }}</td> --}}
                     {{-- <td>Action</td> --}}
                   </tr>
@@ -340,6 +345,87 @@
         </div>
       </div>
     </div>
+  @endif
+  @if ($product_variant_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('add_variant') }}</h5>
+            <button class="close" type="button" wire:click="$set('product_variant_modal', false)">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row p-3">
+              <div class="col-lg-6 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
+                <input class="form-control" type="number" wire:model.live="size"
+                  placeholder="{{ _app('size') }}">
+                @error('size')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label" for="color">{{ _app('color') }}</label>
+                <input class="form-control" type="color" wire:model.live="color"
+                  placeholder="{{ _app('color') }}">
+                @error('color')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label" for="si_unit">{{ _app('si_unit') }}</label>
+                <select class="form-control" wire:model.live="si_unit">
+                  <option value="">{{ _app('si_unit') }}</option>
+                  @foreach (system_si_unit() as $unit)
+                    <option value="{{ $unit['symbol'] }}">{{ $unit['title'] }}</option>
+                  @endforeach
+                </select>
+                @error('si_unit')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label" for="weight">{{ _app('weight') }}</label>
+                <input class="form-control" type="number" wire:model.live="weight"
+                  placeholder="{{ _app('weight') }}">
+                @error('weight')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label"
+                  for="stock_price">{{ _app('stock_price') }}</label>
+                <input class="form-control" type="number" wire:model.live="stock_price"
+                  placeholder="{{ _app('stock_price') }}">
+                @error('stock_price')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label"
+                  for="sale_price">{{ _app('sale_price') }}</label>
+                <input class="form-control" type="number" wire:model.live="sale_price"
+                  placeholder="{{ _app('sale_price') }}">
+                @error('sale_price')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="col-lg-6 mb-2"><label class="form-label"
+                  for="available_stock">{{ _app('available_stock') }}</label>
+                <input class="form-control" type="number" wire:model.live="available_stock"
+                  placeholder="{{ _app('available_stock') }}">
+                @error('available_stock')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_add_variant_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-primary" type="button"
+              wire:click="create_product_variant">{{ _app('add') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   @endif
   @if ($product_image_modal)
     <div class="modal" tabindex="-1" style="display:block;">
