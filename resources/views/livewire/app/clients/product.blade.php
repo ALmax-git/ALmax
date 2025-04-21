@@ -7,7 +7,7 @@
       <button class="btn btn-sm btn-primary" wire:click='add_product_modal'>{{ _app('add') }}</button>
     </div>
   </div>
-  <table class="mt-4 table">
+  <table class="table-hover table-bordered mt-4 table">
     <thead>
       <tr>
         <th>{{ _app('name') }}</th>
@@ -35,10 +35,12 @@
           <td>{{ $Product->sold }}</td>
           <td>{{ $Product->status }}</td>
           <td>
-            <button class="btn btn-info"
-              wire:click='edit_product_modal("{{ write($Product->id) }}")'>{{ _app('update') }}</button>
-            <button class="btn btn-danger"
-              wire:click='delete_product_modal("{{ write($Product->id) }}")'>{{ _app('Delete') }}</button>
+            <button class="btn btn-success" wire:click='view_product_modal("{{ write($Product->id) }}")'><i
+                class="bi bi-eye"></i></button>
+            <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
+                class="bi bi-pen"></i></button>
+            <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
+                class="bi bi-trash"></i></button>
           </td>
         </tr>
       @endforeach
@@ -221,6 +223,157 @@
               wire:click="$set('product_delete_modal', false)">{{ _app('cancel') }}</button>
             <button class="btn btn-danger" type="button"
               wire:click="confirm_delete_product">{{ _app('delete') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if ($product_image_delete_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Deletion</h5>
+            <button class="close" type="button" wire:click="close_delete_product_image_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h3 class="text-primary text-center">{{ $product->name }}</h3>
+            <hr>
+            <p>{{ _app('msg_delete') }}</p>
+            <img class="image" src="{{ 'storage/' . $image->path }}" alt=""
+              style="width: 70px; height: 70px;">
+            <hr>
+            <input class="form-control" type="password" wire:model.live="password"
+              placeholder="Enter your password to confirm">
+            @error($password)
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_delete_product_image_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-danger" type="button"
+              wire:click="confirm_delete_product_image">{{ _app('delete') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if ($product_view_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('Product') }}</h5>
+            <button class="close" type="button" wire:click="$set('product_view_modal', false)">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p><strong>{{ _app('Name') }}:</strong> {{ $product->name }}</p>
+            <p>{{ _app('Brand') }}:</strong> {{ $product->brand }}</p>
+            <p>{{ _app('sub_title') }}:</strong> {{ $product->sub_title }}</p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <hr style="flex: 1; margin: 0;">
+              <button class="btn btn-sm btn-outline-primary" wire:click='open_product_images_modal'><i
+                  class="bi bi-upload"></i></button>
+            </div>
+            <div class="d-flex align-items-center pointer hover-client mb-4 ms-4" style="overflow-x: scroll;">
+              @foreach ($product->images() as $image)
+                <div class="position-relative m-2">
+                  <img class="rounded-circle" src="{{ 'storage/' . $image->path }}" alt=""
+                    style="width: 70px; height: 70px;">
+                  <div class="rounded-circle position-absolute bottom-0 end-0 border-white" style="cursor: pointer;"
+                    wire:click='delete_product_image_modal("{{ write($image->id) }}")'>
+                    <i class="bi bi-trash" style="font-size: small; color: red;"></i>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+            <hr>
+            <div class="d-flex" style="justify-content:  space-between;">
+              <p><strong>{{ _app('variant') }}</strong></p>
+              <button class="btn btn-sm btn-primary">{{ _app('add') }}</button>
+            </div>
+            <table class="table-hover table">
+              <thead>
+                <tr>
+                  <th>{{ _app('size') }}</th>
+                  <th>{{ _app('color') }}</th>
+                  <th>{{ _app('si_unit') }}</th>
+                  <th>{{ _app('weight') }}</th>
+                  <th>{{ _app('stock_price') }}</th>
+                  <th>{{ _app('sale_price') }}</th>
+                  <th>{{ _app('available_stock') }}</th>
+                  <th>{{ _app('sold') }}</th>
+                  {{-- <th>{{ _app('status') }}</th> --}}
+                  {{-- <th>{{ _app('action') }}</th> --}}
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($product->variants as $Variant)
+                  <tr>
+                    <td>{{ $Variant->size }}</td>
+                    <td>{{ $Variant->color }}</td>
+                    <td>{{ $Variant->si_unit }}</td>
+                    <td>{{ $Variant->weight }}</td>
+                    <td>{{ $Variant->stock_price }}</td>
+                    <td>{{ $Variant->sale_price }}</td>
+                    <td>{{ $Variant->available_stock }}</td>
+                    <td>{{ $Variant->sold }}</td>
+                    {{-- <td>{{ $Variant->status }}</td> --}}
+                    {{-- <td>Action</td> --}}
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="$set('product_view_modal', false)">{{ _app('close') }}</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+  @if ($product_image_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('Product') }}</h5>
+            <button class="close" type="button" wire:click="close_product_images_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h1>{{ $product->name }}</h1>
+            <input class="form-control" type="file" wire:model.live="image" multiple
+              placeholder="{{ _app('Image') }}">
+            @error('image')
+              <span class="text-danger">{{ $message }}</span>
+            @enderror
+            <hr>
+            @if ($image)
+              <div class="row">
+                @foreach ($image as $Image)
+                  <img class="rounded-circle m-1" src="{{ $Image->temporaryUrl() }}" alt="Product Image Preview"
+                    style="width: 60px; height: 60px;">
+                @endforeach
+              </div>
+            @endif
+            <hr>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_product_images_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-primary" type="button"
+              wire:click='upload_product_image'>{{ _app('upload') }}</button>
           </div>
         </div>
       </div>

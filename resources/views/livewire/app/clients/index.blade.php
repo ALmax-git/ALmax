@@ -96,7 +96,7 @@
                 wire:click="toggleRegister({{ $client->id }})">
                 {{ $client->is_registered ? 'Registered' : 'Register' }}
               </button>
-              <button class="btn btn-sm btn-outline-primary" wire:click="deleteClient({{ $client->id }})"
+              <button class="btn btn-sm btn-outline-danger" wire:click="deleteClient({{ $client->id }})"
                 wire:comfirm="Are you sure?">
                 <i class="bi bi-trash"></i>
               </button>

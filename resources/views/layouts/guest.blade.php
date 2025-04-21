@@ -132,7 +132,7 @@
          text-decoration: underline;
        }
      </style>
-     <title>CBT Web</title>
+     <title>ALmax</title>
      @livewireStyles
 
    </head>

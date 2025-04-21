@@ -59,4 +59,8 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function images()
+    {
+        return File::where('label', $this->id)->where('type', 'product_image')->get();
+    }
 }

@@ -2,8 +2,8 @@
   <style>
     .form-control {
       background-color: #000 !important;
-      color: #ff0000 !important;
-      border: 1px solid #f90000 !important;
+      color: #0800ff !important;
+      border: 1px solid #0000f9 !important;
     }
   </style>
   <!-- Spinner Start -->
@@ -42,11 +42,11 @@
           <hr>
           <style>
             .hover-client {
-              border-left: 1px solid #ff0000;
+              border-left: 1px solid #4400ff;
             }
 
             .hover-client:hover {
-              border-right: 2px solid #ff0000;
+              border-right: 2px solid #0400ff;
             }
           </style>
           @foreach (Auth::user()->clients as $client)
@@ -144,7 +144,7 @@
         }
 
         .clock .container h2#seconds {
-          color: #ff0000;
+          color: #0040ff;
         }
 
         .clock .container span {

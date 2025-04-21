@@ -4,8 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\User;
+use Illuminate\Support\Facades\App as FacadesApp;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+// use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 class App extends Component
@@ -83,6 +85,42 @@ class App extends Component
     public function change_tab($tab)
     {
         $this->tab = $tab;
+    }
+
+    public function mount()
+    {
+        // Optional: Check if user is logged in
+        if (!Auth::check()) {
+            return redirect()->route('login'); // Redirect to login if not authenticated
+        }
+
+        // Optional: Check if user has a client_id (business profile)
+        if (!Auth::user()->client_id) {
+            return redirect()->route('app.business.create'); // Redirect to business creation page
+        }
+        //Set Language
+        $locale = 'en'; // Default language
+        if (Auth::user()->language) {
+            switch (Auth::user()->language) {
+                case 'English':
+                    $locale = 'en';
+                    break;
+                case 'Arabic':
+                    $locale = 'ar';
+                    break;
+                case 'French':
+                    $locale = 'fr';
+                    break;
+                case 'Spannish':
+                    $locale = 'es';
+                    break;
+
+                default:
+                    $locale = 'en';
+                    break;
+            }
+        }
+        FacadesApp::setLocale($locale);
     }
 
     /**

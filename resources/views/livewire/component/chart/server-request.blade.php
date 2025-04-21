@@ -28,8 +28,8 @@
         label: "Requests per Minute",
         fill: true,
         lineTension: 0.3,
-        borderColor: "rgba(235, 22, 22, .7)",
-        backgroundColor: "rgba(235, 22, 22, .3)",
+        borderColor: "rgba(22, 22, 235, .7)",
+        backgroundColor: "rgba(22, 22, 235, .3)",
         data: []
       }]
     },

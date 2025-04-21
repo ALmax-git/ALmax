@@ -22,6 +22,9 @@ class Product extends Component
     public $product_modal = false;
     public $is_edit = false;
     public $product_delete_modal = false;
+    public $product_view_modal = false;
+    public $product_image_modal = false;
+    public $product_image_delete_modal = false;
     public $password = '';
     public $product,
         $name,
@@ -40,6 +43,33 @@ class Product extends Component
         $status,
         $sold,
         $image;
+    public function view_product_modal($id)
+    {
+        $this->product = ModelsProduct::find(read($id));
+        $this->product_view_modal = true;
+    }
+    public function delete_product_image_modal($id)
+    {
+        $this->product_image_delete_modal = true;
+        $this->product_view_modal = false;
+        $this->image = File::find(read($id));
+    }
+    public function close_delete_product_image_modal()
+    {
+        $this->product_image_delete_modal = false;
+        $this->product_view_modal = true;
+    }
+    public function open_product_images_modal()
+    {
+        $this->image = null;
+        $this->product_image_modal = true;
+        $this->product_view_modal = false;
+    }
+    public function close_product_images_modal()
+    {
+        $this->product_image_modal = false;
+        $this->product_view_modal = true;
+    }
     public function create_product()
     {
         $validatedData = $this->validate([
@@ -258,6 +288,42 @@ class Product extends Component
             $this->alert('error', 'Failed to update product' . $e->getMessage(), ['position' => 'center']);
         }
     }
+    public function upload_product_image()
+    {
+        $this->validate([
+            'image.*' => 'required|image|max:6024', // max size 1MB
+        ]);
+        DB::beginTransaction();
+        try {
+            // Save product images
+            foreach ($this->image as $file) {
+                $file_name = $file->store('products', 'public');
+
+                File::create([
+                    'label' => $this->product->id,
+                    'path' => $file_name,
+                    'description' => 'Product Image: ' . $this->product->name,
+                    'visibility' => 'public',
+                    'info' => 'Product Image: ' . $this->product->name,
+                    'mimes' => Storage::mimeType($file_name),
+                    'type' => 'product_image',
+                    'user_id' => Auth::user()->id,
+                    'client_id' => Auth::user()->client_id,
+                ]);
+            }
+            DB::commit();  // Commit transaction if everything is successful
+            $this->alert('success', 'Product image successfully uploaded', ['position' => 'center']);
+            $this->product_image_modal = false;
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e);
+            DB::rollback();  // Rollback transaction on failure
+            $this->alert('error', 'Failed to upload product image' . $e->getMessage(), ['position' => 'center']);
+        }
+        $this->product = ModelsProduct::find($this->product->id);
+        $this->product_view_modal = true;
+        $this->product_image_modal = false;
+        $this->product_image_delete_modal = false;
+    }
     public function delete_product_modal($id)
     {
         $this->product_delete_modal = true;
@@ -279,6 +345,26 @@ class Product extends Component
         }
 
         $this->product_delete_modal = false;
+        $this->password = '';
+    }
+    public function confirm_delete_product_image()
+    {
+        $this->validate([
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Check if the entered password is correct
+        if (Hash::check($this->password, auth()->user()->password)) {
+            $this->image->delete();
+            $this->alert('success', 'Product Image deleted successfully!');
+        } else {
+            $this->alert('error', 'Incorrect password. Please try again.');
+            return;
+        }
+
+        $this->product_image_delete_modal = false;
+        $this->product = ModelsProduct::find($this->product->id);
+        $this->product_view_modal = true;
         $this->password = '';
     }
     public function reset_input_fields()

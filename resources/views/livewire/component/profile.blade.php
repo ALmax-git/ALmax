@@ -1,5 +1,5 @@
 <div class="h-75 m-3 w-full bg-black"
-  style="border-left: 2px solid #f40202; overflow-x: scroll; height: 65vh !important; padding: 15px; border-right: 2px solid #f40202;">
+  style="border-left: 2px solid #1602f4; overflow-x: scroll; height: 65vh !important; padding: 15px; border-right: 2px solid #1602f4;">
   <div class="cards flex flex-wrap">
     <div class="row">
 
