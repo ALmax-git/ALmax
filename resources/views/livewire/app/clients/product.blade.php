@@ -204,7 +204,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="$set('product_delete_modal', false)">
               <span>&times;</span>
             </button>
@@ -234,7 +234,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="close_delete_product_image_modal">
               <span>&times;</span>
             </button>
@@ -311,7 +311,7 @@
                   <th>{{ _app('available_stock') }}</th>
                   <th>{{ _app('sold') }}</th>
                   {{-- <th>{{ _app('status') }}</th> --}}
-                  {{-- <th>{{ _app('action') }}</th> --}}
+                  <th>{{ _app('action') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -331,7 +331,14 @@
                     <td>{{ $Variant->available_stock }}</td>
                     <td>{{ $Variant->sold ?? 0 }}</td>
                     {{-- <td>{{ $Variant->status }}</td> --}}
-                    {{-- <td>Action</td> --}}
+                    <td>
+                      <button class="btn btn-info btn-sm"
+                        wire:click="edit_variant_modal('{{ write($Variant->id) }}')"><i
+                          class="bi bi-pencil"></i></button>
+                      <button class="btn btn-danger btn-sm"
+                        wire:click="delete_product_variant_modal('{{ write($Variant->id) }}')"><i
+                          class="bi bi-trash"></i></button>
+                    </td>
                   </tr>
                 @endforeach
               </tbody>
@@ -351,7 +358,12 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">{{ _app('add_variant') }}</h5>
+            @if ($is_edit)
+              <h5 class="modal-title">{{ _app('edit_product_variant') }}</h5>
+              <h4 class="text-center">{{ $product->name }}</h4>
+            @else
+              <h5 class="modal-title">{{ _app('add_product_variant') }}</h5>
+            @endif
             <button class="close" type="button" wire:click="$set('product_variant_modal', false)">
               <span>&times;</span>
             </button>
@@ -419,13 +431,48 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="close_add_variant_modal">{{ _app('cancel') }}</button>
-            <button class="btn btn-primary" type="button"
-              wire:click="create_product_variant">{{ _app('add') }}</button>
+            @if ($is_edit)
+              <button class="btn btn-primary" type="button"
+                wire:click="update_product_variant">{{ _app('update') }}</button>
+            @else
+              <button class="btn btn-primary" type="button"
+                wire:click="create_product_variant">{{ _app('add') }}</button>
+            @endif
+
           </div>
         </div>
       </div>
     </div>
 
+  @endif
+  @if ($product_variant_delete_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
+            <button class="close" type="button" wire:click="close_delete_product_variant_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>{{ _app('msg_delete') }}?</p>
+            <h3 class="text-primary text-center">{{ $product->name }}</h3>
+            <input class="form-control" type="password" wire:model.live="password"
+              placeholder="Enter your password to confirm">
+            @error($password)
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_delete_product_variant_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-danger" type="button"
+              wire:click="confirm_delete_product_variant">{{ _app('delete') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
   @endif
   @if ($product_image_modal)
     <div class="modal" tabindex="-1" style="display:block;">

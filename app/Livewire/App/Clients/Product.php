@@ -5,6 +5,7 @@ namespace App\Livewire\App\Clients;
 use App\Models\File;
 use App\Models\Product as ModelsProduct;
 use App\Models\ProductCategory;
+use App\Models\ProductVariant;
 use BaconQrCode\Common\Mode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,8 @@ class Product extends Component
         $status,
         $sold,
         $image;
+    public $product_variant;
+
     public function view_product_modal($id)
     {
         $this->product = ModelsProduct::find(read($id));
@@ -397,6 +400,8 @@ class Product extends Component
     {
         $this->product_variant_modal = true;
         $this->product_view_modal = false;
+        $this->reset_input_fields();
+        $this->product_variant = null;
     }
     public function close_add_variant_modal()
     {
@@ -451,6 +456,118 @@ class Product extends Component
             DB::rollback(); // Rollback transaction on failure
             $this->alert('error', 'Failed to add product variant: ' . $e->getMessage(), ['position' => 'center']);
         }
+    }
+    public function edit_variant_modal($id)
+    {
+        $this->product_variant = ProductVariant::find(read($id));
+        $this->product_variant_modal = true;
+        $this->product_view_modal = false;
+        $this->size = $this->product_variant->size;
+        $this->color = $this->product_variant->color;
+        $this->si_unit = $this->product_variant->si_unit;
+        $this->weight = $this->product_variant->weight;
+        $this->stock_price = $this->product_variant->stock_price;
+        $this->sale_price = $this->product_variant->sale_price;
+        $this->available_stock = $this->product_variant->available_stock;
+        $this->status = $this->product_variant->status;
+        // $this->sold = $this->product_variant->sold;
+        $this->is_edit = true;
+    }
+    public function update_product_variant()
+    {
+        $validatedData = $this->validate([
+            'size'              => 'required|numeric',
+            'color'             => 'required|string|max:100',
+            'si_unit'           => 'nullable|string',
+            'weight'            => 'required|numeric|min:0',
+            'stock_price'       => 'required|numeric',
+            'sale_price'        => 'required|numeric',
+            'available_stock'   => 'required|numeric',
+        ]);
+        if ($this->sale_price <= $this->stock_price) {
+            $this->alert(
+                'info',
+                'Oops! Sale price most be greater than the stock price.',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+            return;
+        }
+        DB::beginTransaction();
+        try {
+            // Save new product variant
+            $this->product_variant = ProductVariant::find($this->product_variant->id);
+            $this->product_variant->update([
+                // Update only the fields that are changed
+                // You can add more fields as needed
+                // If you want to update all fields, you can use $validatedData directly
+                // but make sure to remove the image field from the validation rules above
+                // or handle it separately.
+                // Example:
+                // $this->product_variant->update($validatedData);
+                // Or:
+                // $this->product_variant->update($this->product_variant);
+                // But here we are updating only the necessary fields for simplicity.
+                // You can also use fill() method if you want to update multiple fields at once.
+                // $this->product_variant->fill($validatedData)->save();
+                // Or:
+                // $this->product_variant->fill($this->product_variant)->save();
+                // But here we are updating
+                // only the necessary fields for simplicity.
+                // $this->product_variant = ModelsProduct::find($this->product_variant->id);
+                'size' => $this->size,
+                'color' => $this->color,
+                'si_unit' => $this->si_unit,
+                'weight' => $this->weight,
+                'stock_price' => $this->stock_price,
+                'sale_price' => $this->sale_price,
+                'available_stock' => $this->available_stock,
+                'status' => $this->status,
+                'sold' => $this->sold,
+            ]);
+            DB::commit(); // Commit transaction if everything is successful
+            $this->alert('success', 'Product variant successfully updated', ['position' => 'center']);
+            $this->product_variant_modal = false;
+            $this->product_view_modal = true;
+            $this->is_edit = false;
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e);
+            DB::rollback(); // Rollback transaction on failure
+            $this->alert('error', 'Failed to update product variant: ' . $e->getMessage(), ['position' => 'center']);
+        }
+    }
+    public function delete_product_variant_modal($id)
+    {
+        $this->product_variant_delete_modal = true;
+        $this->product_variant = ProductVariant::find(read($id));
+    }
+    public function confirm_delete_product_variant()
+    {
+        $this->validate([
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Check if the entered password is correct
+        if (Hash::check($this->password, auth()->user()->password)) {
+            ProductVariant::destroy($this->product_variant->id);
+            $this->alert('success', 'Product variant deleted successfully!');
+        } else {
+            $this->alert('error', 'Incorrect password. Please try again.');
+            return;
+        }
+
+        $this->product_variant_delete_modal = false;
+        $this->product_variant = null;
+        $this->password = '';
+    }
+    public function close_delete_product_variant_modal()
+    {
+        $this->product_variant_delete_modal = false;
+        $this->product_view_modal = true;
     }
 
     public function render()
