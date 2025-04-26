@@ -89,10 +89,17 @@ class User extends Authenticatable
 
     public function clients()
     {
-        return $this->belongsToMany(Client::class, 'user_clients');
+        return $this->belongsToMany(Client::class, 'user_clients')
+            ->where(function ($query) {
+                $query->where('status', 'verified')
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->where('status', '!=', 'terminated')
+                            ->where('user_clients.user_id', auth()->id());
+                    });
+            });
     }
     public function files()
     {
-        $this->hasMany(File::class);
+        return $this->hasMany(File::class);
     }
 }

@@ -19,4 +19,12 @@ class ProductCategory extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    /**
+     * Relationship with the Addon model (a productcategory has many addons).
+     */
+    public function addons()
+    {
+        return $this->hasMany(Addon::class);
+    }
 }

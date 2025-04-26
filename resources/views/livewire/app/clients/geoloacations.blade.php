@@ -79,6 +79,7 @@
       <table class="mt-4 table">
         <thead>
           <tr>
+            <th>#</th>
             <th>{{ _app('State') }}</th>
             <th>{{ _app('City') }}</th>
             <th>{{ _app('status') }}</th>
@@ -87,17 +88,22 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($states as $State)
+          @foreach ($states as $key => $current_state)
+            {{-- @dd($states, $key, $current_state) --}}
             <tr>
-              <td>{{ $State->name }}</td>
-              <td>{{ $State->cities->count() }}</td>
-              <td>{{ $State->status }}</td>
-              <td>{{ $State->country->name }}</td>
+              <td> {{ $key + 1 }} </td>
+              <td>{{ $current_state->name }}</td>
+              <td>{{ $current_state->cities->count() }}</td>
+              <td>{{ $current_state->status }}</td>
+              <td>{{ $current_state->country->name }}</td>
               <td>
-                <button class="btn btn-info"
-                  wire:click='edit_state("{{ write($State->id) }}")'>{{ _app('update') }}</button>
+                @php
+                  $current_state_id = $current_state->id;
+                @endphp
                 <button class="btn btn-danger"
-                  wire:click='delete_state("{{ write($State->id) }}")'>{{ _app('Delete') }}</button>
+                  wire:click='delete_state("{{ write($current_state_id) }}")'>{{ _app('Delete') }}</button>
+                <button class="btn btn-info"
+                  wire:click='edit_state("{{ write($current_state_id) }}")'>{{ _app('update') }}</button>
               </td>
             </tr>
           @endforeach
@@ -201,7 +207,8 @@
           </div>
           <div class="modal-body">
             <p>{{ _app('msg_delete') }}?</p>
-            <h3 class="text-primary text-center">{{ $state->name }}</h3>
+            {{-- @dd($this->state); --}}
+            <h3 class="text-primary text-center">{{ $this->state->name }}</h3>
             <input class="form-control" type="password" wire:model.live="password"
               placeholder="Enter your password to confirm">
             @error($password)

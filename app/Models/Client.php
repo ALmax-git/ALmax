@@ -38,7 +38,7 @@ class Client extends Model
     {
         if ($this->logo) {
             // $logos = is_array($this->logo) ? $this->logo : json_decode($this->logo, true);
-            return $this->logo; # asset($logos[0] ?? 'default.png');
+            return 'storage/' . $this->logo ?? 'default.png';
         }
 
         $file = File::where('type', 'business_logo')->where('client_id', $this->id)->first();
@@ -75,5 +75,9 @@ class Client extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    public function available_products()
+    {
+        return $this->hasMany(Product::class)->where('available_stock', '>=', 1);
     }
 }

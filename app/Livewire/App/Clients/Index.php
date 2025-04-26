@@ -24,6 +24,7 @@ class Index extends Component
     public $client = null;
     public $modal = false;
     public $password; #, $tab;
+    public $view_business_card = false;
 
     public function toggleVerify($id)
     {
@@ -38,7 +39,15 @@ class Index extends Component
         $client->is_registered = !$client->is_registered;
         $client->save();
     }
-
+    public function open_view_business_card($id): void
+    {
+        $this->client = Client::findOrFail(read($id));
+        $this->view_business_card = true;
+    }
+    public function close_view_business_card(): void
+    {
+        $this->view_business_card = false;
+    }
     public function deleteClient($id)
     {
         $this->client = Client::findOrFail($id);

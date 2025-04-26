@@ -25,7 +25,7 @@
       <div class="d-flex align-items-center pointer mb-4 ms-4" wire:click='toggle_profile_model'>
         <div class="position-relative">
           <img class="rounded-circle" src="{{ Auth::user()->client->logo() }}" alt=""
-            style="width: 40px; height: 40px;">
+            style="width: 40px; height: 40px;" loading="lazy">
           <div class="bg-success rounded-circle position-absolute bottom-0 end-0 border border-2 border-white p-1"
             wire:offline.class="bg-danger">
           </div>
@@ -54,7 +54,7 @@
               wire:click='switch_profiles("{{ write($client->id) }}")'>
               <div class="position-relative">
                 <img class="rounded-circle" src="{{ $client->logo() }}" alt=""
-                  style="width: 40px; height: 40px;">
+                  style="width: 40px; height: 40px;" loading="lazy">
                 <div class="bg-success rounded-circle position-absolute bottom-0 end-0 border border-2 border-white p-1"
                   wire:offline.class="bg-danger">
                 </div>
@@ -73,19 +73,24 @@
       @endif
       <div class="navbar-nav w-100">
         <hr>
+
+        {{-- General --}}
         <a class="nav-item nav-link {{ $tab == 'Dashboard' ? 'active' : '' }}" href="{{ route('app') }}"
           wire:click='change_tab("Dashboard")'>
           <i class="fa bi-bar-chart me-2"></i>{{ _app('Dashboard') }}
         </a>
-        @if (Auth::user()->id === 1)
-          <span class="nav-item nav-link {{ $tab == 'System' ? 'active' : '' }}" wire:click='change_tab("System")'>
-            <i class="fa fa-gears me-2"></i>{{ _app('System') }}
-          </span>
-        @endif
 
         <span class="nav-item nav-link {{ $tab == 'Profile' ? 'active' : '' }}" wire:click='change_tab("Profile")'>
           <i class="fa fa-user me-2"></i>{{ _app('Profile') }}
         </span>
+
+        {{-- Business Tools --}}
+        @if (Auth::user()->id == Auth::user()->client->user_id)
+          <span class="nav-item nav-link {{ $tab == 'Business' ? 'active' : '' }}" wire:click='change_tab("Business")'>
+            <i class="fa bi-briefcase me-2"></i>{{ _app('Business') }}
+          </span>
+        @endif
+
         <span class="nav-item nav-link {{ $tab == 'Product' ? 'active' : '' }}" wire:click='change_tab("Product")'>
           <i class="fa bi-boxes me-2"></i>{{ _app('Product') }}
         </span>
@@ -94,10 +99,45 @@
           <i class="fa bi-list-check me-2"></i>{{ _app('Todo') }}
         </span>
 
-        <span class="nav-item nav-link" href="#" wire:click='closeApp'>
+        {{-- Market and Social --}}
+        <span class="nav-item nav-link {{ $tab == 'Market' ? 'active' : '' }}" wire:click='change_tab("Market")'>
+          <i class="fa bi-shop me-2"></i>{{ _app('Market') }}
+        </span>
+
+        <span class="nav-item nav-link {{ $tab == 'Cart' ? 'active' : '' }}" wire:click='change_tab("Cart")'>
+          <i class="fa bi-cart me-2"></i>{{ _app('Cart') }}
+        </span>
+
+        <span class="nav-item nav-link {{ $tab == 'Community' ? 'active' : '' }}" wire:click='change_tab("Community")'>
+          <i class="fa bi-people-fill me-2"></i>{{ _app('Community') }}
+        </span>
+
+        {{-- Finance --}}
+        <span class="nav-item nav-link {{ $tab == 'Wallet' ? 'active' : '' }}" wire:click='change_tab("Wallet")'>
+          <i class="fa bi-wallet2 me-2"></i>{{ _app('Wallet') }}
+        </span>
+
+        {{-- Admin & System --}}
+        @if (Auth::user()->id === 1)
+          <span class="nav-item nav-link {{ $tab == 'System' ? 'active' : '' }}" wire:click='change_tab("System")'>
+            <i class="fa fa-gears me-2"></i>{{ _app('System') }}
+          </span>
+        @endif
+
+        <span class="nav-item nav-link {{ $tab == 'Settings' ? 'active' : '' }}" wire:click='change_tab("Settings")'>
+          <i class="fa bi-gear me-2"></i>{{ _app('Settings') }}
+        </span>
+
+        <span class="nav-item nav-link {{ $tab == 'Support' ? 'active' : '' }}" wire:click='change_tab("Support")'>
+          <i class="fa bi-headset me-2"></i>{{ _app('Support') }}
+        </span>
+
+        {{-- Exit --}}
+        <span class="nav-item nav-link" wire:click='closeApp'>
           <i class="fa fa-power-off me-2"></i>{{ _app('Exit') }}
         </span>
       </div>
+
     </nav>
   </div>
   <!-- Sidebar End -->
@@ -203,20 +243,20 @@
 
       <div class="navbar-nav align-items-center ms-auto">
         {{-- --}}
-        @livewire('component.switch-language')
-        <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-            <img class="rounded-circle me-lg-2"
-              src="{{ Auth::user()->profile_photo_path ? 'storage/' . Auth::user()->profile_photo_path : 'default.png' }}"
-              alt="" style="width: 40px; height: 40px;">
-            <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end bg-secondary rounded-0 rounded-bottom m-0 border-0">
-            <a class="dropdown-item" href="#" wire:click='change_tab("Profile")'>{{ _app('Profile') }}</a>
-            {{-- <a class="dropdown-item" href="#">Settings</a> --}}
-            <a class="dropdown-item" href="#" wire:click='logout'>{{ _app('logout') }}</a>
+        <livewire:component.switch-language wire:lazy>
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+              <img class="rounded-circle me-lg-2"
+                src="{{ Auth::user()->profile_photo_path ? 'storage/' . Auth::user()->profile_photo_path : 'default.png' }}"
+                alt="" style="width: 40px; height: 40px;">
+              <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end bg-secondary rounded-0 rounded-bottom m-0 border-0">
+              <a class="dropdown-item" href="#" wire:click='change_tab("Profile")'>{{ _app('Profile') }}</a>
+              {{-- <a class="dropdown-item" href="#">Settings</a> --}}
+              <a class="dropdown-item" href="#" wire:click='logout'>{{ _app('logout') }}</a>
+            </div>
           </div>
-        </div>
       </div>
     </nav>
     <!-- Navbar End -->
@@ -244,9 +284,13 @@
         @livewire('app.control')
       @break
 
+      @case('Business')
+        @livewire('app.client')
+      @break
+
       @default
         <!-- Sale & Revenue Start -->
-        <div class="container-fluid px-4 pt-4">
+        <div class="container-fluid px-4 pt-4" wire:lazy>
           <div class="row g-4">
             <div class="col-sm-6 col-xl-3">
               <div class="bg-secondary d-flex align-items-center justify-content-between rounded p-4">

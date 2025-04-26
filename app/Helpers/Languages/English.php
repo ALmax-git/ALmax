@@ -3,7 +3,7 @@
 return [
     'dashboard'              => 'Dashboard',
     'system'                 => 'System',
-    'profile'                => 'Profile',
+    'profi  le'                => 'Profile',
     'todo'                   => 'Todo',
     'exit'                   => 'Exit',
     'product'                => 'Product',

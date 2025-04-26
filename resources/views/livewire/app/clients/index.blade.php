@@ -64,6 +64,27 @@
       @default
     @endswitch
   @else
+    @if ($view_business_card)
+      <div class="modal" tabindex="-1" style="display:block;">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+          <div class="modal-content bg-secondary">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ _app('business_card') }}</h5>
+              <button class="close" type="button" wire:click="close_view_business_card">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <livewire:component.card.client :client="$client" loading="lazy" />
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button"
+                wire:click="close_view_business_card">{{ _app('cancel') }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
     <div class="row">
       @forelse ($clients as $client)
         <div class="col-md-4 mb-4">
@@ -96,6 +117,9 @@
                 wire:click="toggleRegister({{ $client->id }})">
                 {{ $client->is_registered ? 'Registered' : 'Register' }}
               </button>
+              <button class="btn btn-sm btn-outline-info"
+                wire:click='open_view_business_card("{{ write($client->id) }}")'>
+                {{ _app('view') }} </button>
               <button class="btn btn-sm btn-outline-danger" wire:click="deleteClient({{ $client->id }})"
                 wire:comfirm="Are you sure?">
                 <i class="bi bi-trash"></i>

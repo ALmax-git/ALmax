@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
 
             // Variant-specific attributes
+            $table->string('label')->nullable(); // e.g. "Large", "Blue"
             $table->string('size')->nullable();
             $table->string('color')->nullable();
             $table->string('si_unit')->nullable();

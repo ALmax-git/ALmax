@@ -98,30 +98,35 @@
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <textarea class="form-control"style="height: 150px;" wire:model.live='description'
-        placeholder="Tell us More about you business"></textarea>
+      <textarea class="form-control" wire:model.live='description' placeholder="Tell us More about you business"></textarea>
       <label for="description">{{ _app('Description') }}</label>
       @error('description')
         <small class="text-danger">{{ $message }}</small>
       @enderror
     </div>
-    <hr>
-    @if ($logo)
-      <img class="rounded-circle center" src="{{ $logo->temporaryUrl() }}" alt=""
-        style="width: 60px; height: 60px;">
-    @endif
+    @if (!$is_editing)
+      <hr>
+      @if ($logo)
+        <img class="rounded-circle center" src="{{ $logo->temporaryUrl() }}" alt=""
+          style="width: 60px; height: 60px;">
+      @endif
 
-    <label class="btn btn-primary mb-4 me-2" for="logo" tabindex="0">
-      <span class="d-none d-sm-block">{{ _app('upload_logo') }}</span>
-      <i class="bx bx-upload d-block d-sm-none"></i>
-      <input class="account-file-input" id="logo" type="file" wire:model="logo" hidden
-        accept="image/png, image/jpeg" />
-    </label>
-    @error('logo')
-      <small class="text-danger">{{ $message }}</small>
-    @enderror
+      <label class="btn btn-primary mb-4 me-2" for="logo" tabindex="0">
+        <span class="d-none d-sm-block">{{ _app('upload_logo') }}</span>
+        <i class="bx bx-upload d-block d-sm-none"></i>
+        <input class="account-file-input" id="logo" type="file" wire:model="logo" hidden
+          accept="image/png, image/jpeg" />
+      </label>
+      @error('logo')
+        <small class="text-danger">{{ $message }}</small>
+      @enderror
+    @endif
     <hr>
-    <button class="btn btn-primary" type="submit" wire:click='submit'>{{ _app('Create') }}</button>
-    <button class="btn btn-primary" type="reset" wire:click='cancel'>{{ _app('Cancel') }}</button>
+    @if ($is_editing)
+      <button class="btn btn-primary" type="submit" wire:click='update'>{{ _app('Update') }}</button>
+    @else
+      <button class="btn btn-primary" type="submit" wire:click='submit'>{{ _app('Create') }}</button>
+      <button class="btn btn-primary" type="reset" wire:click='cancel'>{{ _app('Cancel') }}</button>
+    @endif
   </div>
 </div>

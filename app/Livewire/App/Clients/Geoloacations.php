@@ -212,7 +212,7 @@ class Geoloacations extends Component
 
     public function delete_state($id)
     {
-        $this->state = State::find(read($id));
+        $this->state = State::where('id', read($id))->first();
         $this->deleteId = $this->state->id;
         $this->state_delete_modal = true;
         $this->password = '';
@@ -252,7 +252,7 @@ class Geoloacations extends Component
             ->paginate(5);
 
         $states = State::query()
-            ->where('country_id', $this->selectedCountry)
+            ->where('country_id', $this->selectedCountry ?? 1)
             ->orderBy('name')
             ->paginate(5);
 

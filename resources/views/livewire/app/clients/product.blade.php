@@ -1,51 +1,54 @@
 <div class="container-fluid pt-4" style="min-height: 80vh;">
-  <div class="h-100 bg-secondary rounded p-4">
+  <div class="h-100 bg-secondary p-3">
     <h2>{{ _app('Product') }}</h2>
-    <div class="d-flex mb-4">
+    <div class="d-flex">
       <input class="form-control me-2" type="text" wire:model.live="search" placeholder="{{ _app('search') }}">
 
       <button class="btn btn-sm btn-primary" wire:click='add_product_modal'>{{ _app('add') }}</button>
     </div>
   </div>
-  <table class="table-hover table-bordered mt-4 table">
-    <thead>
-      <tr>
-        <th>{{ _app('name') }}</th>
-        <th>{{ _app('brand') }}</th>
-        <th>{{ _app('category') }}</th>
-        <th>{{ _app('stock_price') }}</th>
-        <th>{{ _app('sale_price') }}</th>
-        <th>{{ _app('discount') }}</th>
-        <th>{{ _app('available_stock') }}</th>
-        <th>{{ _app('sold') }}</th>
-        <th>{{ _app('status') }}</th>
-        <th>{{ _app('action') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach ($products as $Product)
+  <div class="table-responsive bg-secondary">
+
+    <table class="table-hover table bg-black">
+      <thead class="table-black">
         <tr>
-          <td>{{ $Product->name }}</td>
-          <td>{{ $Product->brand }}</td>
-          <td>{{ $Product->category->title }}</td>
-          <td>{{ $Product->stock_price }}</td>
-          <td>{{ $Product->sale_price }}</td>
-          <td>{{ $Product->discount }}</td>
-          <td>{{ $Product->available_stock }}</td>
-          <td>{{ $Product->sold }}</td>
-          <td>{{ $Product->status }}</td>
-          <td>
-            <button class="btn btn-success" wire:click='view_product_modal("{{ write($Product->id) }}")'><i
-                class="bi bi-eye"></i></button>
-            <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
-                class="bi bi-pen"></i></button>
-            <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
-                class="bi bi-trash"></i></button>
-          </td>
+          <th>{{ _app('name') }}</th>
+          <th>{{ _app('brand') }}</th>
+          <th>{{ _app('category') }}</th>
+          <th>{{ _app('stock_price') }}</th>
+          <th>{{ _app('sale_price') }}</th>
+          <th>{{ _app('discount') }}</th>
+          <th>{{ _app('available_stock') }}</th>
+          <th>{{ _app('sold') }}</th>
+          <th>{{ _app('status') }}</th>
+          <th>{{ _app('action') }}</th>
         </tr>
-      @endforeach
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @foreach ($products as $Product)
+          <tr>
+            <td>{{ $Product->name }}</td>
+            <td>{{ $Product->brand }}</td>
+            <td>{{ $Product->category->title }}</td>
+            <td>{{ $Product->stock_price }}</td>
+            <td>{{ $Product->sale_price }}</td>
+            <td>{{ $Product->discount }}</td>
+            <td>{{ $Product->available_stock }}</td>
+            <td>{{ $Product->sold }}</td>
+            <td>{{ $Product->status }}</td>
+            <td>
+              <button class="btn btn-success" wire:click='view_product_modal("{{ write($Product->id) }}")'><i
+                  class="bi bi-eye"></i></button>
+              <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
+                  class="bi bi-pen"></i></button>
+              <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
+                  class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
   @if ($product_modal)
     <div class="modal" tabindex="-1" style="display:block;">
       <div class="modal-dialog">
@@ -265,7 +268,7 @@
 
   @if ($product_view_modal)
     <div class="modal" tabindex="-1" style="display:block;">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
             <h5 class="modal-title">{{ _app('Product') }}</h5>
@@ -299,59 +302,116 @@
               <p><strong>{{ _app('variant') }}</strong></p>
               <button class="btn btn-sm btn-primary" wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
             </div>
-            <table class="table-hover table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{{ _app('color') }}</th>
-                  <th>{{ _app('size') }}</th>
-                  <th>{{ _app('weight') }}</th>
-                  <th>{{ _app('stock_price') }}</th>
-                  <th>{{ _app('sale_price') }}</th>
-                  <th>{{ _app('available_stock') }}</th>
-                  <th>{{ _app('sold') }}</th>
-                  {{-- <th>{{ _app('status') }}</th> --}}
-                  <th>{{ _app('action') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @php
-                  $count = 0;
-                @endphp
-                @foreach ($product->variants as $Variant)
-                  <tr>
-                    <td>{{ ++$count }}</td>
-                    <td>
-                      <div style="width: 15px; height: 15px; background-color: {{ $Variant->color }};"></div>
-                    </td>
-                    <td>{{ $Variant->size }}</td>
-                    <td>{{ $Variant->weight }} {{ $Variant->si_unit }}</td>
-                    <td>{{ $Variant->stock_price }}</td>
-                    <td>{{ $Variant->sale_price }}</td>
-                    <td>{{ $Variant->available_stock }}</td>
-                    <td>{{ $Variant->sold ?? 0 }}</td>
-                    {{-- <td>{{ $Variant->status }}</td> --}}
-                    <td>
-                      <button class="btn btn-info btn-sm"
-                        wire:click="edit_variant_modal('{{ write($Variant->id) }}')"><i
-                          class="bi bi-pencil"></i></button>
-                      <button class="btn btn-danger btn-sm"
-                        wire:click="delete_product_variant_modal('{{ write($Variant->id) }}')"><i
-                          class="bi bi-trash"></i></button>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button"
-              wire:click="$set('product_view_modal', false)">{{ _app('close') }}</button>
+            <div class="table-responsive">
 
+              <table class="table-hover table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ _app('label') }}</th>
+                    <th>{{ _app('color') }}</th>
+                    <th>{{ _app('size') }}</th>
+                    <th>{{ _app('weight') }}</th>
+                    <th>{{ _app('stock_price') }}</th>
+                    <th>{{ _app('sale_price') }}</th>
+                    <th>{{ _app('available_stock') }}</th>
+                    <th>{{ _app('sold') }}</th>
+                    {{-- <th>{{ _app('status') }}</th> --}}
+                    <th>{{ _app('action') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @php
+                    $count = 0;
+                  @endphp
+                  @foreach ($product->variants as $Variant)
+                    <tr>
+                      <td>{{ ++$count }}</td>
+                      <td>{{ $Variant->label }}</td>
+                      <td>
+                        <div style="width: 15px; height: 15px; background-color: {{ $Variant->color }};"></div>
+                      </td>
+                      <td>{{ $Variant->size }}</td>
+                      <td>{{ $Variant->weight }} {{ $Variant->si_unit }}</td>
+                      <td>{{ $Variant->stock_price }}</td>
+                      <td>{{ $Variant->sale_price }}</td>
+                      <td>{{ $Variant->available_stock }}</td>
+                      <td>{{ $Variant->sold ?? 0 }}</td>
+                      {{-- <td>{{ $Variant->status }}</td> --}}
+                      <td>
+                        <button class="btn btn-info btn-sm"
+                          wire:click="edit_variant_modal('{{ write($Variant->id) }}')"><i
+                            class="bi bi-pencil"></i></button>
+                        <button class="btn btn-danger btn-sm"
+                          wire:click="delete_product_variant_modal('{{ write($Variant->id) }}')"><i
+                            class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <div class="d-flex" style="justify-content:  space-between;">
+              <p><strong>{{ _app('Addons') }}</strong></p>
+              <button class="btn btn-sm btn-primary" wire:click='open_add_addons_modal'>{{ _app('add') }}</button>
+            </div>
+            <div class="table-responsive">
+
+              <table class="table-hover table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ _app('label') }}</th>
+                    <th>{{ _app('name') }}</th>
+                    <th>{{ _app('brand') }}</th>
+                    <th>{{ _app('Required') }}</th>
+                    <th>{{ _app('Available') }}</th>
+                    <th>{{ _app('Sale_price') }}</th>
+                    <th>{{ _app('stock_price') }}</th>
+
+                    <th>{{ _app('action') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @php
+                    $count = 0;
+                  @endphp
+                  @foreach ($product->addons as $Addon)
+                    <tr>
+                      <td>{{ ++$count }}</td>
+                      <td>{{ $Addon->label }}</td>
+                      <td>{{ $Addon->addonProduct->name }}</td>
+                      <td>{{ $Addon->addonProduct->brand }}</td>
+                      <td> <span
+                          class="badge bg-{{ $Addon->required ? 'primary' : 'warning' }}">{{ $Addon->required ? 'Yes' : 'No' }}
+                        </span></td>
+                      <td>{{ $Addon->addonProduct->available_stock }}</td>
+                      <td>{{ $Addon->addonProduct->sale_price }}</td>
+                      <td>{{ $Addon->addonProduct->stock_price }}</td>
+                      <td>
+                        <button class="btn btn-info btn-sm"
+                          wire:click="edit_product_addons_modal('{{ write($Addon->id) }}')"><i
+                            class="bi bi-pencil"></i></button>
+                        <button class="btn btn-danger btn-sm"
+                          wire:click="delete_product_addons_modal('{{ write($Addon->id) }}')"><i
+                            class="bi bi-trash"></i></button>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+              <div class="table-responsive">
+
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button"
+                  wire:click="$set('product_view_modal', false)">{{ _app('close') }}</button>
+
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
   @endif
   @if ($product_variant_modal)
     <div class="modal" tabindex="-1" style="display:block;">
@@ -364,12 +424,19 @@
             @else
               <h5 class="modal-title">{{ _app('add_product_variant') }}</h5>
             @endif
-            <button class="close" type="button" wire:click="$set('product_variant_modal', false)">
+            <button class="close" type="button" wire:click="close_add_variant_modal">
               <span>&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div class="row p-3">
+              <div class="col-lg-12 mb-2"><label class="form-label" for="label">{{ _app('label') }}</label>
+                <input class="form-control" type="text" wire:model.live="label"
+                  placeholder="{{ _app('label') }}">
+                @error('label')
+                  <span class="text-danger">{{ $message }}</span>
+                @enderror
+              </div>
               <div class="col-lg-6 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
                 <input class="form-control" type="number" wire:model.live="size"
                   placeholder="{{ _app('size') }}">
@@ -469,6 +536,94 @@
               wire:click="close_delete_product_variant_modal">{{ _app('cancel') }}</button>
             <button class="btn btn-danger" type="button"
               wire:click="confirm_delete_product_variant">{{ _app('delete') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+  @if ($product_addons_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('add_product_addons') }}</h5>
+            <button class="close" type="button" wire:click="close_add_product_addons_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>{{ _app('add_addons') }}?</p>
+            <h4 class="text-primary">{{ $product->name }}</h4>
+
+            <div class="col-lg-12 mb-2"><label class="form-label" for="label">{{ _app('label') }}</label>
+              <input class="form-control" type="text" wire:model.live="label"
+                placeholder="{{ _app('label') }}">
+              @error('label')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-lg-12 mb-2"><label class="form-label"
+                for="addon_product_id">{{ _app('Addons') }}</label>
+              <select class="form-control" wire:model.live="addon_product_id">
+                <option value="">{{ _app('choose') }}</option>
+                @foreach ($products as $Product)
+                  @if ($Product->id !== $product->id)
+                    <option value="{{ $Product->id }}">{{ $Product->name }} <strong>-</strong>
+                      {{ $Product->brand }}</option>
+                  @endif
+                @endforeach
+              </select>
+              @error('addon_product_id')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+            <div class="col-lg-12 mb-2">
+              <label class="form-label" for="required">{{ _app('required') }}</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" id="required" type="checkbox" wire:model.live="required">
+                <label class="form-check-label" for="required">{{ _app('yes') }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_add_product_addons_modal">{{ _app('cancel') }}</button>
+            @if ($is_edit)
+              <button class="btn btn-primary" type="button"
+                wire:click="update_product_addons">{{ _app('update') }}</button>
+            @else
+              <button class="btn btn-primary" type="button"
+                wire:click="create_product_addons">{{ _app('add') }}</button>
+            @endif
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+  @if ($product_addons_delete_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
+            <button class="close" type="button" wire:click="close_delete_product_addons_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>{{ _app('msg_delete') }}?</p>
+            <h3 class="text-primary text-center">{{ $product->name }} <strong>-</strong> {{ $addon->label }} </h3>
+            <input class="form-control" type="password" wire:model.live="password"
+              placeholder="Enter your password to confirm">
+            @error($password)
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_delete_product_addons_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-danger" type="button"
+              wire:click="confirm_delete_product_addons">{{ _app('delete') }}</button>
           </div>
         </div>
       </div>

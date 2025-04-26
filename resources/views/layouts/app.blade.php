@@ -61,7 +61,7 @@
         <link href="{{ asset('build/assets/css/font-awesome.css') }}" rel="stylesheet">
         <link href="{{ asset('node_modules/bootstrap-icons/font/bootstrap-icons.min.css') }}" rel="stylesheet">
         <link href="{{ asset('build/assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
-        {{-- <link href="{{ asset('build/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet"> --}}
+        <link href="{{ asset('build/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet">
 
         <!-- App Styles -->
         <link href="{{ asset('build/assets/css/style.css') }}" rel="stylesheet">

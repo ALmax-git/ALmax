@@ -63,4 +63,30 @@ class Product extends Model
     {
         return File::where('label', $this->id)->where('type', 'product_image')->get();
     }
+    // Addons where this product is the base
+    public function addons()
+    {
+        return $this->hasMany(Addon::class, 'base_product_id');
+    }
+
+    // Addons where this product is used AS an addon
+    public function usedAsAddon()
+    {
+        return $this->hasMany(Addon::class, 'addon_product_id');
+    }
+    // Get the total number of sold products
+    public function getTotalSoldAttribute()
+    {
+        return $this->sold + $this->variants()->sum('sold');
+    }
+    // Get the total number of available products
+    public function getTotalAvailableAttribute()
+    {
+        return $this->available_stock + $this->variants()->sum('available_stock');
+    }
+    // Get the total number of products
+    public function getTotalProductsAttribute()
+    {
+        return $this->total_available + $this->total_sold;
+    }
 }

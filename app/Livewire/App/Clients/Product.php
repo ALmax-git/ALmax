@@ -2,6 +2,7 @@
 
 namespace App\Livewire\App\Clients;
 
+use App\Models\Addon;
 use App\Models\File;
 use App\Models\Product as ModelsProduct;
 use App\Models\ProductCategory;
@@ -28,6 +29,8 @@ class Product extends Component
     public $product_image_delete_modal = false;
     public $product_variant_modal = false;
     public $product_variant_delete_modal = false;
+    public $product_addons_modal = false;
+    public $product_addons_delete_modal = false;
     public $password = '';
     public $product,
         $name,
@@ -45,8 +48,15 @@ class Product extends Component
         $weight,
         $status,
         $sold,
-        $image;
+        $image,
+        $addon_product_id,
+        $base_product_id,
+        $required,
+        $addon,
+        $label;
+
     public $product_variant;
+    // public $
 
     public function view_product_modal($id)
     {
@@ -390,11 +400,12 @@ class Product extends Component
         $this->status = '';
         $this->sold = '';
         $this->image = '';
-        $this->product = '';
+        // $this->product = '';
         $this->product_modal = false;
         $this->is_edit = false;
         $this->product_delete_modal = false;
         $this->password = '';
+        $this->label = '';
     }
     public function open_add_variant_modal()
     {
@@ -437,6 +448,7 @@ class Product extends Component
             // Save new product variant
             $this->product = ModelsProduct::find($this->product->id);
             $this->product->variants()->create([
+                'label' => $this->label,
                 'size' => $this->size,
                 'color' => $this->color,
                 'si_unit' => $this->si_unit,
@@ -462,6 +474,7 @@ class Product extends Component
         $this->product_variant = ProductVariant::find(read($id));
         $this->product_variant_modal = true;
         $this->product_view_modal = false;
+        $this->label = $this->product_variant->label;
         $this->size = $this->product_variant->size;
         $this->color = $this->product_variant->color;
         $this->si_unit = $this->product_variant->si_unit;
@@ -519,6 +532,7 @@ class Product extends Component
                 // But here we are updating
                 // only the necessary fields for simplicity.
                 // $this->product_variant = ModelsProduct::find($this->product_variant->id);
+                'label' => $this->label,
                 'size' => $this->size,
                 'color' => $this->color,
                 'si_unit' => $this->si_unit,
@@ -543,6 +557,7 @@ class Product extends Component
     public function delete_product_variant_modal($id)
     {
         $this->product_variant_delete_modal = true;
+        $this->product_view_modal = false;
         $this->product_variant = ProductVariant::find(read($id));
     }
     public function confirm_delete_product_variant()
@@ -561,6 +576,7 @@ class Product extends Component
         }
 
         $this->product_variant_delete_modal = false;
+        $this->product_view_modal = true;
         $this->product_variant = null;
         $this->password = '';
     }
@@ -569,17 +585,185 @@ class Product extends Component
         $this->product_variant_delete_modal = false;
         $this->product_view_modal = true;
     }
+    public function open_add_addons_modal()
+    {
+        $this->product_addons_modal = true;
+        $this->product_view_modal = false;
+        $this->reset_input_fields();
+    }
+    public function close_add_product_addons_modal()
+    {
+        $this->product_addons_modal = false;
+        $this->product_view_modal = true;
+    }
+    public function create_product_addons()
+    {
+        $validatedData = $this->validate([
+            'addon_product_id' => 'required|integer|exists:products,id',
+            'label' => 'required|string|max:100',
+            'required' => 'nullable|boolean',
+        ]);
+        DB::beginTransaction();
+        if ($this->product->addons()->where('addon_product_id', $this->addon_product_id)->exists()) {
+            $this->alert(
+                'info',
+                'Oops! This addon already exists for the product.',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+            return;
+        }
+        if ($this->product->addons()->where('label', $this->label)->exists()) {
+            $this->alert(
+                'info',
+                'Oops! An addon with the same label already exists for this product.',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+            return;
+        }
+        try {
+            // Save new product
+            $this->product = ModelsProduct::find($this->product->id);
+            $this->product->addons()->create([
+                'addon_product_id' => $this->addon_product_id,
+                'base_product_id' => $this->product->id,
+                'category_id' => $this->product->category_id,
+                'required' => $this->required,
+                'label' => $this->label,
+            ]);
 
+            DB::commit();  // Commit transaction if everything is successful
+
+            $this->alert('success', 'Product successfully added', ['position' => 'center']);
+
+            $this->product_addons_modal = false;
+            $this->product_view_modal = true;
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e);
+            DB::rollback();  // Rollback transaction on failure
+            $this->alert('error', 'Failed to add product' . $e->getMessage(), ['position' => 'center']);
+        }
+    }
+    public function delete_product_addons_modal($id)
+    {
+        $this->product_addons_delete_modal = true;
+        $this->product_view_modal = false;
+        $this->addon = Addon::find(read($id));
+    }
+    public function confirm_delete_product_addons()
+    {
+        $this->validate([
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Check if the entered password is correct
+        if (Hash::check($this->password, auth()->user()->password)) {
+            Addon::destroy($this->addon->id);
+            $this->alert('success', 'Product addon deleted successfully!');
+        } else {
+            $this->alert('error', 'Incorrect password. Please try again.');
+            return;
+        }
+
+        $this->product_addons_delete_modal = false;
+        $this->product_view_modal = true;
+        $this->product_variant = null;
+        $this->password = '';
+    }
+    public function close_delete_product_addons_modal()
+    {
+        $this->product_addons_delete_modal = false;
+        $this->product_view_modal = true;
+    }
+    public function edit_product_addons_modal($id)
+    {
+        $this->product_addons_modal = true;
+        $this->product_view_modal = false;
+        $this->addon = Addon::find(read($id));
+        $this->addon_product_id = $this->addon->addon_product_id;
+        $this->base_product_id = $this->addon->base_product_id;
+        $this->label = $this->addon->label;
+        $this->required = $this->addon->required;
+        $this->is_edit = true;
+    }
+    public function update_product_addons()
+    {
+        $validatedData = $this->validate([
+            'addon_product_id' => 'required|integer|exists:products,id',
+            'label' => 'required|string|max:100',
+            'required' => 'nullable|boolean',
+        ]);
+        // if ($this->product->addons()->where('addon_product_id', $this->addon_product_id)->exists() ) {
+        //     $this->alert(
+        //         'info',
+        //         'Oops! This addon already exists for the product.',
+        //         [
+        //             'position' => 'center',
+        //             'toast' => 1,
+        //             'showConfirmButton' => true,
+        //             'timer' => null
+        //         ]
+        //     );
+        //     return;
+        // }
+        if ($this->product->addons()->where('label', $this->label)->exists() && $this->addon->label != $this->label) {
+            $this->alert(
+                'info',
+                'Oops! An addon with the same label already exists for this product.',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+            return;
+        }
+        DB::beginTransaction();
+        try {
+            // Save new product
+            $this->addon = Addon::find($this->addon->id);
+            $this->addon->update([
+                'addon_product_id' => $this->addon_product_id,
+                'base_product_id' => $this->product->id,
+                'category_id' => $this->product->category_id,
+                'required' => $this->required,
+                'label' => $this->label,
+            ]);
+
+            DB::commit();  // Commit transaction if everything is successful
+
+            $this->alert('success', 'Product successfully updated', ['position' => 'center']);
+
+            $this->product_addons_modal = false;
+            $this->product_view_modal = true;
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e);
+            DB::rollback();  // Rollback transaction on failure
+            $this->alert('error', 'Failed to add product' . $e->getMessage(), ['position' => 'center']);
+        }
+    }
     public function render()
     {
-
         $products = ModelsProduct::query()
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('brand', 'like', '%' . $this->search . '%')
-            ->orWhere('sub_title', 'like', '%' . $this->search . '%')
+            ->where('client_id', Auth::user()->client_id)
+            ->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('brand', 'like', '%' . $this->search . '%')
+                    ->orWhere('sub_title', 'like', '%' . $this->search . '%');
+            })
             ->orderBy('name')
             ->paginate(5);
-        $categories = ProductCategory::orderBy('title')->get();
+        $categories = ProductCategory::where('status', 'active')->orderBy('title')->get();
         return view('livewire.app.clients.product', compact('products', 'categories'));
     }
 }

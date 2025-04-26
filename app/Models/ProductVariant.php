@@ -9,6 +9,7 @@ class ProductVariant extends Model
     // Define fillable fields
     protected $fillable = [
         'product_id',
+        'label',
         'size',
         'color',
         'si_unit',

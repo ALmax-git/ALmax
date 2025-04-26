@@ -36,65 +36,66 @@
         </button>
       </div>
     @endif
+    <div class="table-responsive">
 
-    <table class="table-striped table-hover table-sm table">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th style="width: 10vw;">{{ _app('title') }}</th>
-          <th style="width: 35vw;">{{ _app('description') }}</th>
-          <th>{{ _app('due_date') }}</th>
-          <th>{{ _app('Priority') }}</th>
-          <th>{{ _app('Status') }}</th>
-          <th style="text-align: right;">{{ _app('Actions') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse ($tasks as $index => $task)
+      <table class="table-striped table-hover table-sm table">
+        <thead class="table-dark">
           <tr>
-            <td>
-              {{ $loop->iteration }}
-            </td>
-            <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
-              {{ $task->title }}
-            </td>
-            <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
-              {{ $task->description }}
-            </td>
-            <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
-              {{ $task->due_date }}
-            </td>
-            <td>
-              <span
-                class="badge {{ $task->priority === 'high' ? 'bg-danger' : ($task->priority === 'medium' ? 'bg-warning' : 'bg-success') }}">
-                {{ _app(ucfirst($task->priority)) }}
-              </span>
-            </td>
-            <td>
-              <span class="badge {{ $task->status === 'completed' ? 'bg-success' : 'bg-secondary' }}">
-                {{ _app($task->status) }}
-              </span>
-            </td>
-            <td style="text-align: right;">
-              <input class="form-check-input btn btn-outline-primary m-1" type="checkbox"
-                style="width: 12px; height: 12px;" wire:click="toggleStatus({{ $task->id }})"
-                {{ $task->status === 'completed' ? 'checked' : '' }}>
-              <button class="btn btn-sm btn-outline-primary" wire:click="editTask({{ $task->id }})">
-                <i class="bi bi-pen"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" wire:click="deleteTask({{ $task->id }})">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
+            <th>#</th>
+            <th style="width: 10vw;">{{ _app('title') }}</th>
+            <th style="width: 35vw;">{{ _app('description') }}</th>
+            <th>{{ _app('due_date') }}</th>
+            <th>{{ _app('Priority') }}</th>
+            <th>{{ _app('Status') }}</th>
+            <th style="text-align: right;">{{ _app('Actions') }}</th>
           </tr>
-        @empty
-          <tr>
-            <td class="text-muted text-center" colspan="7">No tasks found.</td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
-
+        </thead>
+        <tbody>
+          @forelse ($tasks as $index => $task)
+            <tr>
+              <td>
+                {{ $loop->iteration }}
+              </td>
+              <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
+                {{ $task->title }}
+              </td>
+              <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
+                {{ $task->description }}
+              </td>
+              <td class="{{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
+                {{ $task->due_date }}
+              </td>
+              <td>
+                <span
+                  class="badge {{ $task->priority === 'high' ? 'bg-danger' : ($task->priority === 'medium' ? 'bg-warning' : 'bg-success') }}">
+                  {{ _app(ucfirst($task->priority)) }}
+                </span>
+              </td>
+              <td>
+                <span class="badge {{ $task->status === 'completed' ? 'bg-success' : 'bg-secondary' }}">
+                  {{ _app($task->status) }}
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <input class="form-check-input btn btn-outline-primary m-1" type="checkbox"
+                  style="width: 12px; height: 12px;" wire:click="toggleStatus({{ $task->id }})"
+                  {{ $task->status === 'completed' ? 'checked' : '' }}>
+                <button class="btn btn-sm btn-outline-primary" wire:click="editTask({{ $task->id }})">
+                  <i class="bi bi-pen"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" wire:click="deleteTask({{ $task->id }})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td class="text-muted text-center" colspan="7">No tasks found.</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
     <div class="mt-3">
       {{-- {{ $tasks->links() }} --}}
     </div>
