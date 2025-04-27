@@ -4,6 +4,7 @@ namespace App\Livewire\App\Clients;
 
 use App\Models\Addon;
 use App\Models\File;
+use App\Models\Label;
 use App\Models\Product as ModelsProduct;
 use App\Models\ProductCategory;
 use App\Models\ProductVariant;
@@ -13,9 +14,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
+// use Endroid\QrCode\Label\Label as ;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\ValidationException;
 
 class Product extends Component
 {
@@ -31,6 +43,7 @@ class Product extends Component
     public $product_variant_delete_modal = false;
     public $product_addons_modal = false;
     public $product_addons_delete_modal = false;
+    public $label_model = false;
     public $password = '';
     public $product,
         $name,
@@ -57,6 +70,7 @@ class Product extends Component
 
     public $product_variant;
     // public $
+    public $qrCodes = [];
 
     public function view_product_modal($id)
     {
@@ -99,7 +113,7 @@ class Product extends Component
             'available_stock'   => 'required|numeric',
             'color'             => 'required',
             'image.*'           => 'required|image|max:6024', // max size 1MB
-            'size'              => 'required|numeric', // max size 10MB
+            'size'              => 'required|string', // max size 10MB
             'si_unit'           => 'nullable|string',
             'weight'            => 'required|numeric|min:0',
         ]);
@@ -222,7 +236,7 @@ class Product extends Component
             'available_stock'   => 'required|numeric',
             'color'             => 'required',
             // 'image.*'           => 'nullable|image|max:6024', // max size 1MB
-            'size'              => 'required|numeric', // max size 10MB
+            'size'              => 'required|string', // max size 10MB
             'si_unit'           => 'nullable|string',
             'weight'            => 'required|numeric|min:0',
         ]);
@@ -422,7 +436,7 @@ class Product extends Component
     public function create_product_variant()
     {
         $validatedData = $this->validate([
-            'size'              => 'required|numeric',
+            'size'              => 'required|string',
             'color'             => 'required|string|max:100',
             'si_unit'           => 'nullable|string',
             'weight'            => 'required|numeric|min:0',
@@ -489,7 +503,7 @@ class Product extends Component
     public function update_product_variant()
     {
         $validatedData = $this->validate([
-            'size'              => 'required|numeric',
+            'size'              => 'required|string',
             'color'             => 'required|string|max:100',
             'si_unit'           => 'nullable|string',
             'weight'            => 'required|numeric|min:0',
@@ -751,6 +765,125 @@ class Product extends Component
             DB::rollback();  // Rollback transaction on failure
             $this->alert('error', 'Failed to add product' . $e->getMessage(), ['position' => 'center']);
         }
+    }
+    public function sync_all()
+    {
+        // Get all products
+        $products = ModelsProduct::with(['variants', 'labels'])->get();
+
+        foreach ($products as $product) {
+            // 1. Sync Product Labels
+            $this->syncProductLabels($product);
+
+            // 2. Sync Variant Labels
+            foreach ($product->variants as $variant) {
+                $this->syncVariantLabels($variant, $product);
+            }
+        }
+
+        $this->alert('success', 'Labels synchronized successfully!', ['position' => 'center']);
+    }
+    protected function syncProductLabels($product)
+    {
+        $expectedLabelsCount = $product->available_stock; // Or any logic to determine how many labels you expect
+
+        // Check how many labels exist for this product without variant
+        $existingLabels = Label::where('product_id', $product->id)
+            ->whereNull('variant_id')
+            ->get();
+
+        $missing = $expectedLabelsCount - $existingLabels->count();
+
+        // If missing, generate
+        if ($missing > 0) {
+            app('App\Services\LabelService')->bulkCreateLabels($product->id, null, $missing, $product->status);
+        }
+
+        if ($existingLabels->count() > $expectedLabelsCount) {
+            $existingLabels = $existingLabels->slice($expectedLabelsCount);
+            foreach ($existingLabels as $label) {
+                $label->delete();
+            }
+        }
+
+        // Sync status for all labels
+        foreach ($existingLabels as $label) {
+
+            $label->update([
+                'status' => $product->status,
+            ]);
+        }
+    }
+    protected function syncVariantLabels($variant, $product)
+    {
+        $expectedLabelsCount = $variant->available_stock; // Or any logic to determine how many labels you expect
+
+        $existingLabels = Label::where('product_id', $product->id)
+            ->where('variant_id', $variant->id)
+            ->get();
+
+        $missing = $expectedLabelsCount - $existingLabels->count();
+
+        if ($missing > 0) {
+            app('App\Services\LabelService')->bulkCreateLabels($product->id, $variant->id, $missing, $product->status);
+        }
+        if ($existingLabels->count() > $expectedLabelsCount) {
+            $existingLabels = $existingLabels->slice($expectedLabelsCount);
+            foreach ($existingLabels as $label) {
+                $label->delete();
+            }
+        }
+        // Sync status for all labels
+        foreach ($existingLabels as $label) {
+            $label->update([
+                'status' => $product->status,
+            ]);
+        }
+    }
+
+    public function open_label_model($product_id, $variant_id = null)
+    {
+        // $this->product_view_modal = false;
+        $this->label_model = true;
+        $this->product = ModelsProduct::find($product_id);
+        foreach ($this->product->labels as $label) {
+            $this->qrCodes[$label->id] = $this->generateQr($label->qr_key);
+        }
+        if ($variant_id) {
+            $this->product_variant = ProductVariant::find($variant_id);
+        } else {
+            $this->product_variant = null;
+        }
+    }
+    public function close_label_modal()
+    {
+        $this->label_model = false;
+        // $this->product_view_modal = true;
+        $this->product_variant = null;
+    }
+
+    public function generateQr($text)
+    {
+        $writer = new PngWriter();
+
+        // Create QR code
+        $qrCode = new QrCode($text);
+        // $qrCode->setSize(200);
+        // $qrCode->setMargin(5);
+        // $qrCode->setEncoding(new Encoding('UTF-8'));
+        // $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevel('L'));
+        // $qrCode->setRoundBlockSizeMode(new RoundBlockSizeMode('PHP_ROUND_HALF_UP'));
+
+        // Create generic logo
+        // $logo = new Logo('../assets/symfony.png');
+        // $logo->setResizeToWidth(50);
+
+        // Create generic label
+        // $label = new Label('Scan the code', new Font('../assets/noto_sans.otf', 16));
+
+        $result = $writer->write($qrCode);
+
+        return $result->getDataUri();
     }
     public function render()
     {

@@ -284,6 +284,10 @@
         @livewire('app.control')
       @break
 
+      @case('Market')
+        @livewire('app.market')
+      @break
+
       @case('Business')
         @livewire('app.client')
       @break

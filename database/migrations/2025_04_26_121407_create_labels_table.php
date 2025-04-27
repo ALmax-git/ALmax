@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('labels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('variant_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('variant_id')->nullable()->constrained('product_variants')->nullOnDelete();
             $table->string('qr_key')->unique(); // example: "ALmax-9fk34fj9f"
             $table->string('serial_number')->nullable(); // Optional SN tracking
-            $table->enum('status', ['active', 'inactive', 'sold', 'reserved'])->default('active');
+            $table->enum('status', ['verified', 'new', 'inactive', 'out_of_stock', 'discontinued', 'archived'])->default('new');
             $table->timestamps();
         });
     }

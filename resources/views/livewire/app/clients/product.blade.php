@@ -4,7 +4,10 @@
     <div class="d-flex">
       <input class="form-control me-2" type="text" wire:model.live="search" placeholder="{{ _app('search') }}">
 
-      <button class="btn btn-sm btn-primary" wire:click='add_product_modal'>{{ _app('add') }}</button>
+      <button class="btn btn-sm btn-primary me-2" wire:click='add_product_modal'>{{ _app('add') }}</button>
+      <button class="btn btn-sm btn-outline-info me-2" wire:click='sync_all' wire:loading.attr="disabled">
+        <i class="fa fa-refresh fa-spin" style="cursor: pointer;" wire:loading.class="text-dark"></i>
+      </button>
     </div>
   </div>
   <div class="table-responsive bg-secondary">
@@ -41,6 +44,8 @@
                   class="bi bi-eye"></i></button>
               <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
                   class="bi bi-pen"></i></button>
+              <button class="btn btn-outline-light" wire:click='open_label_model("{{ $Product->id }}")'><i
+                  class="bi bi-qr-code fa2x"></i></button>
               <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
                   class="bi bi-trash"></i></button>
             </td>
@@ -135,7 +140,7 @@
                 @enderror
               </div>
               <div class="col-lg-4 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
-                <input class="form-control" type="number" wire:model.live="size"
+                <input class="form-control" type="text" wire:model.live="size"
                   placeholder="{{ _app('size') }}">
                 @error('size')
                   <span class="text-danger">{{ $message }}</span>
@@ -266,7 +271,7 @@
     </div>
   @endif
 
-  @if ($product_view_modal)
+  @if ($product_view_modal && !$label_model)
     <div class="modal" tabindex="-1" style="display:block;">
       <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content bg-secondary">
@@ -284,6 +289,9 @@
               <hr style="flex: 1; margin: 0;">
               <button class="btn btn-sm btn-outline-primary" wire:click='open_product_images_modal'><i
                   class="bi bi-upload"></i></button>
+              <button class="btn btn-sm btn-outline-light"
+                wire:click='open_label_model("{{ $product->id }}", {{ null }})'><i
+                  class="bi bi-qr-code fa2x"></i></button>
             </div>
             <div class="d-flex align-items-center pointer hover-client mb-4 ms-4" style="overflow-x: scroll;">
               @foreach ($product->images() as $image)
@@ -300,7 +308,8 @@
             <hr>
             <div class="d-flex" style="justify-content:  space-between;">
               <p><strong>{{ _app('variant') }}</strong></p>
-              <button class="btn btn-sm btn-primary" wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
+              <button class="btn btn-sm btn-primary"
+                wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
             </div>
             <div class="table-responsive">
 
@@ -413,6 +422,86 @@
           </div>
         </div>
   @endif
+  @if ($label_model)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ _app('Product') }}</h5>
+            <button class="close" type="button" wire:click="close_label_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <style>
+              .label-card {
+                width: 300px;
+                /* Adjust as needed */
+                border: 1px solid #343a40;
+                /* Dark border to blend with background */
+                border-radius: 8px;
+              }
+
+              .store-logo {
+                max-width: 50px;
+                /* Adjust logo size */
+                height: auto;
+              }
+
+              .store-name {
+                font-size: 1.1rem;
+              }
+
+              .product-name {
+                font-size: 1.3rem;
+                letter-spacing: 0.5px;
+                color: #000000 !important;
+              }
+
+              .price {
+                font-size: 1.2rem;
+              }
+
+              .qr-code {
+                max-width: 60px;
+                /* Adjust QR code size */
+                height: auto;
+              }
+            </style>
+            <h1>{{ $product->name }}</h1>
+            <div class="d-flex flex-wrap gap-4" style="justify-content: center;">
+              @foreach ($product->labels as $label)
+                <div class="card text-dark label-card bg-white">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center mb-2">
+                      <img class="store-logo rounded-circle me-3" src="{{ Auth::user()->client->logo() }}"
+                        alt="Store Logo">
+                      <h6 class="card-title store-name text-info mb-0">{{ Auth::user()->client->name }}</h6>
+                    </div>
+                    <h5 class="card-subtitle product-name fw-bold mb-2">{{ $product->name }}
+                    </h5>
+                    @if ($label->variant)
+                      <span class="badge" style=" background-color: {{ $label->variant->color }};">
+                        {{ $label->variant->size }}</span>
+                    @endif # {{ $loop->iteration }}
+                    <div class="d-flex justify-content-between align-items-center">
+                      <p class="card-text price text-success">{{ Auth::user()->client->country->currency }}
+                        {{ $product->sale_price }}</p>
+                      <img class="qr-code" src="{{ $qrCodes[$label->id] }}" alt="QR Code">
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_label_modal">{{ _app('close') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
   @if ($product_variant_modal)
     <div class="modal" tabindex="-1" style="display:block;">
       <div class="modal-dialog">
@@ -438,7 +527,7 @@
                 @enderror
               </div>
               <div class="col-lg-6 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
-                <input class="form-control" type="number" wire:model.live="size"
+                <input class="form-control" type="text" wire:model.live="size"
                   placeholder="{{ _app('size') }}">
                 @error('size')
                   <span class="text-danger">{{ $message }}</span>

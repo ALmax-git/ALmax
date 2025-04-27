@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "endroid/qr-code": "^6.0",
         "flutterwavedev/flutterwave-v3": "^1.0",
         "jantinnerezo/livewire-alert": "^3.0",
         "laravel/framework": "^12.0",

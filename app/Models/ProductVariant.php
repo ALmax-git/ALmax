@@ -27,4 +27,11 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    /**
+     * Relationship with the Label model (a variant can have many labels).
+     */
+    public function labels()
+    {
+        return $this->hasMany(Label::class);
+    }
 }

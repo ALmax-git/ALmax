@@ -84,6 +84,9 @@
     @auth
       @if (Auth::user())
         <!-- Charts & Plugins -->
+        {{-- <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script> --}}
+        {{-- <link href="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js" rel="preload"
+          as="script"> --}}
         <script src="{{ asset('node_modules/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
         <x-livewire-alert::scripts />
         <script src="{{ asset('build/assets/js/jquery.min.js') }}"></script>
