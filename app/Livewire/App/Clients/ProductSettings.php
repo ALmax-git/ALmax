@@ -7,10 +7,11 @@ use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\WithPagination;
 
 class ProductSettings extends Component
 {
-    use LivewireAlert;
+    use LivewireAlert, WithPagination;
     public $search = '';
     public $product_category_modal = false, $product_category_delete_modal = false;
     public $product_category,
@@ -26,7 +27,7 @@ class ProductSettings extends Component
 
         // Check if the entered password is correct
         if (Hash::check($this->password, auth()->user()->password)) {
-            ProductCategory::destroy($this->product_category->id);
+            ProductCategory::find($this->product_category->id)->update(['status' => 'discontinued']);
             $this->alert('success', 'Product Category deleted successfully!');
         } else {
             $this->alert('error', 'Incorrect password. Please try again.');
@@ -60,7 +61,7 @@ class ProductSettings extends Component
         $this->product_category->title = $this->title;
         $this->product_category->status = $this->status;
         $this->product_category->save();
-        $this->alert('success', 'product created Successfully');
+        $this->alert('success', 'Product Category updated Successfully');
         $this->product_category_modal = false;
         $this->is_edit = false;
     }
@@ -74,7 +75,7 @@ class ProductSettings extends Component
         $this->product_category->title = $this->title;
         $this->product_category->status = $this->status;
         $this->product_category->save();
-        $this->alert('success', 'product created Successfully');
+        $this->alert('success', 'Product Category created Successfully');
         $this->product_category_modal = false;
         $this->is_edit = false;
     }
@@ -86,7 +87,7 @@ class ProductSettings extends Component
             ->paginate(5);
         $categories = ProductCategory::where('title', 'like', '%' . $this->search . '%')
             ->orderBy('title')
-            ->get();
+            ->paginate(5);
         return view('livewire.app.clients.product-settings', compact('products', 'categories'));
     }
 }

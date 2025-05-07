@@ -9,8 +9,7 @@
     <!-- Primary Meta Tags -->
     <title>ALmax - Empowering Digital Business</title>
     <meta name="title" content="ALmax - Empowering Digital Business">
-    <meta name="description"
-      content="ALmax is a dynamic digital ecosystem for businesses, individuals, and organizations—offering powerful tools for management, payment, logistics, HR, marketing, and innovation.">
+    <meta name="description" content="{{ _app('almax_desc') }}">
     <meta name="keywords"
       content="ALmax, Business Software, HRM, ERP, Digital Marketplace, Payments, Logistics, Web3, Innovation, Business Management, Client Empowerment">
     <meta name="author" content="ALmax Team">
@@ -61,9 +60,15 @@
         <link href="{{ asset('build/assets/css/font-awesome.css') }}" rel="stylesheet">
         <link href="{{ asset('node_modules/bootstrap-icons/font/bootstrap-icons.min.css') }}" rel="stylesheet">
         <link href="{{ asset('build/assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('build/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('build/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}"
+          rel="stylesheet">
 
         <!-- App Styles -->
+        {{-- <link href="{{ asset('build/assets/modules/summernote/summernote-bs4.css') }}" rel="stylesheet">
+        <link href="{{ asset('build/assets/modules/chocolat/dist/css/chocolat.css') }}" rel="stylesheet"> --}}
+        {{-- <link href="{{ asset('build/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}"
+          rel="stylesheet"> --}}
+        {{-- <link href="{{ asset('build/assets/css/components.css') }}" rel="stylesheet"> --}}
         <link href="{{ asset('build/assets/css/style.css') }}" rel="stylesheet">
       @else
         <link href="{{ asset('build/assets/css/app.css') }}" rel="stylesheet">
@@ -99,7 +104,14 @@
         <script src="{{ asset('build/assets/lib/tempusdominus/js/moment-timezone.min.js') }}"></script>
         <script src="{{ asset('build/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 
+        <script src="{{ asset('build/assets/js/stisla.js') }}"></script>
         <!-- Main Script -->
+        {{-- <script src="{{ asset('build/assets/modules/datatables/datatables.min.js') }}"></script>
+        <script src="{{ asset('build/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"> --}}
+        </script>
+        {{-- <script src="{{ asset('build/assets/modules/summernote/summernote-bs4.js') }}"></script>
+        <script src="{{ asset('build/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script> --}}
+        {{-- <script src="{{ asset('build/assets/js/page/modules-datatables.js') }}"></script> --}}
         <script src="{{ asset('build/assets/js/main.js') }}"></script>
       @endif
     @endauth

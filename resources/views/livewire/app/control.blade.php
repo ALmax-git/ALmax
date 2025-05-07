@@ -13,6 +13,13 @@
         <button class="nav-link {{ $tab == 'Product' ? 'active' : '' }}" id="nav-Product-tab" data-bs-toggle="tab"
           data-bs-target="#nav-Product" type="button" role="tab" aria-controls="nav-Product" aria-selected="true"
           wire:click='toggle_c_tab("Product")'>{{ _app('Product') }}</button>
+        <button class="nav-link {{ $tab == 'Business' ? 'active' : '' }}" id="nav-Business-tab" data-bs-toggle="tab"
+          data-bs-target="#nav-Business" type="button" role="tab" aria-controls="nav-Business" aria-selected="true"
+          wire:click='toggle_c_tab("Business")'>{{ _app('Business') }}</button>
+        <button class="nav-link {{ $tab == 'Role And Permission' ? 'active' : '' }}" id="nav-Role-And-Permission-tab"
+          data-bs-toggle="tab" data-bs-target="#nav-Role And Permission" type="button" role="tab"
+          aria-controls="nav-Role-And-Permission" aria-selected="true"
+          wire:click='toggle_c_tab("Role And Permission")'>{{ _app('Role And Permission') }}</button>
       </div>
     </nav>
     <div class="tab-content pt-3" id="nav-tabContent">
@@ -28,6 +35,14 @@
 
           @case('Product')
             @livewire('app.clients.product-settings')
+          @break
+
+          @case('Business')
+            @livewire('app.clients.business')
+          @break
+
+          @case('Role And Permission')
+            @livewire('app.clients.role-and-permission')
           @break
 
           @default

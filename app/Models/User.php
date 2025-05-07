@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -42,6 +43,7 @@ class User extends Authenticatable
         'profile_photo_path',
         'client_id',
         'language',
+        'visibility'
     ];
 
     /**
@@ -84,7 +86,7 @@ class User extends Authenticatable
 
     public function client()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class);
     }
 
     public function clients()
@@ -94,12 +96,47 @@ class User extends Authenticatable
                 $query->where('status', 'verified')
                     ->orWhere(function ($subQuery) {
                         $subQuery->where('status', '!=', 'terminated')
-                            ->where('user_clients.user_id', auth()->id());
+                            ->where('user_clients.user_id', $this->id);
                     });
             });
     }
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function cart_items()
+    {
+        return $this->hasMany(Cart::class);
+    }
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'user_id');
+    }
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->where('roles.status', 'active')
+            ->where('user_roles.client_id', Auth::user()->client->id);
+    }
+    public function white_papers()
+    {
+        return $this->hasMany(Empowerment::class, 'target_id')->where('empowerments.status', 'pending');
+    }
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'target_id');
     }
 }

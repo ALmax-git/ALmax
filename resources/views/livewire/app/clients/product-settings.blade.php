@@ -24,7 +24,7 @@
           <i class="fa bi-list fa-3x text-primary"></i>
           <div class="ms-3">
             <p class="mb-2">{{ _app('categories') }}</p>
-            <h6 class="mb-0 text-right">{{ count($categories) }}</h6>
+            <h6 class="mb-0 text-right">{{ \App\Models\ProductCategory::count() }}</h6>
           </div>
         </div>
       </div>
@@ -42,13 +42,13 @@
   <hr>
   <div class="h-100 bg-secondary rounded">
     <div class="d-flex mb-4">
-      <input class="form-control me-2" type="text" wire:model.live="search" placeholder="{{ _app('search') }}">
+      <input class="form-control me-2" type="text" wire:model.live="search" placeholder=" 🔍 {{ _app('search') }}">
 
       <button class="btn btn-sm btn-primary" wire:click='add_product_category_modal'>{{ _app('add') }}</button>
     </div>
   </div>
-  <table class="hover mt-4 table">
-    <thead>
+  <table class="table-striped table-hover table-sm table">
+    <thead class="table-dark">
       <tr>
         <th>{{ _app('Category') }}</th>
         <th>{{ _app('Status') }}</th>
@@ -63,15 +63,16 @@
           <td>{{ $category->status }}</td>
           <td>{{ $category->products->count() }}</td>
           <td>
-            <button class="btn btn-info"
-              wire:click='edit_product_category_modal("{{ write($category->id) }}")'>{{ _app('update') }}</button>
-            <button class="btn btn-danger"
-              wire:click='delete_product_category("{{ write($category->id) }}")'>{{ _app('Delete') }}</button>
+            <button class="btn btn-info" wire:click='edit_product_category_modal("{{ write($category->id) }}")'><i
+                class="bi bi-pen"></i></button>
+            <button class="btn btn-danger" wire:click='delete_product_category("{{ write($category->id) }}")'><i
+                class="bi bi-trash"></i></button>
           </td>
         </tr>
       @endforeach
     </tbody>
   </table>
+  {{ $categories->links() }}
   @if ($product_category_modal)
     <div class="modal" tabindex="-1" style="display:block;">
       <div class="modal-dialog">
@@ -92,7 +93,7 @@
             <select class="form-control" id="status" name="status" wire:model.live='status'>
               <option value="">{{ _app('choose') }}</option>
               <option value="active">{{ _app('active') }}</option>
-              <option value="discontinued">{{ _app('discontinued') }}</option>
+              {{-- <option value="discontinued">{{ _app('discontinued') }}</option> --}}
               <option value="archived">{{ _app('archived') }}</option>
             </select>
             @error($status)
@@ -103,8 +104,8 @@
             <button class="btn btn-secondary" type="button"
               wire:click="$set('product_category_modal', false)">{{ _app('cancel') }}</button>
             @if ($is_edit)
-              <button class="btn btn-primary" type="button"
-                wire:click="update_product_category">{{ _app('update') }}</button>
+              <button class="btn btn-primary" type="button" wire:click="update_product_category"><i
+                  class="bi bi-pen"></i></button>
             @else
               <button class="btn btn-primary" type="button"
                 wire:click="create_product_category">{{ _app('add') }}</button>
@@ -120,7 +121,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="$set('product_category_delete_modal', false)">
               <span>&times;</span>
             </button>
@@ -137,8 +138,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('product_category_delete_modal', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_product_category">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_product_category"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>

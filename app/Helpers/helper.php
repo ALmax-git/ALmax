@@ -14,11 +14,10 @@ use Flutterwave\EventHandlers\ModalEventHandler as PaymentHandler;
 use Flutterwave\Flutterwave;
 use Flutterwave\Library\Modal;
 
-if (!function_exists('user_can_access')) {
-    function user_can_access()
+if (!function_exists('user_access')) {
+    function user_access()
     {
         $user = Auth::user();
-
         if (!$user) {
             return [];
         }
@@ -26,7 +25,7 @@ if (!function_exists('user_can_access')) {
         foreach ($user->roles as $role) {
             $role_permissions = $role->permissions;
             foreach ($role_permissions as $permission) {
-                $permissions[] = $permission->title;
+                $permissions[] = $permission->label;
             }
         }
 
@@ -45,11 +44,13 @@ if (!function_exists('check_if')) {
         return false;
     }
 }
-if (!function_exists('check_if_user_can_access')) {
-    function check_if_user_can_access($access)
+if (!function_exists('user_can_access')) {
+    function user_can_access($access)
     {
-
-        return check_if(user_can_access(), $access);
+        if (Auth::user()->id == Auth::user()->client->user_id) {
+            return true;
+        }
+        return check_if(user_access(), $access);
     }
 }
 
@@ -112,6 +113,29 @@ if (!function_exists('_app')) {
     }
 }
 
+
+if (!function_exists('generate_wallet_address')) {
+    /**
+     * Generate a unique 20-character wallet address that starts with "0x" and includes the user ID.
+     *
+     * @param int $userId
+     * @return string
+     */
+    function generate_wallet_address($userId)
+    {
+        // Convert the user ID to a string
+        $userIdStr = (string) $userId;
+
+        // Calculate the remaining length after "0x" and user ID
+        $remainingLength = 32 - strlen($userIdStr); // 2 for "0x"
+
+        // Generate a random string to fill the remaining length
+        $randomString = \Illuminate\Support\Str::random($remainingLength);
+
+        // Construct the wallet address
+        return '0xFF' . $userIdStr . $randomString;
+    }
+}
 
 
 if (!function_exists('system_license_check')) {

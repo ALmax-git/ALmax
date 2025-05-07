@@ -12,7 +12,20 @@ class Market extends Component
     public $category_id = null;
     public $varified_only = false;
     public $sort = 'latest'; // latest, oldest, low, high
+    public $view_product_modal = false;
+    public $Product = null;
 
+    public function  open_view_product_modal($id): void
+    {
+        $this->Product = Product::find(read($id));
+        $this->view_product_modal = true;
+    }
+
+    public function close_view_product_modal(): void
+    {
+        $this->Product = null;
+        $this->view_product_modal = false;
+    }
     public function render()
     {
         $products = Product::query()
@@ -30,7 +43,13 @@ class Market extends Component
             ->when($this->sort === 'high', fn($query) => $query->orderBy('sale_price', 'desc'))
             ->paginate(10);
 
-        $categories = ProductCategory::all();
+        $categories = ProductCategory::where('status', 'active')
+            ->orderBy('title')
+            ->get();
+        $categories = $categories->map(function ($category) {
+            $category->name = _app($category->name);
+            return $category;
+        });
 
         return view('livewire.app.market', [
             'products' => $products,

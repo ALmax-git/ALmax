@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->string('si_unit')->nullable();
             $table->string('weight')->nullable();
-            $table->decimal('stock_price', 8, 2);
-            $table->decimal('sale_price', 8, 2);
+            $table->double('stock_price', 8, 2);
+            $table->double('sale_price', 8, 2);
             $table->integer('available_stock')->default(0); // Track stock for each variant
             $table->integer('sold')->unique()->nullable(); // Unique variant SKU if necessary
 

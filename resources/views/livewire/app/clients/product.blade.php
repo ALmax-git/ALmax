@@ -2,58 +2,65 @@
   <div class="h-100 bg-secondary p-3">
     <h2>{{ _app('Product') }}</h2>
     <div class="d-flex">
-      <input class="form-control me-2" type="text" wire:model.live="search" placeholder="{{ _app('search') }}">
+      <input class="form-control me-2" type="text" wire:model.live="search" placeholder="🔍 {{ _app('search') }}">
 
-      <button class="btn btn-sm btn-primary me-2" wire:click='add_product_modal'>{{ _app('add') }}</button>
-      <button class="btn btn-sm btn-outline-info me-2" wire:click='sync_all' wire:loading.attr="disabled">
-        <i class="fa fa-refresh fa-spin" style="cursor: pointer;" wire:loading.class="text-dark"></i>
-      </button>
+      @if (user_can_access('product_management'))
+        <button class="btn btn-sm btn-primary me-2" wire:click='add_product_modal'>{{ _app('add') }}</button>
+        <button class="btn btn-sm btn-outline-info me-2" wire:click='sync_all' wire:loading.attr="disabled">
+          <i class="fa fa-refresh fa-spin" style="cursor: pointer;" wire:loading.class="text-dark"></i>
+        </button>
+      @endif
     </div>
   </div>
-  <div class="table-responsive bg-secondary">
+  @if (user_can_access('product_access'))
+    <div class="table-responsive bg-secondary p-4">
 
-    <table class="table-hover table bg-black">
-      <thead class="table-black">
-        <tr>
-          <th>{{ _app('name') }}</th>
-          <th>{{ _app('brand') }}</th>
-          <th>{{ _app('category') }}</th>
-          <th>{{ _app('stock_price') }}</th>
-          <th>{{ _app('sale_price') }}</th>
-          <th>{{ _app('discount') }}</th>
-          <th>{{ _app('available_stock') }}</th>
-          <th>{{ _app('sold') }}</th>
-          <th>{{ _app('status') }}</th>
-          <th>{{ _app('action') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($products as $Product)
+      <table class="table-hover table bg-black" id="table-1">
+        <thead class="table-black">
           <tr>
-            <td>{{ $Product->name }}</td>
-            <td>{{ $Product->brand }}</td>
-            <td>{{ $Product->category->title }}</td>
-            <td>{{ $Product->stock_price }}</td>
-            <td>{{ $Product->sale_price }}</td>
-            <td>{{ $Product->discount }}</td>
-            <td>{{ $Product->available_stock }}</td>
-            <td>{{ $Product->sold }}</td>
-            <td>{{ $Product->status }}</td>
-            <td>
-              <button class="btn btn-success" wire:click='view_product_modal("{{ write($Product->id) }}")'><i
-                  class="bi bi-eye"></i></button>
-              <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
-                  class="bi bi-pen"></i></button>
-              <button class="btn btn-outline-light" wire:click='open_label_model("{{ $Product->id }}")'><i
-                  class="bi bi-qr-code fa2x"></i></button>
-              <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
-                  class="bi bi-trash"></i></button>
-            </td>
+            <th>{{ _app('name') }}</th>
+            <th>{{ _app('brand') }}</th>
+            <th>{{ _app('category') }}</th>
+            <th>{{ _app('stock_price') }}</th>
+            <th>{{ _app('sale_price') }}</th>
+            <th>{{ _app('discount') }}</th>
+            <th>{{ _app('available_stock') }}</th>
+            <th>{{ _app('sold') }}</th>
+            <th>{{ _app('status') }}</th>
+            <th>{{ _app('action') }}</th>
           </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          @foreach ($products as $Product)
+            <tr>
+              <td>{{ $Product->name }}</td>
+              <td>{{ $Product->brand }}</td>
+              <td>{{ $Product->category->title }}</td>
+              <td>{{ $Product->stock_price }}</td>
+              <td>{{ $Product->sale_price }}</td>
+              <td>{{ $Product->discount }}</td>
+              <td>{{ $Product->available_stock }}</td>
+              <td>{{ $Product->sold }}</td>
+              <td>{{ $Product->status }}</td>
+              <td>
+                <button class="btn btn-success" wire:click='view_product_modal("{{ write($Product->id) }}")'><i
+                    class="bi bi-eye"></i></button>
+
+                @if (user_can_access('product_management'))
+                  <button class="btn btn-info" wire:click='edit_product_modal("{{ write($Product->id) }}")'><i
+                      class="bi bi-pen"></i></button>
+                  <button class="btn btn-outline-light" wire:click='open_label_model("{{ $Product->id }}")'><i
+                      class="bi bi-qr-code fa2x"></i></button>
+                  <button class="btn btn-danger" wire:click='delete_product_modal("{{ write($Product->id) }}")'><i
+                      class="bi bi-trash"></i></button>
+                @endif
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  @endif
   @if ($product_modal)
     <div class="modal" tabindex="-1" style="display:block;">
       <div class="modal-dialog">
@@ -196,8 +203,8 @@
             <button class="btn btn-secondary" type="button"
               wire:click="$set('product_modal', false)">{{ _app('cancel') }}</button>
             @if ($is_edit)
-              <button class="btn btn-primary" type="button"
-                wire:click="update_product">{{ _app('update') }}</button>
+              <button class="btn btn-primary" type="button" wire:click="update_product"><i
+                  class="bi bi-pen"></i></button>
             @else
               <button class="btn btn-primary" type="button"
                 wire:click="create_product">{{ _app('add') }}</button>
@@ -229,8 +236,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('product_delete_modal', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_product">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_product"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -263,8 +270,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="close_delete_product_image_modal">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_product_image">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_product_image"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -287,11 +294,13 @@
             <p>{{ _app('sub_title') }}:</strong> {{ $product->sub_title }}</p>
             <div style="display: flex; align-items: center; gap: 10px;">
               <hr style="flex: 1; margin: 0;">
-              <button class="btn btn-sm btn-outline-primary" wire:click='open_product_images_modal'><i
-                  class="bi bi-upload"></i></button>
-              <button class="btn btn-sm btn-outline-light"
-                wire:click='open_label_model("{{ $product->id }}", {{ null }})'><i
-                  class="bi bi-qr-code fa2x"></i></button>
+              @if (user_can_access('product_management'))
+                <button class="btn btn-sm btn-outline-primary" wire:click='open_product_images_modal'><i
+                    class="bi bi-upload"></i></button>
+                <button class="btn btn-sm btn-outline-light"
+                  wire:click='open_label_model("{{ $product->id }}", {{ null }})'><i
+                    class="bi bi-qr-code fa2x"></i></button>
+              @endif
             </div>
             <div class="d-flex align-items-center pointer hover-client mb-4 ms-4" style="overflow-x: scroll;">
               @foreach ($product->images() as $image)
@@ -308,13 +317,16 @@
             <hr>
             <div class="d-flex" style="justify-content:  space-between;">
               <p><strong>{{ _app('variant') }}</strong></p>
-              <button class="btn btn-sm btn-primary"
-                wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
+
+              @if (user_can_access('product_management'))
+                <button class="btn btn-sm btn-primary"
+                  wire:click='open_add_variant_modal'>{{ _app('add') }}</button>
+              @endif
             </div>
             <div class="table-responsive">
 
               <table class="table-hover table">
-                <thead>
+                <thead class="table-dark">
                   <tr>
                     <th>#</th>
                     <th>{{ _app('label') }}</th>
@@ -363,12 +375,16 @@
             <hr>
             <div class="d-flex" style="justify-content:  space-between;">
               <p><strong>{{ _app('Addons') }}</strong></p>
-              <button class="btn btn-sm btn-primary" wire:click='open_add_addons_modal'>{{ _app('add') }}</button>
+
+              @if (user_can_access('product_management'))
+                <button class="btn btn-sm btn-primary"
+                  wire:click='open_add_addons_modal'>{{ _app('add') }}</button>
+              @endif
             </div>
             <div class="table-responsive">
 
               <table class="table-hover table">
-                <thead>
+                <thead class="table-dark">
                   <tr>
                     <th>#</th>
                     <th>{{ _app('label') }}</th>
@@ -588,8 +604,8 @@
             <button class="btn btn-secondary" type="button"
               wire:click="close_add_variant_modal">{{ _app('cancel') }}</button>
             @if ($is_edit)
-              <button class="btn btn-primary" type="button"
-                wire:click="update_product_variant">{{ _app('update') }}</button>
+              <button class="btn btn-primary" type="button" wire:click="update_product_variant"><i
+                  class="bi bi-pen"></i></button>
             @else
               <button class="btn btn-primary" type="button"
                 wire:click="create_product_variant">{{ _app('add') }}</button>
@@ -623,8 +639,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="close_delete_product_variant_modal">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_product_variant">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_product_variant"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -678,8 +694,8 @@
             <button class="btn btn-secondary" type="button"
               wire:click="close_add_product_addons_modal">{{ _app('cancel') }}</button>
             @if ($is_edit)
-              <button class="btn btn-primary" type="button"
-                wire:click="update_product_addons">{{ _app('update') }}</button>
+              <button class="btn btn-primary" type="button" wire:click="update_product_addons"><i
+                  class="bi bi-pen"></i></button>
             @else
               <button class="btn btn-primary" type="button"
                 wire:click="create_product_addons">{{ _app('add') }}</button>
@@ -711,8 +727,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="close_delete_product_addons_modal">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_product_addons">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_product_addons"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
   <div class="row mb-4">
     <div class="col-md-4 mb-2">
       <input class="form-control bg-dark border-danger text-white" type="text" wire:model.live="search"
-        placeholder="Search Clients...">
+        placeholder="🔍 Search Clients...">
     </div>
     <div class="col-md-3 mb-2">
       <select class="form-control bg-dark border-danger text-white" wire:model.live="statusFilter">

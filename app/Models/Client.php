@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Client extends Model
 {
@@ -69,6 +70,12 @@ class Client extends Model
     {
         return $this->belongsToMany(User::class, 'user_clients');
     }
+    public function staffs()
+    {
+        $staffs_ids = UserClient::where('client_id', Auth::user()->client_id)->where('is_staff', true)->pluck('user_id');
+        $staffs = User::whereIn('id', $staffs_ids)->orderBy('name')->get();
+        return $staffs;
+    }
     /**
      * Relationship with the Product model (a client has many products).
      */
@@ -79,5 +86,9 @@ class Client extends Model
     public function available_products()
     {
         return $this->hasMany(Product::class)->where('available_stock', '>=', 1);
+    }
+    public function white_papers()
+    {
+        return $this->hasMany(Empowerment::class);
     }
 }

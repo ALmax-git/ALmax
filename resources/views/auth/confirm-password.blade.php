@@ -1,28 +1,30 @@
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+  <x-authentication-card>
+    <x-slot name="logo">
+      <x-authentication-card-logo />
+    </x-slot>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-        </div>
+    <div class="mb-4 text-sm text-gray-600">
 
-        <x-validation-errors class="mb-4" />
+      {{ _app('confirm_password_info') }}
+    </div>
 
-        <form method="POST" action="{{ route('password.confirm') }}">
-            @csrf
+    <x-validation-errors class="mb-4" />
 
-            <div>
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" autofocus />
-            </div>
+    <form method="POST" action="{{ route('password.confirm') }}">
+      @csrf
 
-            <div class="flex justify-end mt-4">
-                <x-button class="ms-4">
-                    {{ __('Confirm') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
+      <div>
+        <x-label for="password" value="{{ _app('Password') }}" />
+        <x-input class="mt-1 block w-full" id="password" name="password" type="password" required
+          autocomplete="current-password" autofocus />
+      </div>
+
+      <div class="mt-4 flex justify-end">
+        <x-button class="ms-4">
+          {{ __('Confirm') }}
+        </x-button>
+      </div>
+    </form>
+  </x-authentication-card>
 </x-guest-layout>

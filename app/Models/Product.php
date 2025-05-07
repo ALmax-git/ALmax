@@ -59,6 +59,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+
     public function images()
     {
         return File::where('label', $this->id)->where('type', 'product_image')->get();
@@ -91,7 +92,6 @@ class Product extends Model
     }
     // Get all the labels for this product
     // This includes labels for the product itself and for all its variants
-    // This is a one-to-many relationship
     public function labels()
     {
         return $this->hasMany(Label::class);

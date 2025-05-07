@@ -8,7 +8,7 @@
 
     <div class="d-flex mb-2">
       <input class="form-control me-2 bg-transparent" type="text" wire:model.live="search"
-        placeholder="{{ _app('search_task') }}">
+        placeholder=" 🔍 {{ _app('search_task') }}">
       <select class="form-select me-2 bg-transparent" wire:model.live="priority">
         <option value="">{{ _app('all_priorities') }}</option>
         <option value="low">{{ _app('low') }}</option>

@@ -43,7 +43,7 @@
   @switch($tab)
     @case('City')
       <table class="mt-4 table">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th>{{ _app('City') }}</th>
             <th>{{ _app('postal_code') }}</th>
@@ -65,9 +65,10 @@
                 @php
                   $id = $City->id;
                 @endphp
-                <button class="btn btn-danger"
-                  wire:click='deleteCity("{{ write($id) }}")'>{{ _app('Delete') }}</button>
-                <button class="btn btn-info" wire:click='edit_city("{{ write($id) }}")'>{{ _app('update') }}</button>
+                <button class="btn btn-danger" wire:click='deleteCity("{{ write($id) }}")'><i
+                    class="bi bi-trash"></i></button>
+                <button class="btn btn-info" wire:click='edit_city("{{ write($id) }}")'><i
+                    class="bi bi-pen"></i></button>
               </td>
             </tr>
           @endforeach
@@ -77,7 +78,7 @@
 
     @case('State')
       <table class="mt-4 table">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th>#</th>
             <th>{{ _app('State') }}</th>
@@ -100,10 +101,10 @@
                 @php
                   $current_state_id = $current_state->id;
                 @endphp
-                <button class="btn btn-danger"
-                  wire:click='delete_state("{{ write($current_state_id) }}")'>{{ _app('Delete') }}</button>
-                <button class="btn btn-info"
-                  wire:click='edit_state("{{ write($current_state_id) }}")'>{{ _app('update') }}</button>
+                <button class="btn btn-danger" wire:click='delete_state("{{ write($current_state_id) }}")'><i
+                    class="bi bi-trash"></i></button>
+                <button class="btn btn-info" wire:click='edit_state("{{ write($current_state_id) }}")'><i
+                    class="bi bi-pen"></i></button>
               </td>
             </tr>
           @endforeach
@@ -113,14 +114,14 @@
 
     @case('Country')
       <table class="mt-4 table">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th>{{ _app('country') }}</th>
             <th>{{ _app('Flag') }}</th>
             <th>Code</th>
             <th>ISO2</th>
             <th>ISO3</th>
-            <th>Currency</th>
+            <th>{{ _app('Currency') }}</th>
             <th>{{ _app('status') }}</th>
             <th>{{ _app('State') }}</th>
             <th>{{ _app('action') }}</th>
@@ -142,15 +143,15 @@
               </td>
               <td>{{ $Country->states->count() }}</td>
               <td>
-                <button class="btn btn-info btn-sm"
-                  wire:click='edit_country("{{ write($Country->id) }}")'>{{ _app('update') }}</button>
-                <button class="btn btn-danger btn-sm"
-                  wire:click='delete_country("{{ write($Country->id) }}")'>{{ _app('delete') }}</button>
+                <button class="btn btn-info btn-sm" wire:click='edit_country("{{ write($Country->id) }}")'><i
+                    class="bi bi-pen"></i></button>
+                <button class="btn btn-danger btn-sm" wire:click='delete_country("{{ write($Country->id) }}")'><i
+                    class="bi bi-trash"></i></button>
               </td>
             </tr>
           @empty
             <tr>
-              <td class="text-center" colspan="8">No countries found.</td>
+              <td class="text-center" colspan="8">{{ _app('no_countries_found') }}</td>
             </tr>
           @endforelse
         </tbody>
@@ -171,7 +172,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="$set('modalOpen', false)">
               <span>&times;</span>
             </button>
@@ -188,7 +189,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('modalOpen', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button" wire:click="confirmDelete">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirmDelete"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -200,7 +202,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="$set('state_delete_modal', false)">
               <span>&times;</span>
             </button>
@@ -218,8 +220,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('state_delete_modal', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_state">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_state"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -231,7 +233,7 @@
       <div class="modal-dialog">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Deletion</h5>
+            <h5 class="modal-title">{{ _app('confirm_deletion') }}</h5>
             <button class="close" type="button" wire:click="$set('country_delete_modal', false)">
               <span>&times;</span>
             </button>
@@ -248,8 +250,8 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button"
               wire:click="$set('country_delete_modal', false)">{{ _app('cancel') }}</button>
-            <button class="btn btn-danger" type="button"
-              wire:click="confirm_delete_country">{{ _app('delete') }}</button>
+            <button class="btn btn-danger" type="button" wire:click="confirm_delete_country"><i
+                class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>
@@ -376,11 +378,13 @@
             {{-- @endif --}}
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" wire:click="$set('city_modal', false)">Cancel</button>
+            <button class="btn btn-secondary" type="button"
+              wire:click="$set('city_modal', false)">{{ _app('Cancel') }}</button>
             @if ($isEditing)
-              <button class="btn btn-primary mt-2" wire:click="updateCity">Update City</button>
+              <button class="btn btn-primary mt-2" wire:click="updateCity"><i class="bi bi-pen"></i>
+                {{ _app('city') }}</button>
             @else
-              <button class="btn btn-success mt-2" wire:click="addCity">Add City</button>
+              <button class="btn btn-success mt-2" wire:click="addCity">+ {{ _app('City') }}</button>
             @endif
           </div>
         </div>

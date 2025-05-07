@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_clients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->cascade()->onDelete('cascade');
+
             $table->foreignId('client_id')->cascade()->onDelete('cascade');
             $table->timestamps();
         });

@@ -1,29 +1,38 @@
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid mt-2 px-4">
   <div class="bg-secondary h-100 rounded p-4">
-    <h6 class="mb-4">{{ _app('create_new_business') }}</h6>
+    @if ($is_edit)
+      <h4>{{ $client->name }}</h4>
+      <p><i>{{ $client->tagline }} </i></p>
+    @else
+      <h6 class="mb-4">{{ _app('create_new_business') }}</h6>
+    @endif
     <div class="form-floating mb-3">
-      <input class="form-control" type="text" wire:model.live='name' placeholder="{{ _app('business_name') }}">
+      <input class="form-control" type="text" {{ $is_edit ? 'readonly disabled' : 'required' }} wire:model.live='name'
+        placeholder="{{ _app('business_name') }}">
       <label for="name">{{ _app('business_name') }}</label>
       @error('name')
         <small class="text-danger">{{ $message }}</small>
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <input class="form-control" type="email" wire:model.live='email' placeholder="client@example.com">
+      <input class="form-control" type="email" {{ $is_edit ? 'readonly disabled' : 'required' }}
+        wire:model.live='email' placeholder="client@example.com">
       <label for="email">{{ _app('Email') }}</label>
       @error('email')
         <small class="text-danger">{{ $message }}</small>
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <input class="form-control" type="text" wire:model.live='tagline' placeholder="Code your dreams into reality">
+      <input class="form-control" type="text" {{ $is_edit ? 'readonly disabled' : 'required' }}
+        wire:model.live='tagline' placeholder="Code your dreams into reality">
       <label for="tagline">{{ _app('tagline') }}</label>
       @error('tagline')
         <small class="text-danger">{{ $message }}</small>
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <input class="form-control" type="tel" wire:model.live='telephone' placeholder="+234 80 0000 0000">
+      <input class="form-control" type="tel" {{ $is_edit ? 'readonly disabled' : 'required' }}
+        wire:model.live='telephone' placeholder="+234 80 0000 0000">
       <label for="telephone">{{ _app('Telephone') }}</label>
       @error('telephone')
         <small class="text-danger">{{ $message }}</small>
@@ -31,7 +40,8 @@
     </div>
 
     <div class="form-floating mb-3">
-      <select class="form-select" aria-label="categories" wire:model.live='country_id'>
+      <select class="form-select" aria-label="categories" wire:model.live='country_id'
+        {{ $is_edit ? 'readonly disabled' : 'required' }}>
         <option selected>{{ _app('Choose') }}</option>
         @foreach ($countries as $country)
           <option value="{{ $country->id }}" wire:click='change_country("{{ write($country->id) }}")'>
@@ -45,7 +55,8 @@
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <select class="form-select" aria-label="categories" wire:model.live='state_id'>
+      <select class="form-select" aria-label="categories" wire:model.live='state_id'
+        {{ $is_edit ? 'readonly disabled' : 'required' }}>
         <option selected>{{ _app('Choose') }}</option>
         @foreach ($states as $state)
           <option value="{{ $state->id }}" wire:click='change_state("{{ write($state->id) }}")'>
@@ -59,7 +70,8 @@
       @enderror
     </div>
     <div class="form-floating mb-3">
-      <select class="form-select" aria-label="categories" wire:model.live='city_id'>
+      <select class="form-select" aria-label="categories" wire:model.live='city_id'
+        {{ $is_edit ? 'readonly disabled' : 'required' }}>
         <option selected>{{ _app('Choose') }}</option>
         @foreach ($cities as $city)
           <option value="{{ $city->id }}">{{ $city->name }}</option>
@@ -72,7 +84,8 @@
     </div>
 
     <div class="form-floating mb-3">
-      <select class="form-select" aria-label="categories" wire:model.live='category_id'>
+      <select class="form-select" aria-label="categories" wire:model.live='category_id'
+        {{ $is_edit ? 'readonly disabled' : 'required' }}>
         <option selected>{{ _app('Choose') }}</option>
         @foreach ($business_categories as $category)
           <option value="{{ $category->id }}">{{ $category->title }}</option>
@@ -104,7 +117,7 @@
         <small class="text-danger">{{ $message }}</small>
       @enderror
     </div>
-    @if (!$is_editing)
+    @if (!$is_edit)
       <hr>
       @if ($logo)
         <img class="rounded-circle center" src="{{ $logo->temporaryUrl() }}" alt=""
@@ -114,15 +127,34 @@
       <label class="btn btn-primary mb-4 me-2" for="logo" tabindex="0">
         <span class="d-none d-sm-block">{{ _app('upload_logo') }}</span>
         <i class="bx bx-upload d-block d-sm-none"></i>
-        <input class="account-file-input" id="logo" type="file" wire:model="logo" hidden
+        <input class="account-file-input" id="logo" type="file" wire:model.live="logo" hidden
           accept="image/png, image/jpeg" />
       </label>
       @error('logo')
         <small class="text-danger">{{ $message }}</small>
       @enderror
+    @else
+      <hr>
+      @if ($logo)
+        <img class="rounded-circle center" src="{{ $logo->temporaryUrl() }}" alt=""
+          style="width: 60px; height: 60px;">
+      @endif
+
+      <label class="btn btn-primary mb-4 me-2" for="logo" tabindex="0">
+        <span class="d-none d-sm-block">{{ _app('upload_logo') }}</span>
+        <i class="bx bx-upload d-block d-sm-none"></i>
+        <input class="account-file-input" id="logo" type="file" wire:model.live="logo" hidden
+          accept="image/png, image/jpeg" />
+      </label>
+      @error('logo')
+        <small class="text-danger">{{ $message }}</small>
+      @enderror
+      <br>
+      <button class="btn btn-primary" type="submit" wire:click='update_logo'>{{ _app('save') }}</button>
+      <hr>
     @endif
     <hr>
-    @if ($is_editing)
+    @if ($is_edit)
       <button class="btn btn-primary" type="submit" wire:click='update'>{{ _app('Update') }}</button>
     @else
       <button class="btn btn-primary" type="submit" wire:click='submit'>{{ _app('Create') }}</button>

@@ -30,6 +30,9 @@ class Index extends Component
     {
         $client = Client::findOrFail($id);
         $client->is_verified = !$client->is_verified;
+        if ($client->is_verified) {
+            $client->status = 'active';
+        }
         $client->save();
     }
 

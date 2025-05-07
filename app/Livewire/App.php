@@ -3,7 +3,10 @@
 namespace App\Livewire;
 
 use App\Models\Client;
+use App\Models\Empowerment;
 use App\Models\User;
+use App\Models\UserClient;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\App as FacadesApp;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -17,9 +20,23 @@ class App extends Component
     // Currently active tab on the dashboard
     public $tab = 'Dashboard';
 
+    //toggle wallet modal
+    public $view_wallet = false;
+
     // Profile switcher visibility toggle
     public $switch_profile = false;
 
+    //User Wallet
+    public ?Wallet $wallet;
+
+    public function open_wallet(): void
+    {
+        $this->view_wallet = true;
+    }
+    public function close_wallet(): void
+    {
+        $this->view_wallet = false;
+    }
     /**
      * Logs the user out and redirects to login page.
      */
@@ -95,9 +112,9 @@ class App extends Component
         }
 
         // Optional: Check if user has a client_id (business profile)
-        if (!Auth::user()->client_id) {
-            return redirect()->route('app.business.create'); // Redirect to business creation page
-        }
+        // if (!Auth::user()->client_id) {
+        //     return redirect()->route('app.business.create'); // Redirect to business creation page
+        // }
         //Set Language
         $locale = 'en'; // Default language
         if (Auth::user()->language) {
@@ -120,9 +137,83 @@ class App extends Component
                     break;
             }
         }
-        FacadesApp::setLocale($locale);
-    }
 
+        FacadesApp::setLocale($locale);
+        if (!Auth::user()->client_id) {
+            $user = User::find(Auth::user()->id);
+            $user->client_id = 1;
+            $user->save();
+            UserClient::create([
+                'user_id' => $user->id,
+                'client_id' => $user->client_id,
+                'is_staff' => false
+            ]);
+            return redirect()->route('app');
+        }
+        $this->wallet = Wallet::where('user_id', Auth::user()->id)->first();
+        if (!$this->wallet) {
+            $this->wallet = new Wallet();
+            $this->wallet->user_id = Auth::user()->id;
+            $this->wallet->address = generate_wallet_address(Auth::user()->id);
+            $this->wallet->balance = 0.00;
+            $this->wallet->label = "My Wallet";
+            $this->wallet->save();
+        }
+        if (Auth::user()->white_papers->count() > 0) {
+            $this->alert(
+                'info',
+                Auth::user()->name . ' you have ' . Auth::user()->white_papers->count() . ' White papers. this may be a new oppotunity!',
+                [
+                    'position' => 'center',
+                    'toast' => 1,
+                    'showConfirmButton' => true,
+                    'timer' => null
+                ]
+            );
+        }
+    }
+    public function refresh()
+    {
+        $this->mount();
+    }
+    public function reload()
+    {
+        return redirect()->route('app');
+    }
+    public function accept_white_paper($id)
+    {
+        $white_paper = Empowerment::find(read($id));
+        if ($white_paper) {
+            $white_paper->status = 'accepted';
+            $white_paper->save();
+            $user_client = UserClient::where('user_id', Auth::user()->id)
+                ->where('client_id', $white_paper->client->id)->first();
+            if ($user_client) {
+                $user_client->is_staff = true;
+                $user_client->save();
+            } else {
+                UserClient::create([
+                    'user_id' => Auth::user()->id,
+                    'is_staff' => true,
+                    'client_id' => $white_paper->client->id
+                ]);
+            }
+            $this->alert('success', 'White paper accepted successfully');
+        } else {
+            $this->alert('error', 'White paper not found');
+        }
+    }
+    public function decline_white_paper($id)
+    {
+        $white_paper = Empowerment::find(read($id));
+        if ($white_paper) {
+            $white_paper->status = 'rejected';
+            $white_paper->save();
+            $this->alert('success', 'White paper rejected successfully');
+        } else {
+            $this->alert('error', 'White paper not found');
+        }
+    }
     /**
      * Render the main app dashboard and track usage.
      */

@@ -5,8 +5,8 @@ namespace App\Livewire\Forms\Create;
 use App\Models\Client as ModelsClient;
 use App\Models\ClientCategory;
 use App\Models\Country;
-use App\Models\File;
 use App\Models\State;
+use App\Models\File;
 use App\Models\User;
 use App\Models\UserClient;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +22,9 @@ class Client extends Component
     // Form Inputs
     public string $name = '', $email = '', $tagline = '', $telephone = '';
     public string $vision = '', $mission = '', $description = '';
-    public bool $is_editing = false;
+    public bool $is_edit = false;
     public $logo; // File upload
-    public ?int $category_id = null, $country_id = null, $state_id = null, $city_id = null;
+    public $category_id = null, $country_id = null, $state_id = null, $city_id = null;
 
     // Dropdown Data
     public $business_categories = [];
@@ -42,18 +42,18 @@ class Client extends Component
             $this->client = $client;
             $this->name = $client->name;
             $this->email = $client->email;
-            $this->tagline = $client->tagline;
+            $this->tagline = $client->tagline  ?? '';
             $this->telephone = $client->telephone;
             $this->category_id = $client->category_id;
-            $this->vision = $client->vision;
-            $this->mission = $client->mission;
-            $this->country_id = $client->country_id;
-            $this->change_country(write($client->country_id));
-            $this->state_id = $client->state_id;
-            $this->change_state(write($client->state_id));
-            $this->city_id = $client->city_id;
-            $this->description = $client->description;
-            $this->is_editing = true;
+            $this->vision = $client->vision ?? '';
+            $this->mission = $client->mission ?? '';
+            $this->country_id = $client->country_id ?? 1;
+            $this->change_country(write($client->country_id ?? 1));
+            $this->state_id = $client->state_id ?? 1;
+            $this->change_state(write($client->state_id ?? 1));
+            $this->city_id = $client->city_id ?? 1;
+            $this->description = $client->description  ?? '';
+            $this->is_edit = true;
         }
         $this->business_categories = ClientCategory::orderBy('title')->get();
         $this->countries = Country::where('status', 'active')->orderBy('name')->get();
@@ -166,7 +166,7 @@ class Client extends Component
             // Create UserClient relationship
             UserClient::firstOrCreate([
                 'user_id' => Auth::id(),
-                // 'is_staff' => 0,
+                'is_staff' => true,
                 'client_id' => $this->client->id,
             ]);
 
@@ -187,45 +187,50 @@ class Client extends Component
     public function update()
     {
         $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'tagline' => 'required|string|max:255',
-            'telephone' => 'required|string|max:255',
-            'category_id' => 'required|exists:client_categories,id',
+            // 'name' => 'required|string|max:255',
+            // 'email' => 'required|email|max:255',
+            // 'tagline' => 'required|string|max:255',
+            // 'telephone' => 'required|string|max:255',
+            // 'category_id' => 'required|exists:client_categories,id',
             'vision' => 'required|string',
             'mission' => 'required|string',
             'description' => 'required|string',
             // 'logo' => 'nullable|image|max:2048', // Optional for update
-            'country_id' => 'required|exists:countries,id',
-            'state_id' => 'required|exists:states,id',
-            'city_id' => 'required|exists:cities,id',
+            // 'country_id' => 'required|exists:countries,id',
+            // 'state_id' => 'required|exists:states,id',
+            // 'city_id' => 'required|exists:cities,id',
         ]);
 
         DB::beginTransaction();
-
+        // Create UserClient relationship
+        // UserClient::firstOrCreate([
+        //     'user_id' => Auth::id(),
+        //     'is_staff' => true,
+        //     'client_id' => $this->client->id,
+        // ]);
         try {
             // Handle logo upload if exists
             if ($this->logo) {
                 $file_name = $this->logo->store('logo', 'public');
                 $this->client->update(['logo' => $file_name]);
-                File::where('client_id', $this->client->id)->update(['path' => $file_name]);
+                File::where('client_id', $this->client->id)->first()->update(['path' => $file_name]);
             }
 
             // Update Client
             $this->client->update([
-                'name' => $this->name,
-                'email' => $this->email,
-                'tagline' => $this->tagline,
-                'telephone' => $this->telephone,
-                'category_id' => $this->category_id,
+                // 'name' => $this->name,
+                // 'email' => $this->email,
+                // 'tagline' => $this->tagline,
+                // 'telephone' => $this->telephone,
+                // 'category_id' => $this->category_id,
                 'vision' => $this->vision,
                 'mission' => $this->mission,
                 'description' => $this->description,
                 // No need to update logo here as it's handled above
                 // 'logo' => $file_name,
-                'country_id' => $this->country_id,
-                'state_id' => $this->state_id,
-                'city_id' => $this->city_id,
+                // 'country_id' => $this->country_id,
+                // 'state_id' => $this->state_id,
+                // 'city_id' => $this->city_id,
             ]);
 
             DB::commit();
@@ -235,6 +240,38 @@ class Client extends Component
             DB::rollBack();
             report($e);
             $this->alert('error', __('Something went wrong while updating the client.'));
+        }
+    }
+    public function update_logo(): void
+    {
+        $this->validate([
+            'logo' => 'required|image|max:2048', // Optional for update
+        ]);
+        // Handle logo upload if exists
+        if ($this->logo) {
+            $file_name = $this->logo->store('logo', 'public');
+            $this->client->update(['logo' => $file_name]);
+            if (File::where('client_id', $this->client->id)->where('type', 'business_logo')->first()) {
+                File::where('client_id', $this->client->id)->where('type', 'business_logo')->first()->update(['path' => $file_name]);
+                $this->alert('success', __('Client updated successfully!'));
+            } else {
+                File::create([
+                    'label' => $file_name,
+                    'path' => $file_name,
+                    'visibility' => 'protected',
+                    'mimes' => $this->logo->getMimeType(),
+                    'type' => 'business_logo',
+                    'info' => json_encode([
+                        'size' => $this->logo->getSize(),
+                        'original_name' => $this->logo->getClientOriginalName(),
+                        'mimes' => $this->logo->getMimeType(),
+                        'type' => $this->logo->getClientOriginalExtension(),
+                    ]),
+                    'user_id' => Auth::id(),
+                    'client_id' => $this->client->id,
+                ]);
+                $this->alert('success', __('Client updated successfully!'));
+            }
         }
     }
     public function cancel()

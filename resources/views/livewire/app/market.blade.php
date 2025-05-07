@@ -3,7 +3,8 @@
     <!-- Search and Filters -->
     <div class="row mb-4">
       <div class="col-md-4 mb-2">
-        <input class="form-control" type="text" wire:model.live.debounce.500ms="search" placeholder="Search products...">
+        <input class="form-control" type="text" wire:model.live.debounce.500ms="search"
+          placeholder="🔍 Search products...">
       </div>
 
       <div class="col-md-3 mb-2">
@@ -37,20 +38,20 @@
     <!-- Products Grid -->
     <div class="row">
       @forelse($products as $product)
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4" wire:click="open_view_product_modal('{{ write($product->id) }}')">
           <div class="card h-100 bg-black shadow-sm">
             @if ($product->images()->count())
               @if ($product->images()->count() > 1)
                 <div class="carousel slide" id="carouselExampleIndicators{{ $product->id }}" data-bs-ride="carousel">
                   <div class="carousel-inner">
                     @foreach ($product->images() as $key => $image)
-                      <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                      <div class="carousel-item {{ $key === 0 ? 'active' : '' }}" data-bs-interval="2000">
                         <img class="d-block w-100" src="{{ 'storage/' . $image->path }}" alt="{{ $product->name }}"
                           style="height: 200px; object-fit: cover;">
                       </div>
                     @endforeach
                   </div>
-                  <button class="carousel-control-prev" data-bs-target="#carouselExampleIndicators{{ $product->id }}"
+                  {{-- <button class="carousel-control-prev" data-bs-target="#carouselExampleIndicators{{ $product->id }}"
                     data-bs-slide="prev" type="button">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -59,7 +60,7 @@
                     data-bs-slide="next" type="button">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
-                  </button>
+                  </button> --}}
                 </div>
               @else
                 <img class="card-img-top" src="{{ 'storage/' . $product->images()->first()->path }}"
@@ -106,11 +107,31 @@
         </div>
       @empty
         <div class="col-12 mt-5 text-center">
-          <h5 class="text-muted">No products found...</h5>
+          @livewire('app.error404', ['text' => 'No result found 🫤'])
         </div>
       @endforelse
     </div>
-
+    @if ($view_product_modal)
+      <div class="modal" tabindex="-1" style="display:block;">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <div class="modal-content bg-secondary">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ $Product->name }}</h5>
+              <button class="close" type="button" wire:click="close_view_product_modal">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <livewire:component.card.productview :id="$Product->id" />
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button"
+                wire:click="close_view_product_modal">{{ _app('close') }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
     <!-- Pagination -->
     <div class="d-flex justify-content-center mt-4">
       {{ $products->links() }}

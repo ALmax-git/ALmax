@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('client_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title')->unique();
-            $table->string('status', ['active', 'terminated', 'suspended']);
+            $table->enum('status', ['active', 'terminated', 'suspended']);
             $table->text('description')->nullable();
             $table->timestamps();
         });

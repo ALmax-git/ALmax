@@ -1,15 +1,15 @@
 <div class="row g-4">
   <div class="col-sm-12 col-xl-6">
     <div class="bg-secondary h-100 rounded p-4">
-      <h6 class="mb-4">System Live Requests (Every 2 Minutes)</h6>
+      <h6 class="mb-4">{{ _app('sys_req') }}</h6>
       <canvas id="line-chart"></canvas>
     </div>
   </div>
   <div class="col-sm-12 col-xl-6">
     <div class="h-100 bg-secondary rounded p-4">
       <div class="d-flex align-items-center justify-content-between mb-4">
-        <h6 class="mb-0">Calender</h6>
-        <a href="#">Show All</a>
+        <h6 class="mb-0">{{ _app('calendar') }}</h6>
+        <a href="#">{{ _app('show_all') }}</a>
       </div>
       <div id="calender"></div>
     </div>
@@ -25,7 +25,7 @@
     data: {
       labels: [],
       datasets: [{
-        label: "Requests per Minute",
+        label: "{{ _app('req_min') }}",
         fill: true,
         lineTension: 0.3,
         borderColor: "rgba(22, 22, 235, .7)",
@@ -54,7 +54,7 @@
       .catch(error => console.error("Error fetching data:", error));
 
     // Fetch data every 2 minutes (120,000 milliseconds)
-    setTimeout(fetchsystemdData, 1000);
+    setTimeout(fetchsystemdData, 120000);
   }
 
   // Start fetching data on page load
