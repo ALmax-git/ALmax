@@ -91,4 +91,9 @@ class Client extends Model
     {
         return $this->hasMany(Empowerment::class);
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

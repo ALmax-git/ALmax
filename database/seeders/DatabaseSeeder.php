@@ -534,6 +534,12 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage documents including storage, retrieval, and version control.',
                 'status' => 'active',
             ],
+            [
+                'title' => 'Event Access',
+                'label' => 'event_access',
+                'description' => 'This allow user to access event menu and also view them with details',
+                'status' => 'active',
+            ]
         ];
 
         Permission::insert($permissions);

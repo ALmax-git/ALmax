@@ -166,6 +166,13 @@
           <i class="fa bi-wallet2 me-2"></i>{{ _app('Wallet') }}
         </span>
 
+        @if (user_can_access('event_access'))
+          <span class="nav-item nav-link {{ $tab == 'Event' ? 'active' : '' }}" style="cursor: pointer;"
+            wire:click='change_tab("Event")'>
+            <i class="fa bi-calendar-event me-2"></i>{{ _app('Event') }}
+          </span>
+        @endif
+
         {{-- Admin & System --}}
         @if (Auth::user()->id === 1)
           <span class="nav-item nav-link {{ $tab == 'System' ? 'active' : '' }}" style="cursor: pointer;"
@@ -357,6 +364,12 @@
 
       @case('Community')
         @livewire('app.community')
+      @break
+
+      @case('Event')
+        @if (user_can_access('event_access'))
+          @livewire('app.client.event')
+        @endif
       @break
 
       @case('Wallet')

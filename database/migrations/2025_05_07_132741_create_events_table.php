@@ -16,11 +16,19 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('organizer_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreignId('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreignId('state_id')->references('id')->on('states')->onDelete('cascade');
+            $table->foreignId('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->string('title');
             $table->text('description');
             $table->string('location');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
+
+            $table->timestamp('starting_day')->nullable();
+            $table->timestamp('closing_day')->nullable();
+
+
             $table->enum('type', ['online', 'offline'])->default('online');
             $table->decimal('price', 10, 2)->nullable();
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'closed'])->default('pending');
