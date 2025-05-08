@@ -4,13 +4,13 @@
   </a>
 
   <ul class="dropdown-menu bg-secondary">
-    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'English' ? 'primary' : '' }}"
+    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'English' ? 'primary' : '' }} p-3"
         wire:click='swich_language("English")'>🇬🇧 English</a></li>
-    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'Arabic' ? 'primary' : '' }}" href="#"
+    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'Arabic' ? 'primary' : '' }} p-3" href="#"
         wire:click='swich_language("Arabic")'>🇸🇦 Arabic</a></li>
-    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'French' ? 'primary' : '' }}" href="#"
+    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'French' ? 'primary' : '' }} p-3" href="#"
         wire:click='swich_language("French")'>🇫🇷 French</a></li>
-    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'Spanish' ? 'primary' : '' }}" href="#"
+    <li><a class="dropdown-item bg-{{ Auth::user()->language == 'Spanish' ? 'primary' : '' }} p-3" href="#"
         wire:click='swich_language("Spanish")'>🇪🇸 Spanish</a></li>
   </ul>
 </div>

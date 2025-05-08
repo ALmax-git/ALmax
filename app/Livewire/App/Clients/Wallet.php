@@ -39,10 +39,18 @@ class Wallet extends Component
     {
         $this->transfer_modal = true;
     }
+    public function mount($client = false)
+    {
+        if ($client) {
+            $this->wallet = Auth::user()->client->wallet;
+        } else {
+            $this->wallet = Auth::user()->wallet;
+        }
+    }
     public function close_transfer_modal()
     {
         $this->transfer_modal = false;
-        $this->reset();
+        // $this->reset();
     }
 
     public function render()

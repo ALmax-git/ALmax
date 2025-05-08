@@ -539,6 +539,12 @@ class DatabaseSeeder extends Seeder
                 'label' => 'event_access',
                 'description' => 'This allow user to access event menu and also view them with details',
                 'status' => 'active',
+            ],
+            [
+                'title' => 'Access Client Wallet',
+                'label' => 'client_wallet_access',
+                'description' => 'This allow user to access client wallet menu and also view them with details',
+                'status' => 'active',
             ]
         ];
 

@@ -19,16 +19,6 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\QrCode;
-// use Endroid\QrCode\Label\Label as ;
-use Endroid\QrCode\Logo\Logo;
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\Writer\ValidationException;
-
 class Product extends Component
 {
     use WithFileUploads, LivewireAlert;
@@ -847,7 +837,7 @@ class Product extends Component
         $this->label_model = true;
         $this->product = ModelsProduct::find($product_id);
         foreach ($this->product->labels as $label) {
-            $this->qrCodes[$label->id] = $this->generateQr($label->qr_key);
+            $this->qrCodes[$label->id] = generate_qr_code($label->qr_key);
         }
         if ($variant_id) {
             $this->product_variant = ProductVariant::find($variant_id);
@@ -862,29 +852,6 @@ class Product extends Component
         $this->product_variant = null;
     }
 
-    public function generateQr($text)
-    {
-        $writer = new PngWriter();
-
-        // Create QR code
-        $qrCode = new QrCode($text);
-        // $qrCode->setSize(200);
-        // $qrCode->setMargin(5);
-        // $qrCode->setEncoding(new Encoding('UTF-8'));
-        // $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevel('L'));
-        // $qrCode->setRoundBlockSizeMode(new RoundBlockSizeMode('PHP_ROUND_HALF_UP'));
-
-        // Create generic logo
-        // $logo = new Logo('../assets/symfony.png');
-        // $logo->setResizeToWidth(50);
-
-        // Create generic label
-        // $label = new Label('Scan the code', new Font('../assets/noto_sans.otf', 16));
-
-        $result = $writer->write($qrCode);
-
-        return $result->getDataUri();
-    }
     public function render()
     {
         $products = ModelsProduct::query()

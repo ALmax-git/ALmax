@@ -304,7 +304,27 @@
         @livewire('app.loading')
       </div>
       <div class="navbar-nav align-items-center ms-auto">
-        {{-- --}}
+        @if (Auth::user()->event_tickets->count() > 0)
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+              <i class="fa fa-bell"></i>
+              <span class="position-absolute start-100 translate-middle badge rounded-pill bg-primary top-0">
+                {{ Auth::user()->event_tickets->count() }}
+                <span class="visually-hidden">New alerts</span>
+              </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end bg-secondary rounded-0 rounded-bottom m-0 border-0"
+              style="color: white;">
+              @foreach (Auth::user()->event_tickets as $ticket)
+                <a class="dropdown-item p-3" href="#" style="color: white;"
+                  wire:click='view_ticket("{{ write($ticket->id) }}")'>{{ $ticket->event->title }}</a>
+              @endforeach
+              <a class="dropdown-item p-3" href="#"
+                wire:click='change_tab("Event")'>{{ _app('View_All') }}</a>
+            </div>
+          </div>
+
+        @endif
         <livewire:component.switch-language wire:lazy>
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
@@ -316,6 +336,10 @@
             <div class="dropdown-menu dropdown-menu-end bg-secondary rounded-0 rounded-bottom m-0 border-0">
               <a class="dropdown-item" href="#" wire:click='change_tab("Profile")'>{{ _app('Profile') }}</a>
               <a class="dropdown-item" href="#" wire:click='open_wallet'>{{ _app('Wallet') }}</a>
+              @if (user_can_access('client_wallet_access'))
+                <a class="dropdown-item" href="#"
+                  wire:click='open_client_wallet'>{{ _app('Client_Wallet') }}</a>
+              @endif
               <a class="dropdown-item" href="#" wire:click='logout'>{{ _app('logout') }}</a>
             </div>
           </div>
@@ -383,6 +407,17 @@
       @break
 
       @default
+        @if (session('success'))
+          <div class="alert alert-success">
+            {{ session('success') }}
+          </div>
+        @endif
+
+        @if (session('error'))
+          <div class="alert alert-danger">
+            {{ session('error') }}
+          </div>
+        @endif
         @if (user_can_access('dashboad_view'))
           <!-- Sale & Revenue Start -->
           <div class="container-fluid px-4 pt-4" wire:lazy>
@@ -452,7 +487,7 @@
     @endswitch
     @if ($view_wallet)
       <div class="modal" tabindex="-1" style="display:block;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content bg-secondary">
             <div class="modal-body">
               @livewire('app.clients.wallet')
@@ -460,6 +495,36 @@
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button"
                 wire:click="close_wallet">{{ _app('close') }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+    @if ($client_wallet_modal)
+      <div class="modal" tabindex="-1" style="display:block;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-secondary">
+            <div class="modal-body">
+              @livewire('app.clients.wallet', ['client' => true])
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button"
+                wire:click="close_client_wallet">{{ _app('close') }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+    @if ($event_ticket_modal)
+      <div class="modal" tabindex="-1" style="display:block;">
+        <div class="modal-dialog">
+          <div class="modal-content bg-secondary">
+            <div class="modal-body">
+              @livewire('component.card.eventticket', ['id' => $event_ticket->id])
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button"
+                wire:click="close_event_ticket">{{ _app('close') }}</button>
             </div>
           </div>
         </div>

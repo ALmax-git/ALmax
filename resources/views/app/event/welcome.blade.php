@@ -64,9 +64,7 @@
       <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
         <a class="logo d-flex align-items-center me-auto" href="index.html">
-          <img src="build/assets/img/logo.png" alt="">
-          <!-- Uncomment the line below if you also wish to use an text logo -->
-          <!-- <h1 class="sitename">TheEvent</h1>  -->
+          <h1 class="sitename">EventPulse</h1>
         </a>
 
         <nav class="navmenu" id="navmenu">
@@ -77,7 +75,6 @@
             <li><a href="#speakers">Speakers</a></li>
             <li><a href="#schedule">Schedule</a></li>
             <li><a href="#venue">Venue</a></li>
-            <li><a href="#hotels">Hotels</a></li>
             <li><a href="#sponsors">Sponsors</a></li>
             <li><a href="#contact">Contact</a></li>
             {{-- <li class="buy-tickets"><a href="#buyticket">Buy Tickets</a></li> --}}
@@ -98,9 +95,10 @@
         <img class="" data-aos="fade-in" src="{{ asset('build/assets/img/hero-bg.jpg') }}" alt="">
 
         <div class="d-flex flex-column align-items-center container mt-auto text-center">
-          <h2 class="" data-aos="fade-up" data-aos-delay="100">THE ANNUAL<br><span>MARKETING</span> CONFERENCE
+          <h2 class="" data-aos="fade-up" data-aos-delay="100">International Conference
+            on<br><span>Flood</span> Management 2025
           </h2>
-          <p data-aos="fade-up" data-aos-delay="200">10-12 December, Downtown Conference Center, New York</p>
+          <p data-aos="fade-up" data-aos-delay="200">About The Event</p>
           <div class="" data-aos="fade-up" data-aos-delay="300">
             <a class="glightbox pulsating-play-btn mt-3" href="https://www.youtube.com/watch?v=Y7f98aduVJ8"></a>
           </div>
@@ -112,18 +110,18 @@
             <div class="row">
               <div class="col-lg-6">
                 <h2>About The Event</h2>
-                <p>Sed nam ut dolor qui repellendus iusto odit. Possimus inventore eveniet accusamus error amet eius aut
-                  accusantium et. Non odit consequatur repudiandae sequi ea odio molestiae. Enim possimus sunt inventore
-                  in
-                  est ut optio sequi unde.</p>
+                <p>Flooding is more than a seasonal inconvenience — it's a threat to lives, livelihoods, and local
+                  infrastructure. The International Conference on Flood Management 2025 brings together experts,
+                  government agencies, NGOs, community leaders, and the public to address the critical challenges of
+                  flood risk in Borno State and beyond.</p>
               </div>
               <div class="col-lg-3">
                 <h3>Where</h3>
-                <p>Downtown Conference Center, New York</p>
+                <p>Muhammad Indimi International Conference Center, University of Maiduguri</p>
               </div>
               <div class="col-lg-3">
                 <h3>When</h3>
-                <p>Monday to Wednesday<br>10-12 December</p>
+                <p>22 July 2025 by 10:00 AM</p>
               </div>
             </div>
           </div>
@@ -482,7 +480,8 @@
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
           <h2>Event Venue<br></h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+          <p>Muhammad Indimi International Conference Hall, University of Maiduguri.</h3>
+          <p>We wait for you at the International Conference on flood Management 2025</p>
         </div><!-- End Section Title -->
 
         <div class="container-fluid" data-aos="fade-up">
@@ -497,10 +496,9 @@
             <div class="col-lg-6 venue-info">
               <div class="row justify-content-center">
                 <div class="col-11 col-lg-8 position-relative">
-                  <h3>Downtown Conference Center, New York</h3>
-                  <p>Iste nobis eum sapiente sunt enim dolores labore accusantium autem. Cumque beatae ipsam. Est quae
-                    sit qui voluptatem corporis velit. Qui maxime accusamus possimus. Consequatur sequi et ea suscipit
-                    enim nesciunt quia velit.</p>
+                  <h3>Borno State, Nigeria</h3>
+                  <p>Muhammad Indimi International Conference Hall, University of Maiduguri.</h3>
+                  <p>We wait for you at the International Conference on flood Management 2025.</p>
                 </div>
               </div>
             </div>
@@ -588,7 +586,7 @@
 
       </section><!-- /Venue Section -->
 
-      <!-- Hotels Section -->
+      {{-- <!-- Hotels Section -->
       <section class="hotels section" id="hotels">
 
         <!-- Section Title -->
@@ -641,7 +639,7 @@
 
         </div>
 
-      </section><!-- /Hotels Section -->
+      </section><!-- /Hotels Section --> --}}
 
       <!-- Gallery Section -->
       <section class="gallery section" id="gallery">
@@ -787,62 +785,56 @@
               <div class="faq-container">
 
                 <div class="faq-item faq-active">
-                  <h3>Non consectetur a erat nam at lectus urna duis?</h3>
+                  <h3>How do I book a seat for the conference?</h3>
                   <div class="faq-content">
-                    <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur
-                      gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
+                    <p>To book a seat, visit our conference reservation page, fill in your details, and complete the
+                      payment using our secure online payment system. After payment, you will receive a confirmation
+                      email and a downloadable receipt.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
 
                 <div class="faq-item">
-                  <h3>Feugiat scelerisque varius morbi enim nunc faucibus?</h3>
+                  <h3>What payment methods are accepted?</h3>
                   <div class="faq-content">
-                    <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet
-                      id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est
-                      pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt
-                      dui.</p>
+                    <p>We accept online payments via Paystack, which allows you to pay using ATM cards (Visa,
+                      Mastercard, Verve) and bank transfers. All transactions are secure and encrypted.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
 
                 <div class="faq-item">
-                  <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
+                  <h3>Will I receive a receipt after payment?</h3>
                   <div class="faq-content">
-                    <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar
-                      elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque
-                      eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis
-                      sed odio morbi quis</p>
+                    <p>Yes, once your payment is successfully processed, you will receive a PDF ticket with your details
+                      and payment status.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
 
                 <div class="faq-item">
-                  <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
+                  <h3>Can I get a refund if I can’t attend the conference?</h3>
                   <div class="faq-content">
-                    <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet
-                      id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est
-                      pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt
-                      dui.</p>
+                    <p>You can't refund your money after making payment.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
 
                 <div class="faq-item">
-                  <h3>Tempus quam pellentesque nec nam aliquam sem et tortor?</h3>
+                  <h3>Do I need to create an account to make a reservation?</h3>
                   <div class="faq-content">
-                    <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in.
-                      Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est.
-                      Purus gravida quis blandit turpis cursus in</p>
+                    <p>No, you do not need to create an account. You can simply fill in your details, make the payment,
+                      and receive your confirmation instantly.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
 
                 <div class="faq-item">
-                  <h3>Perspiciatis quod quo quos nulla quo illum ullam?</h3>
+                  <h3>Where will the conference take place, and how do I get there?</h3>
                   <div class="faq-content">
-                    <p>Enim ea facilis quaerat voluptas quidem et dolorem. Quis et consequatur non sed in suscipit
-                      sequi. Distinctio ipsam dolore et.</p>
+                    <p>The conference will be held at Muhammad Indimi International Conference Hall, University of
+                      Maiduguri, in Borno State. Directions and venue details will be provided in your booking
+                      confirmation email.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
@@ -876,7 +868,7 @@
                 data-aos-delay="200">
                 <i class="bi bi-geo-alt"></i>
                 <h3>Address</h3>
-                <p>A108 Adam Street, New York, NY 535022</p>
+                <p>Cock Center at Ramat Polytechnic Maiduguri</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -885,7 +877,7 @@
                 data-aos-delay="300">
                 <i class="bi bi-telephone"></i>
                 <h3>Call Us</h3>
-                <p>+1 5589 55488 55</p>
+                <p>+234 81 6514 1519</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -894,7 +886,7 @@
                 data-aos-delay="400">
                 <i class="bi bi-envelope"></i>
                 <h3>Email Us</h3>
-                <p>info@example.com</p>
+                <p>abituho7s@mozmail.com</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -958,13 +950,13 @@
           <div class="row gy-4">
             <div class="col-lg-4 col-md-6 footer-about">
               <a class="logo d-flex align-items-center" href="index.html">
-                <span class="sitename">TheEvent</span>
+                <span class="sitename">EventPulse</span>
               </a>
               <div class="footer-contact pt-3">
-                <p>A108 Adam Street</p>
-                <p>New York, NY 535022</p>
-                <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-                <p><strong>Email:</strong> <span>info@example.com</span></p>
+                <p>Borno State Nigeria</p>
+                <p>Cock Center at Ramat Polytechnic Maiduguri</p>
+                <p class="mt-3"><strong>Phone:</strong> <span>+234 81 6514 1519</span></p>
+                <p><strong>Email:</strong> <span>abituho7s@mozmail.com</span></p>
               </div>
             </div>
 
@@ -990,7 +982,7 @@
               </ul>
             </div>
 
-            <div class="col-lg-2 col-md-3 footer-links">
+            {{-- <div class="col-lg-2 col-md-3 footer-links">
               <h4>Hic solutasetp</h4>
               <ul>
                 <li><a href="#">Molestiae accusamus iure</a></li>
@@ -999,9 +991,9 @@
                 <li><a href="#">Dilecta</a></li>
                 <li><a href="#">Sit quas consectetur</a></li>
               </ul>
-            </div>
+            </div> --}}
 
-            <div class="col-lg-2 col-md-3 footer-links">
+            {{-- <div class="col-lg-2 col-md-3 footer-links">
               <h4>Nobis illum</h4>
               <ul>
                 <li><a href="#">Ipsam</a></li>
@@ -1010,13 +1002,13 @@
                 <li><a href="#">Trodelas</a></li>
                 <li><a href="#">Flexo</a></li>
               </ul>
-            </div>
+            </div> --}}
 
           </div>
         </div>
       </div>
 
-      {{-- <div class="copyright text-center">
+      <div class="copyright text-center">
         <div class="container-fluid px-4 pt-4">
           <div class="bg-secondary rounded-top mt-2 p-4">
             <div class="col-12 col-sm-6 text-sm-start text-center">
@@ -1024,8 +1016,7 @@
             </div>
           </div>
         </div>
-      </div> --}}
-
+      </div>
     </footer>
 
     <!-- Scroll Top -->

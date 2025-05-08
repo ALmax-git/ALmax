@@ -10,7 +10,7 @@
         <div class="panel-header">
           <div class="system-status">
             <span class="status-indicator"></span>
-            <span class="status-text">{{ Auth::user()->wallet->address }}</span>
+            <span class="status-text">{{ $wallet->address }}</span>
           </div>
         </div>
 
@@ -20,9 +20,8 @@
               <div class="progress-line"></div>
               <div class="progress-particles text-warning">
                 <span class="fa-2x">
-                  <button class="rounded-circle tn btn-lg rounded-pill btn-warning text-white"><i
-                      class="bi bi-boxes"></i></button>
-                  {{ Auth::user()->wallet->balance }}
+                  <button class="rounded-circle tn btn-lg rounded-pill btn-warning text-white">₦</button>
+                  {{ $wallet->balance }}
                 </span>
               </div>
             </div>
@@ -55,21 +54,26 @@
           </div>
           <div class="h-100 scrollable p-2">
             <ul class="m-0 p-0">
-
-              <li class="d-flex asset-card mb-4 rounded p-2" style="border: 1px solid blue;">
-                <div class="avatar me-3 flex-shrink-0">
-                  <span class="avatar-initial bg-label-success rounded">NGN</span>
-                </div>
-                <div class="d-flex w-100 align-items-center justify-content-between flex-wrap gap-2">
-                  <div class="me-2">
-                    <h6 class="mb-0">Nigerian Naira</h6>
-                    <small class="text-muted">1</small>
+              @foreach ($wallet->transactions as $transaction)
+                <li class="d-flex asset-card mb-4 rounded p-2" style="border: 1px solid blue;">
+                  <div class="avatar me-3 flex-shrink-0">
+                    @if ($transaction->type == 'credit')
+                      <span class="avatar-initial bg-label-primary rounded">CR</span>
+                    @else
+                      <span class="avatar-initial bg-label-danger rounded">DB</span>
+                    @endif
                   </div>
-                  <div class="user-progress">
-                    <small class="fw-semibold">1008.90</small>
+                  <div class="d-flex w-100 align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">{{ $transaction->sender->name }}</h6>
+                      <small class="text-muted">{{ $transaction->description }}</small>
+                    </div>
+                    <div class="user-progress">
+                      <small class="fw-semibold">{{ $transaction->amount }}</small>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              @endforeach
 
             </ul>
           </div>
@@ -79,7 +83,7 @@
   </div>
   @if ($transfer_modal)
     <div class="modal" tabindex="-1" style="display:block;">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content bg-secondary">
           <div class="modal-header">
             <h5 class="modal-title">{{ Auth::user()->wallet->label }}</h5>

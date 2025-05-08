@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\Empowerment;
+use App\Models\EventTicket;
 use App\Models\User;
 use App\Models\UserClient;
 use App\Models\Wallet;
@@ -22,13 +23,40 @@ class App extends Component
 
     //toggle wallet modal
     public $view_wallet = false;
+    public $client_wallet_modal = false;
 
     // Profile switcher visibility toggle
     public $switch_profile = false;
 
     //User Wallet
-    public ?Wallet $wallet;
+    public ?Wallet $wallet, $client_wallet;
 
+    public $event_ticket_modal = false;
+    public $event_ticket = null;
+
+    public function view_ticket($id)
+    {
+        $this->event_ticket = EventTicket::find(read($id));
+        if (!$this->event_ticket) {
+            $this->alert('error', 'Event ticket not found');
+            return;
+        }
+        $this->event_ticket_modal = true;
+    }
+    public function close_event_ticket()
+    {
+        $this->event_ticket = null;
+        $this->event_ticket_modal = false;
+    }
+
+    public function open_client_wallet(): void
+    {
+        $this->client_wallet_modal = true;
+    }
+    public function close_client_wallet(): void
+    {
+        $this->client_wallet_modal = false;
+    }
     public function open_wallet(): void
     {
         $this->view_wallet = true;
@@ -150,15 +178,30 @@ class App extends Component
             ]);
             return redirect()->route('app');
         }
-        $this->wallet = Wallet::where('user_id', Auth::user()->id)->first();
+        $this->wallet = Wallet::where('user_id', Auth::user()->id)->where('type', 'user')->first();
         if (!$this->wallet) {
             $this->wallet = new Wallet();
             $this->wallet->user_id = Auth::user()->id;
             $this->wallet->address = generate_wallet_address(Auth::user()->id);
             $this->wallet->balance = 0.00;
             $this->wallet->label = "My Wallet";
+            $this->wallet->type = 'user';
             $this->wallet->save();
         }
+
+        if (user_can_access('client_wallet_access')) {
+            $this->client_wallet = Wallet::where('user_id', Auth::user()->client_id)->where('type', 'client')->first();
+            if (!$this->client_wallet) {
+                $this->client_wallet = new Wallet();
+                $this->client_wallet->user_id = Auth::user()->client_id;
+                $this->client_wallet->address = generate_wallet_address(Auth::user()->client_id);
+                $this->client_wallet->balance = 0.00;
+                $this->client_wallet->label = "My Business Wallet";
+                $this->client_wallet->type = 'client';
+                $this->client_wallet->save();
+            }
+        }
+
         if (Auth::user()->white_papers->count() > 0) {
             $this->alert(
                 'info',

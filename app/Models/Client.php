@@ -96,4 +96,9 @@ class Client extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'user_id')->where('type', 'client');
+    }
 }

@@ -111,7 +111,7 @@ class User extends Authenticatable
     }
     public function wallet()
     {
-        return $this->hasOne(Wallet::class, 'user_id');
+        return $this->hasOne(Wallet::class, 'user_id')->where('type', 'user');
     }
     public function country()
     {
@@ -138,5 +138,14 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->belongsToMany(User::class, 'followers', 'target_id');
+    }
+    public function sentTransactions()
+    {
+        return $this->hasMany(Transaction::class, 'sender_id');
+    }
+
+    public function event_tickets()
+    {
+        return $this->hasMany(EventTicket::class);
     }
 }
