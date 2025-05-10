@@ -19,7 +19,7 @@ class App extends Component
     use LivewireAlert;
 
     // Currently active tab on the dashboard
-    public $tab = 'Dashboard';
+    public $tab = '';
 
     //toggle wallet modal
     public $view_wallet = false;
@@ -34,6 +34,7 @@ class App extends Component
     public $event_ticket_modal = false;
     public $event_ticket = null;
 
+    public $email, $model;
     public function view_ticket($id)
     {
         $this->event_ticket = EventTicket::find(read($id));
@@ -132,8 +133,26 @@ class App extends Component
         $this->tab = $tab;
     }
 
-    public function mount()
+    public function mount($model = '', $email = null)
     {
+        if ($model) {
+            switch ($model) {
+                case 'User':
+                    if ($email) {
+                        $this->tab = 'Community';
+                        $this->email = $email;
+                    } else {
+                        $this->tab = 'Dashboard';
+                    }
+                    break;
+
+                default:
+                    $this->tab = 'Dashboard';
+                    break;
+            }
+        } else {
+            $this->tab = 'Dashboard';
+        }
         // Optional: Check if user is logged in
         if (!Auth::check()) {
             return redirect()->route('login'); // Redirect to login if not authenticated
@@ -264,7 +283,6 @@ class App extends Component
     {
         // Optional: Custom helper to log user actions, e.g., IP/location/browser/etc.
         \App\helpers\RequestTracker::track();
-
         // Return main Livewire view
         // $this->alert('info', _app("welcome") . ' ' . Auth::user()->name); // Optional: Alert on load
         return view('livewire.app');

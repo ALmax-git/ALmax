@@ -5,15 +5,34 @@ use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\GuardMiddleware;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('app');
+    if (Auth::user()) {
+        return view('app');
+    } else {
+        switch (url('/')) {
+            case 'http://eventpulse.localhost':
+                return view('app.event.welcome');
+                break;
+
+            default:
+                return view('app.ALmax.welcome');
+                break;
+        }
+    }
 })->name('app');
+
 Route::get('/systemd', [RequestController::class, 'trackRequest']);
 
 Route::get('/events', function () {
     return view('app.event.welcome');
 })->name('events');
+
+Route::get('gate', function () {
+    return view('gate.index');
+})->name('gate');
+
 
 Route::middleware([
     'auth:sanctum',
@@ -22,6 +41,14 @@ Route::middleware([
     GuardMiddleware::class,
 ])->group(
     function () {
+
+        Route::get('communities/{email}', function ($email) {
+            $decodedEmail = urldecode($email);
+            return view('app', [
+                'email' => $decodedEmail,
+            ]);
+        })->name('community.profile');
+
         Route::post('/new_ticket', [FlutterwaveController::class, 'new_ticket'])->name('new_ticket');
         Route::get('/new_ticket', [FlutterwaveController::class, 'fallback'])->name('fallback');
     }

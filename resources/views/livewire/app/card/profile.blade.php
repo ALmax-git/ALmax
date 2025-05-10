@@ -24,16 +24,43 @@
           <div class="author-box-job">
             {{ _app('followers') }}: <strong>{{ $user->followers->count() }}</strong> <br>
             {{ _app('clients') }}:
-            <strong>{{ $user->clients->count() - 1 >= 0 ? $user->clients->count() - 1 : 0 }}</strong><br>
+            <strong>{{ $user->clients->count() - 1 >= 0 ? $user->clients->count() : 0 }}</strong><br>
             {{ _app('@') }} <strong>{{ $user->client->name }}</strong>
           </div>
           <div class="author-box-description">
-            <p>{!! $user->bio !!}</p>
+            <small class="card-text">
+              <!-- Display truncated bio -->
+              <span x-data="{ showFullBio: false }">
+                <span x-show="!showFullBio">
+                  {{ \Illuminate\Support\Str::limit($user->bio, 150) }}
+                  <!-- Limit to 150 characters or adjust as needed -->
+                </span>
+
+                <!-- Show full bio when toggled -->
+                <span x-show="showFullBio">
+                  {{ $user->bio }}
+                </span>
+
+                <!-- Toggle the full bio visibility -->
+                <a x-on:click="showFullBio = !showFullBio" wire:navigate>
+                  <span style="color:green" x-show="!showFullBio">Read More</span>
+                  <span style="color:orange" x-show="showFullBio">Show Less</span>
+                </a>
+              </span>
+            </small>
           </div>
           <div class="mb-2 mt-3">
             @if ($user->city && $user->state && $user->country && $user->phone_number)
               <div class="text-small font-weight-bold text-success">{{ _app('verified') }}</div>
               @if ($user->visibility == 'public')
+                <hr>
+                <p><b>First Name: </b><i>{!! $user->first_name ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <p><b>Surname: </b><i>{!! $user->surname ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <p><b>Last Name: </b><i>{!! $user->last_name ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <p><b>Gender: </b><i>{!! $user->gender ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <p><b>Email: </b><i>{!! $user->email ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <p><b>Phone Number: </b><i>{!! $user->phone_number ?? '<span style="color:red;">Not set</span>' !!} </i></p>
+                <hr>
                 {{ $user->country->flag }} {{ $user->country->name }} <br>
                 {{ $user->state->name }}, {{ $user->city->name }} <br>
                 {{ $user->email }} <br>
@@ -46,15 +73,17 @@
           </div>
 
           <div class="w-100 d-sm-none"></div>
-          <div class="mt-sm-0 float-right mt-3">
-            <a class="btn" href="#">Work with {{ $user->name }} @ {{ Auth::user()->client->name }}! Click
-              the
-              Right arrow.
-              <button class="btn btn-sm btn-outline-primary" wire:click='init_white_paper'>
-                <i class="bi bi-arrow-right"></i>
-              </button>
-            </a>
-          </div>
+          @if (user_can_access('staff_management'))
+            <div class="mt-sm-0 float-right mt-3">
+              <a class="btn" href="#">Work with {{ $user->name }} @ {{ Auth::user()->client->name }}! Click
+                the
+                Right arrow.
+                <button class="btn btn-sm btn-outline-primary" wire:click='init_white_paper'>
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </a>
+            </div>
+          @endif
         </div>
       @else
         <div class="modal-body">

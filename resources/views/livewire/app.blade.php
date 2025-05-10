@@ -387,7 +387,7 @@
       @break
 
       @case('Community')
-        @livewire('app.community')
+        @livewire('app.community', ['email' => $email])
       @break
 
       @case('Event')
@@ -484,6 +484,8 @@
           </div>
         @endif
         <livewire:app.client.people lazy />
+      @break
+
     @endswitch
     @if ($view_wallet)
       <div class="modal" tabindex="-1" style="display:block;">

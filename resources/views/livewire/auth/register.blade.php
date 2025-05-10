@@ -1,91 +1,79 @@
-<div class="container">
-  <div class="login-box">
-    <h2>ALmax</h2>
-    <x-validation-errors class="mb-4" />
-
-    @session('status')
-      <div class="mb-4 text-sm font-medium text-green-600">
-        {{ $value }}
-      </div>
-    @endsession
-    <form method="POST" action="{{ route('register') }}">
-      @csrf
-      <div class="input-box">
-        <x-input class="form-control" id="name" name="name" type="text" :value="old('name')" required autofocus
-          autocomplete="name" />
-        <x-label for="name" value="{{ __('Name') }}" />
-      </div>
-      <div class="input-box">
-        <x-input id="email" name="email" type="email" :value="old('email')" required autofocus
-          autocomplete="username" />
-        <x-label for="email" value="{{ __('Email') }}" />
-      </div>
-      <div class="input-box">
-        <x-input id="password" name="password" type="password" required autocomplete="current-password" />
-        <x-label for="password" value="{{ __('Password') }}" />
-      </div>
-      <div class="input-box">
-        <x-input class="form-control" id="password_confirmation" name="password_confirmation" type="password" required
-          autocomplete="new-password" />
-        <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-      </div>
-
-      <button class="btn" type="submit"> {{ __('Log in') }}</button>
-      <div class="signup-link">
-        <a href="{{ route('login') }}">Have Account</a>
-      </div>
-    </form>
-
+<form class="mb-3" id="formAuthentication" method="POST" action="{{ route('register') }}">
+  @csrf
+  <h4 class="mb-2">Welcome to ALmax! 👋</h4>
+  <div>
+    <x-label for="name" value="{{ __('Username') }}" />
+    <input class="form-control" id="name" name="name" type="text" wire:input='validate_name' wire:model='name'
+      :value="old('name')" required autofocus autocomplete="name" />
+    <span class="text-info cursor-pointer">{{ $name_status }}</span>
   </div>
 
-  <span style="--i:0;"></span>
-  <span style="--i:1;"></span>
-  <span style="--i:2;"></span>
-  <span style="--i:3;"></span>
-  <span style="--i:4;"></span>
-  <span style="--i:5;"></span>
-  <span style="--i:6;"></span>
-  <span style="--i:7;"></span>
-  <span style="--i:8;"></span>
-  <span style="--i:9;"></span>
-  <span style="--i:10;"></span>
-  <span style="--i:11;"></span>
-  <span style="--i:12;"></span>
-  <span style="--i:13;"></span>
-  <span style="--i:14;"></span>
-  <span style="--i:15;"></span>
-  <span style="--i:16;"></span>
-  <span style="--i:17;"></span>
-  <span style="--i:18;"></span>
-  <span style="--i:19;"></span>
-  <span style="--i:20;"></span>
-  <span style="--i:21;"></span>
-  <span style="--i:22;"></span>
-  <span style="--i:23;"></span>
-  <span style="--i:24;"></span>
-  <span style="--i:25;"></span>
-  <span style="--i:26;"></span>
-  <span style="--i:27;"></span>
-  <span style="--i:28;"></span>
-  <span style="--i:29;"></span>
-  <span style="--i:30;"></span>
-  <span style="--i:31;"></span>
-  <span style="--i:32;"></span>
-  <span style="--i:33;"></span>
-  <span style="--i:34;"></span>
-  <span style="--i:35;"></span>
-  <span style="--i:36;"></span>
-  <span style="--i:37;"></span>
-  <span style="--i:38;"></span>
-  <span style="--i:39;"></span>
-  <span style="--i:40;"></span>
-  <span style="--i:41;"></span>
-  <span style="--i:42;"></span>
-  <span style="--i:43;"></span>
-  <span style="--i:44;"></span>
-  <span style="--i:45;"></span>
-  <span style="--i:46;"></span>
-  <span style="--i:47;"></span>
-  <span style="--i:48;"></span>
-  <span style="--i:49;"></span>
-</div>
+  <div class="mb-3">
+    <x-label for="email" value="{{ __('Email') }}" />
+    <input class="form-control" id="email" name="email" type="email" wire:input='validate_email'
+      wire:model='email' :value="old('email')" required autocomplete="email" />
+    <span class="text-info cursor-pointer">{{ $email_status }}</span>
+  </div>
+
+  <div class="form-password-toggle mb-3">
+    <x-label for="password" value="{{ __('Password') }}" />
+    <div class="input-group input-group-merge">
+      <input class="form-control" id="password" id="password" name="password" type="password" wire:model='password'
+        wire:change='validate_password' required autocomplete="new-password" />
+      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+    </div>
+    <span class="text-info cursor-pointer">{{ $password_status }}</span>
+  </div>
+
+  <div class="mb-3">
+    <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+    <div class="input-group input-group-merge">
+      <input class="form-control" id="password_confirmation" name="password_confirmation" type="password"
+        wire:model='$comfirmed_password' wire:change='validate_confirm_password' required autocomplete="new-password" />
+      {{-- <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span> --}}
+    </div>
+    <span class="text-info cursor-pointer">{{ $password_status }}</span>
+  </div>
+
+  @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+    <div class="mb-3">
+      <x-label for="terms">
+        <div class="d-flex items-center">
+          <x-checkbox id="terms" name="terms" wire:click='validate_form' required />
+
+          <div class="ms-2">
+            {!! __(' I agree to the :terms_of_service and :privacy_policy', [
+                'terms_of_service' =>
+                    '<a target="_blank" href="' .
+                    route('terms.show') .
+                    '"
+                                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' .
+                    __('Terms
+                                    of Service') .
+                    '</a>',
+                'privacy_policy' =>
+                    '<a target="_blank" href="' .
+                    route('policy.show') .
+                    '"
+                                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' .
+                    __('Privacy
+                                    Policy') .
+                    '</a>',
+            ]) !!}
+          </div>
+        </div>
+      </x-label>
+    </div>
+  @endif
+  <div class="mb-3">
+    <button class="btn btn-primary d-grid w-100" type="submit"
+      wire:confirm="Are you sure your input are correct?">Create Account</button>
+  </div>
+  <div class="mt-4 flex justify-end">
+    <a class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+      href="{{ route('gate') }}">
+      {{ __('Already registered?') }}
+    </a>
+
+  </div>
+</form>

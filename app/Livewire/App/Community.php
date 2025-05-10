@@ -6,18 +6,21 @@ use App\Models\Client;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\User;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Community extends Component
 {
-    use WithPagination;
+    use WithPagination, LivewireAlert;
 
     public $search = '';
     public $country_id;
     public $state_id;
     public $city_id;
     public $client_id;
+
+    public $email;
 
     public $countries = [], $states = [], $cities = [];
 
@@ -29,9 +32,20 @@ class Community extends Component
     public $profile_modal = false;
     public $profile;
 
-    public function mount(): void
+    public function mount($email = null): void
     {
-
+        if ($email) {
+            $user = User::where('email', $email)->first();
+            if ($user) {
+                if ($user->visibility != 'public') {
+                    $this->alert('info', 'We Could not find the user info you are looking for!');
+                } else {
+                    $this->view_profile(write($user->id));
+                }
+            } else {
+                $this->alert('warning', 'We Could not find the user info you are looking for!');
+            }
+        }
         $this->countries = Country::where('status', 'active')->orderBy('name')->get();
     }
     /**
