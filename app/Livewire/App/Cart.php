@@ -17,7 +17,29 @@ class Cart extends Component
     public $cartItemIds = []; // Public property to store only the cart item IDs
     public $view_product_modal, $product_id, $variant_id, $Product;
     public $cart_delete_modal = false, $password, $cart;
+    public $total = [
+        'items' => 0,
+        'price' => 0,
+        'discount' => 0,
+        'shipping' => 0,
+    ];
 
+    public function summary()
+    {
+        $this->total['items'] = 0;
+        $this->total['price'] = 0;
+        $this->total['discount'] = 0;
+        $this->total['shipping'] = 0;
+
+        foreach ($this->cartItems as $item) {
+            if (!$item->is_selected) continue;
+            $this->total['items'] += $item->quantity;
+            $price = $item->variant_id ? $item->product->variants->find($item->variant_id)->sale_price : $item->product->sale_price;
+            $this->total['price'] += $price * $item->quantity;
+            $this->total['discount'] += ($item->product->discount / 100) * ($price * $item->quantity);
+            // $this->total['shipping'] += $item->shipping_cost;
+        }
+    }
     public function mount()
     {
         $this->loadCartItemIds();
@@ -26,6 +48,7 @@ class Cart extends Component
     public function loadCartItemIds()
     {
         $this->cartItemIds = Auth::user()->cart_items()->latest()->pluck('id')->toArray();
+        $this->summary(); // Call the summary method to update totals
     }
 
     public function getCartItemsProperty() // Computed property to fetch cart items with product relation
@@ -43,6 +66,7 @@ class Cart extends Component
             $cart->update(['is_selected' => !$cart->is_selected]);
             $this->loadCartItemIds(); // Refresh the IDs to trigger re-render
         }
+        $this->summary(); // Call the summary method to update totals
     }
 
     public function decrement($id)
@@ -56,6 +80,7 @@ class Cart extends Component
             $cart->save();
             $this->update_price($id);
         }
+        $this->summary(); // Call the summary method to update totals
     }
 
     public function increment($id)
@@ -66,6 +91,7 @@ class Cart extends Component
             $cart->save();
             $this->update_price($id);
         }
+        $this->summary(); // Call the summary method to update totals
     }
     public function update_price($id): void
     {
@@ -84,6 +110,7 @@ class Cart extends Component
         $cart->installment_balance = $cart->total - $cart->paid_amount;
         $cart->save();
         $this->loadCartItemIds(); // Refresh the IDs to trigger re-render
+        $this->summary(); // Call the summary method to update totals
     }
 
     public function open_view_product_modal($product_id, $variant_id = null)

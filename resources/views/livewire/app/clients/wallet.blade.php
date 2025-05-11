@@ -13,7 +13,9 @@
             <span class="status-text">{{ $wallet->address }}</span>
           </div>
         </div>
-
+        <div class="panel-header">
+          <span class="status-text">{{ $wallet->label }}</span>
+        </div>
         <div class="progress-section">
           <div class="progress-wrapper">
             <div class="progress-bar" role="progressbar" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40">

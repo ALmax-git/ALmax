@@ -23,7 +23,6 @@ Route::get('/', function () {
     }
 })->name('app');
 
-Route::get('/systemd', [RequestController::class, 'trackRequest']);
 
 Route::get('/events', function () {
     return view('app.event.welcome');
@@ -42,6 +41,7 @@ Route::middleware([
 ])->group(
     function () {
 
+        Route::get('/systemd', [RequestController::class, 'trackRequest']);
         Route::get('communities/{email}', function ($email) {
             $decodedEmail = urldecode($email);
             return view('app', [
@@ -50,6 +50,7 @@ Route::middleware([
         })->name('community.profile');
 
         Route::post('/new_ticket', [FlutterwaveController::class, 'new_ticket'])->name('new_ticket');
+        Route::post('/checkout', [FlutterwaveController::class, 'checkout'])->name('checkout');
         Route::get('/new_ticket', [FlutterwaveController::class, 'fallback'])->name('fallback');
     }
 );

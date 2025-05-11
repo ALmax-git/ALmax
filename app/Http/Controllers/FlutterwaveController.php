@@ -86,6 +86,65 @@ class FlutterwaveController extends Controller
             abort(500, "An error occurred during the payment process. Please try again.");
         }
     }
+    protected $total = [
+        'items' => 0,
+        'price' => 0,
+        'discount' => 0,
+        'shipping' => 0,
+    ];
+    protected $cart_items = [];
+
+    protected function summary()
+    {
+        $this->total['items'] = 0;
+        $this->total['price'] = 0;
+        $this->total['discount'] = 0;
+        $this->total['shipping'] = 0;
+
+        foreach ($this->cart_items as $item) {
+            if (!$item->is_selected) continue;
+            $this->total['items'] += $item->quantity;
+            $price = $item->variant_id ? $item->product->variants->find($item->variant_id)->sale_price : $item->product->sale_price;
+            $this->total['price'] += $price * $item->quantity;
+            $this->total['discount'] += ($item->product->discount / 100) * ($price * $item->quantity);
+            // $this->total['shipping'] += $item->shipping_cost;
+        }
+    }
+    public function checkout()
+    {
+        $this->cart_items = Auth::user()->selected_cart_items;
+        $this->summary(); // Call the summary method to update totals
+        try {
+            $controller = flutterwave_payment();
+            $data = [
+                'payment_method' => 'card,banktransfer',
+                'amount' => (int) $this->total['price'] + 100,
+                'email' => Auth::user()->email ?? 'abituhi7s@mozmail.com',
+                'tx_ref' => generate_tx_ref(),
+                'first_name' => Auth::user()->first_name ?? 'ALi',
+                'last_name' => Auth::user()->last_name ?? 'Musa',
+                'currency' => 'NGN',
+                'redirect_url' => route('callback'),
+                'success_url' => route('callback'),
+                'failure_url' => route('callback'),
+                'customer' => [
+                    'email' => Auth::user()->email,
+                    "phone_number" => Auth::user()->phone_number ?? '08165141519',
+                    "name" => Auth::user()->name ?? 'ALmax'
+                ],
+                "customizations" => [
+                    "title" => 'Ticket Purchase',
+                    "description" => "Buy your ticket with ALmax"
+                ]
+            ];
+            // Process payment
+            dd($data);
+            $controller->process($data);
+        } catch (\Exception $e) {
+            Log::error('Payment initialization failed: ' . $e->getMessage());
+            abort(500, "An error occurred during the payment process. Please try again.");
+        }
+    }
     public function callback(Request $request)
     {
         // 1) Pull the query parameters

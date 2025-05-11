@@ -1,5 +1,23 @@
 <div class="container-fluid px-4 pt-4">
   <div class="bg-secondary rounded p-4">
+    <h4 class="text-primary text-center">{{ _app('cart') }}</h4>
+    <div class="card text-bg-primary border-pramary mb-2">
+      {{-- Cart Summary and Check out --}}
+      <div class="card-header d-flex justify-content-between align-items-center" style="background-color: black;">
+        <div class="card-title">{{ _app('cart_summary') }}</div>
+        <form action="{{ route('checkout') }}" method="post">
+          @csrf
+          <button class="btn btn-primary float-end" type="submit">Check Out</button>
+        </form>
+      </div>
+      <div class="card-header d-flex justify-content-between align-items-center" style="background-color: black;">
+        <div class="card-title">{{ _app('total Item') }} = {{ $total['items'] }}</div>
+        <div class="card-title">{{ _app('Price') }} = {{ $total['price'] }}</div>
+        <div class="card-title">{{ _app('total discount') }} = {{ $total['discount'] }}</div>
+        <div class="card-title">{{ _app('total Price') }} = {{ $total['price'] - ($total['discount'] ?? 0) }}</div>
+        <div class="card-title">{{ _app('total Shipping') }} = 0</div>
+      </div>
+    </div>
     <hr>
     @foreach ($cartItems as $cart)
       <div class="card text-bg-primary border-primary mb-2">

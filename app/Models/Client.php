@@ -99,6 +99,6 @@ class Client extends Model
 
     public function wallet()
     {
-        return $this->hasOne(Wallet::class, 'user_id')->where('type', 'client');
+        return $this->hasOne(Wallet::class, 'client_id')->where('type', 'client');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\Empowerment;
+use App\Models\Event;
 use App\Models\EventTicket;
 use App\Models\User;
 use App\Models\UserClient;
@@ -35,6 +36,27 @@ class App extends Component
     public $event_ticket = null;
 
     public $email, $model;
+
+
+
+    public $events = [];
+    public $event;
+    public $ticket_modal = false;
+    public $tx_ref, $id;
+
+    public function buy_ticket($id): void
+    {
+        // dd($this);
+        $this->event = Event::find(read($id));
+        $this->ticket_modal = true;
+        $this->tx_ref = generate_tx_ref();
+        $this->id = write($this->event->id);
+    }
+    public function close_buy_ticket(): void
+    {
+        $this->ticket_modal = false;
+    }
+
     public function view_ticket($id)
     {
         $this->event_ticket = EventTicket::find(read($id));
@@ -233,6 +255,8 @@ class App extends Component
                 ]
             );
         }
+
+        $this->events = Event::orderBy('created_at', 'desc')->where('status', 'confirmed')->get();
     }
     public function refresh()
     {

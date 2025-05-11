@@ -24,7 +24,8 @@ class Search extends Component
     {
         $this->products = Product::where('status', '!=', 'trash')
             ->where('name', 'like', '%' . $this->search . '%')
-            ->with(['category', 'images'])->get();
+            // ->with(['category', 'images'])
+            ->get();
         // ->paginate(10);
 
         // $this->services = Service::where('name', 'like', '%' . $this->search . '%')
