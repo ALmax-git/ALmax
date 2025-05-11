@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventTicket;
+use App\Models\Order;
 use App\Models\TicketPayment;
 use App\Models\Transaction;
 use App\Models\Wallet;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\Cast\Double;
 
 class FlutterwaveController extends Controller
 {
@@ -110,17 +112,35 @@ class FlutterwaveController extends Controller
             // $this->total['shipping'] += $item->shipping_cost;
         }
     }
+    protected function vat_vas($amount)
+    {
+        return ($amount * 0.075) + ($amount * 0.05);
+    }
     public function checkout()
     {
         $this->cart_items = Auth::user()->selected_cart_items;
         $this->summary(); // Call the summary method to update totals
         try {
+            $tx_ref =  generate_tx_ref();
+            foreach ($this->cart_items as $item) {
+                $order = new Order();
+                $order->user_id = Auth::id();
+                $order->item_id = $item->id;
+                $order->tx_ref = $tx_ref;
+                $order->external_tx_ref = $item->tx_ref;
+                $order->currency = 'NGN';
+                $order->status = 'pending';
+                $order->quantity = $item->quantity;
+                $order->unit_price = $item->product->sale_price;
+                $order->total_price = $item->product->sale_price * $item->quantity;
+                $order->save();
+            }
             $controller = flutterwave_payment();
             $data = [
                 'payment_method' => 'card,banktransfer',
-                'amount' => (int) $this->total['price'] + 100,
+                'amount' => (int) $this->total['price'] + $this->vat_vas($this->total['price']) - $this->total['discount'] + $this->total['shipping'],
                 'email' => Auth::user()->email ?? 'abituhi7s@mozmail.com',
-                'tx_ref' => generate_tx_ref(),
+                'tx_ref' => $tx_ref,
                 'first_name' => Auth::user()->first_name ?? 'ALi',
                 'last_name' => Auth::user()->last_name ?? 'Musa',
                 'currency' => 'NGN',
@@ -138,11 +158,79 @@ class FlutterwaveController extends Controller
                 ]
             ];
             // Process payment
-            dd($data);
+            $transaction = new Transaction();
+            $transaction->user_id = Auth::id();
+            $transaction->amount = $this->total['price'] + $this->vat_vas($this->total['price']) - $this->total['discount'] + $this->total['shipping'];
+            $transaction->type = 'credit';
+            $transaction->status = 'pending';
+            $transaction->tx_ref = $tx_ref;
+            $transaction->currency = 'NGN';
+            $transaction->description = 'Cart checkout';
+            $transaction->sender_id = 1;
+            $transaction->save();
             $controller->process($data);
         } catch (\Exception $e) {
             Log::error('Payment initialization failed: ' . $e->getMessage());
             abort(500, "An error occurred during the payment process. Please try again.");
+        }
+    }
+    public function checkout_callback(Request $request)
+    {
+        $validated = $request->validate([
+            'tx_ref' => 'required|string',
+        ]);
+
+        try {
+            // Retrieve the transaction
+            $transaction = Transaction::where('tx_ref', $validated['tx_ref'])->first();
+            if (!$transaction) {
+                Log::error('Transaction not found: ' . json_encode($validated));
+                abort(404, "Transaction not found. Please contact support! tx_ref: " . $validated['tx_ref']);
+            }
+            // Verify payment
+            $response = varify_payment($validated['tx_ref']);
+            if ($response->status !== 'success') {
+                Log::error('Payment verification failed: ' . json_encode($response));
+                abort(500, "Payment verification failed. Please contact support.");
+            }
+
+            // fund user wallet
+            $wallet = Wallet::find(Auth::user()->wallet->id);
+            if (!$wallet) {
+                Log::error('User wallet not found: ' . json_encode($response));
+                abort(404, "User Wallet not found. Please contact support! tx_ref: " . $validated['tx_ref']);
+            }
+            $wallet->balance += $transaction->amount;
+            $wallet->save();
+
+            DB::beginTransaction();
+            if ($transaction->status === 'pending') {
+                // Update transaction status
+                $transaction->status = 'completed';
+                $transaction->save();
+
+                // Retrieve and sumonize the orders
+                $orders = Order::where('tx_ref', $validated['tx_ref'])->get();
+                $total_order_price = 0;
+                foreach ($orders as $order) {
+                    $total_order_price += $order->total_price;
+                }
+                if ($total_order_price >= $transaction->amount) {
+                    $transaction->status = 'completed';
+                    $transaction->save();
+                } else {
+                    $transaction->status = 'failed';
+                    $transaction->save();
+                    Log::error('Transaction amount mismatch [cart checkout]: ' . json_encode($response) . ' tx_ref: ' . $validated['tx_ref']);
+
+                    return redirect()->route('app', ['tx_ref' => $validated['tx_ref']])
+                        ->withErrors('An error occurred. tx_ref: ' . $validated['tx_ref'] . '. Transaction amount mismatch. Please contact support.');
+                }
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Callback processing failed: ' . $e->getMessage());
+            abort(500, "An error occurred during the callback process. Please try again.");
         }
     }
     public function callback(Request $request)

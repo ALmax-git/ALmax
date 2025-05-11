@@ -80,4 +80,12 @@ class Cart extends Model
     {
         return $this->reservation_end_time && $this->reservation_end_time < now();
     }
+
+    /**
+     *
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'item_id');
+    }
 }

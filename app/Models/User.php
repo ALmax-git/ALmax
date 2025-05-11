@@ -109,6 +109,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function selected_cart_items()
     {
         return $this->hasMany(Cart::class)->where('is_selected', true);
