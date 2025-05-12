@@ -6,23 +6,37 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\GuardMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Flutterwave\Flutterwave;
 
 Route::get('/', function () {
+    $model = '';
+    if (url('/') == 'http://pos.localhost') {
+        $model = 'pos';
+    }
     if (Auth::user()) {
-        return view('app');
+        return view(
+            'app',
+            [
+                'model' => $model,
+            ]
+        );
     } else {
         switch (url('/')) {
+            case 'http://pos.localhost':
+                return redirect()->route('login');
             case 'http://eventpulse.localhost':
                 return view('app.event.welcome');
                 break;
 
+            case 'http://kycspot.localhost':
+                return view('app.KYCspot.welcome');
+                break;
             default:
                 return view('app.ALmax.welcome');
                 break;
         }
     }
 })->name('app');
-
 
 Route::get('/events', function () {
     return view('app.event.welcome');
@@ -32,7 +46,6 @@ Route::get('gate', function () {
     return view('gate.index');
 })->name('gate');
 
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -41,7 +54,8 @@ Route::middleware([
 ])->group(
     function () {
 
-        Route::get('/systemd', [RequestController::class, 'trackRequest']);
+        Route::get('/systemd', [RequestController::class, 'trackRequest'])->name('systemd');
+
         Route::get('communities/{email}', function ($email) {
             $decodedEmail = urldecode($email);
             return view('app', [
@@ -49,63 +63,62 @@ Route::middleware([
             ]);
         })->name('community.profile');
 
-        Route::post('/new_ticket', [FlutterwaveController::class, 'new_ticket'])->name('new_ticket');
+        Route::get('/user/profile', function () {
+            return redirect()->route('app');
+        })->name('profile.show');
+
+        Route::post('/ticket', [FlutterwaveController::class, 'new_ticket'])->name('new_ticket');
+        Route::get('/ticket', [FlutterwaveController::class, 'ticket_callback'])->name('ticket_callback');
+
         Route::post('/checkout', [FlutterwaveController::class, 'checkout'])->name('checkout');
-        Route::get('/new_ticket', [FlutterwaveController::class, 'fallback'])->name('fallback');
+        Route::get('/checkout', [FlutterwaveController::class, 'checkout_fallback'])->name('checkout_fallback');
     }
 );
 
-Route::get('/callback', [FlutterwaveController::class, 'callback'])->name('callback');
+Route::post('flutterwave/payment/webhook', function () {
+    $method = request()->method();
+    if ($method === 'POST') {
+        //get the request body
+        $body = request()->getContent();
+        $webhook = Flutterwave::use('webhooks');
+        $transaction = Flutterwave::use('transactions');
+        //get the request signature
+        $signature = request()->header($webhook::SECURE_HEADER);
 
-Route::get('/user/profile', function () {
-    return redirect()->route('app');
-})->name('profile.show');
+        //verify the signature
+        $isVerified = $webhook->verifySignature($body, $signature);
 
+        if ($isVerified) {
+            ['tx_ref' => $tx_ref, 'id' => $id] = $webhook->getHook();
+            ['status' => $status, 'data' => $transactionData] = $transaction->verifyTransactionReference($tx_ref);
 
-// Route::post('flutterwave/payment/webhook', function () {
-//     $method = request()->method();
-//     if ($method === 'POST') {
-//         //get the request body
-//         $body = request()->getContent();
-//         $webhook = Flutterwave::use('webhooks');
-//         $transaction = Flutterwave::use('transactions');
-//         //get the request signature
-//         $signature = request()->header($webhook::SECURE_HEADER);
+            $responseData = ['tx_ref' => $tx_ref, 'id' => $id];
+            if ($status === 'success') {
+                switch ($transactionData['status']) {
+                        // case Status::SUCCESSFUL:
+                        //     // do something
+                        //     //save to database
+                        //     //send email
+                        //     break;
+                        // case Status::PENDING:
+                        //     // do something
+                        //     //save to database
+                        //     //send email
+                        //     break;
+                        // case Status::FAILED:
+                        //     // do something
+                        //     //save to database
+                        //     //send email
+                        //     break;
+                }
+            }
 
-//         //verify the signature
-//         $isVerified = $webhook->verifySignature($body, $signature);
+            return response()->json(['status' => 'success', 'message' => 'Webhook verified by Flutterwave Laravel Package', 'data' => $responseData]);
+        }
 
-//         if ($isVerified) {
-//             ['tx_ref' => $tx_ref, 'id' => $id] = $webhook->getHook();
-//             ['status' => $status, 'data' => $transactionData] = $transaction->verifyTransactionReference($tx_ref);
+        return response()->json(['status' => 'error', 'message' => 'Access denied. Hash invalid'])->setStatusCode(401);
+    }
 
-//             $responseData = ['tx_ref' => $tx_ref, 'id' => $id];
-//             if ($status === 'success') {
-//                 switch ($transactionData['status']) {
-//                     case Status::SUCCESSFUL:
-//                         // do something
-//                         //save to database
-//                         //send email
-//                         break;
-//                     case Status::PENDING:
-//                         // do something
-//                         //save to database
-//                         //send email
-//                         break;
-//                     case Status::FAILED:
-//                         // do something
-//                         //save to database
-//                         //send email
-//                         break;
-//                 }
-//             }
-
-//             return response()->json(['status' => 'success', 'message' => 'Webhook verified by Flutterwave Laravel Package', 'data' => $responseData]);
-//         }
-
-//         return response()->json(['status' => 'error', 'message' => 'Access denied. Hash invalid'])->setStatusCode(401);
-//     }
-
-//     // return 404
-//     return abort(404);
-// })->name('flutterwave.webhook');
+    // return 404
+    return abort(404);
+})->name('flutterwave.webhook');

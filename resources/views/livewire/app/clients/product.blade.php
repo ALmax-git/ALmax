@@ -72,7 +72,7 @@
             </button>
           </div>
           <div class="modal-body" style="height: 50vh; overflow-y: scroll;">
-            <div class="row p-3">
+            <div class="row p-3" x-data="{ advance: false }">
               <div class="col-lg-6 mb-2">
                 <label class="form-label" for="name">{{ _app('name') }}</label>
                 <input class="form-control" type="text" wire:model.live="name" placeholder="{{ _app('name') }}">
@@ -104,19 +104,6 @@
                   <span class="text-danger">{{ $message }}</span>
                 @enderror
               </div>
-              <div class="col-lg-12 mb-2"><label class="form-label" for="description">{{ _app('description') }}</label>
-                <textarea class="form-control"wire:model.live="description" placeholder="{{ _app('description') }}"></textarea>
-                @error('description')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="col-lg-6 mb-2"><label class="form-label" for="stock_price">{{ _app('stock_price') }}</label>
-                <input class="form-control" type="number" wire:model.live="stock_price"
-                  placeholder="{{ _app('stock_price') }}">
-                @error('stock_price')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
               <div class="col-lg-6 mb-2"><label class="form-label" for="sale_price">{{ _app('sale_price') }}</label>
                 <input class="form-control" type="number" wire:model.live="sale_price"
                   placeholder="{{ _app('sale_price') }}">
@@ -132,71 +119,92 @@
                   <span class="text-danger">{{ $message }}</span>
                 @enderror
               </div>
-              <div class="col-lg-6 mb-2"><label class="form-label" for="discount">{{ _app('discount') }}</label>
-                <input class="form-control" type="number" wire:model.live="discount"
-                  placeholder="{{ _app('discount') }}">
-                @error('discount')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="col-lg-2 mb-2"><label class="form-label" for="color">{{ _app('color') }}</label>
-                <input class="form-control" type="color" wire:model.live="color"
-                  placeholder="{{ _app('color') }}">
-                @error('color')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="col-lg-4 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
-                <input class="form-control" type="text" wire:model.live="size"
-                  placeholder="{{ _app('size') }}">
-                @error('size')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="col-lg-3 mb-2"><label class="form-label" for="si_unit">{{ _app('si_unit') }}</label>
-                <select class="form-control" wire:model.live="si_unit">
-                  <option value="">{{ _app('si_unit') }}</option>
-                  @foreach (system_si_unit() as $unit)
-                    <option value="{{ $unit['symbol'] }}">{{ $unit['title'] }}</option>
-                  @endforeach
-                </select>
-                @error('si_unit')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="col-lg-3 mb-2"><label class="form-label" for="weight">{{ _app('weight') }}</label>
-                <input class="form-control" type="number" wire:model.live="weight"
-                  placeholder="{{ _app('weight') }}">
-                @error('weight')
-                  <span class="text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="button-wrapper mb-3">
-                @error('photo')
+              <div class="row" x-show="advance">
+                <div class="col-lg-6 mb-2"><label class="form-label"
+                    for="stock_price">{{ _app('stock_price') }}</label>
+                  <input class="form-control" type="number" wire:model.live="stock_price"
+                    placeholder="{{ _app('stock_price') }}">
+                  @error('stock_price')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-6 mb-2"><label class="form-label" for="discount">{{ _app('discount') }}</label>
+                  <input class="form-control" type="number" wire:model.live="discount"
+                    placeholder="{{ _app('discount') }}">
+                  @error('discount')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-12 mb-2"><label class="form-label"
+                    for="description">{{ _app('description') }}</label>
+                  <textarea class="form-control"wire:model.live="description" placeholder="{{ _app('description') }}"></textarea>
+                  @error('description')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-2 mb-2"><label class="form-label" for="color">{{ _app('color') }}</label>
+                  <input class="form-control" type="color" wire:model.live="color"
+                    placeholder="{{ _app('color') }}">
+                  @error('color')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-4 mb-2"><label class="form-label" for="size">{{ _app('size') }}</label>
+                  <input class="form-control" type="text" wire:model.live="size"
+                    placeholder="{{ _app('size') }}">
+                  @error('size')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-3 mb-2"><label class="form-label" for="si_unit">{{ _app('si_unit') }}</label>
+                  <select class="form-control" wire:model.live="si_unit">
+                    <option value="">{{ _app('si_unit') }}</option>
+                    @foreach (system_si_unit() as $unit)
+                      <option value="{{ $unit['symbol'] }}">{{ $unit['title'] }}</option>
+                    @endforeach
+                  </select>
+                  @error('si_unit')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="col-lg-3 mb-2"><label class="form-label" for="weight">{{ _app('weight') }}</label>
+                  <input class="form-control" type="number" wire:model.live="weight"
+                    placeholder="{{ _app('weight') }}">
+                  @error('weight')
+                    <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="button-wrapper mb-3">
+                  <span class="form-label">{{ _app('Image') }}</span><br>
+                  <label class="btn btn-primary mb-4 me-2" for="image" tabindex="0">
+                    <i class="bi bi-upload"></i>
+                    <input class="account-file-input" id="image" type="file" wire:model.live="image" multiple
+                      accept="image/png, image/jpeg" />
+                  </label>
+
+                  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"
+                    wire:loading wire:target="image">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <!-- Preview Section -->
+                  @if ($image)
+                    <div class="row">
+                      @foreach ($image as $Image)
+                        <img class="rounded-circle m-1" src="{{ $Image->temporaryUrl() }}"
+                          alt="Product Image Preview" style="width: 60px; height: 60px;">
+                      @endforeach
+                    </div>
+                  @endif
+                </div>
+                @error('image')
                   <span class="error">{{ $message }}</span>
                 @enderror
-                <span class="form-label">{{ _app('Image') }}</span><br>
-                <label class="btn btn-primary mb-4 me-2" for="image" tabindex="0">
-                  <i class="bi bi-upload"></i>
-                  <input class="account-file-input" id="image" type="file" wire:model="image" hidden multiple
-                    accept="image/png, image/jpeg" />
-                </label>
 
-                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"
-                  wire:loading wire:target="image">
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <!-- Preview Section -->
-                @if ($image)
-                  <div class="row">
-                    @foreach ($image as $Image)
-                      <img class="rounded-circle m-1" src="{{ $Image->temporaryUrl() }}" alt="Product Image Preview"
-                        style="width: 60px; height: 60px;">
-                    @endforeach
-                  </div>
-                @endif
               </div>
-
+              <a x-on:click="advance = !advance" wire:navigate>
+                <span style="color:green" x-show="!advance"> More</span>
+                <span style="color:orange" x-show="advance"> Less</span>
+              </a>
             </div>
           </div>
           <div class="modal-footer">

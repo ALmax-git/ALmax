@@ -107,7 +107,7 @@ class User extends Authenticatable
 
     public function cart_items()
     {
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Cart::class)->where('status', 'pending');
     }
     public function orders()
     {

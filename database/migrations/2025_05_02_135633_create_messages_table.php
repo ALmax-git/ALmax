@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('message_id')->nullable()->references('id')->on('messages')->onDelete('cascade');
 
             $table->foreignId('sender_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('reciever_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('reciever_id')->nullable()->references('id')->on('users')->onDelete('cascade');
 
-            $table->enum('status', ['unread', 'read'])->default('unread'); // unread /read
+            $table->enum('status', ['unread', 'read', 'draft'])->default('unread'); // unread /read
             $table->string('level')->default('info'); // info, success, warning, danger | client only 
             $table->text('content');
             $table->timestamps();

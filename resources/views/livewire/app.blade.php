@@ -2,8 +2,8 @@
   <style>
     .form-control {
       background-color: #000 !important;
-      color: #0800ff !important;
-      border: 1px solid #0000f9 !important;
+      color: #ffffff !important;
+      border: 1px solid #09002ee3 !important;
     }
 
     .card {
@@ -347,6 +347,7 @@
     </nav>
     <!-- Navbar End -->
 
+    @livewire('app.client.sales')
     @switch($tab)
       @case('Todo')
         <div class="container-fluid px-4 pt-4">
@@ -660,5 +661,5 @@
   <!-- Content End -->
 
   <!-- Back to Top -->
-  <a class="btn btn-lg btn-primary btn-lg-square back-to-top" href="#"><i class="bi bi-arrow-up"></i></a>
+  {{-- <a class="btn btn-lg btn-primary btn-lg-square back-to-top" href="#"><i class="bi bi-arrow-up"></i></a> --}}
 </div>

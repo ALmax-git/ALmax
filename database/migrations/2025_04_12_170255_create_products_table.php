@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('category_id');
             $table->text('description')->nullable();
             $table->integer('discount')->nullable();
-            $table->double('stock_price', 8, 2);
+            $table->double('stock_price', 8, 2)->nullable();
             $table->double('sale_price', 8, 2);
             $table->integer('available_stock')->default(0);
             $table->string('color')->nullable();

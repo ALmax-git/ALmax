@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             // $table->decimal('price', 20, 2);
             // $table->decimal('total', 20, 2);    // price * quantity
-            $table->enum('status', ['pending', 'comfirmed', 'abandoned'])->default('pending');  // pending, confirmed, abandoned
+            $table->enum('status', ['pending', 'comfirmed', 'abandoned', 'completed'])->default('pending');  // pending, confirmed, abandoned
             $table->timestamp('reservation_end_time')->nullable(); // Reservation deadline
             $table->decimal('paid_amount', 20, 2)->default(0);  // How much paid so far
             $table->decimal('installment_balance', 20, 2); // Remaining balance for installments

@@ -91,21 +91,22 @@ class Product extends Component
     }
     public function create_product()
     {
+
         $validatedData = $this->validate([
             'name'              => 'required|string|max:100',
             'brand'             => 'required|string|max:100',
             'sub_title'         => 'required|string|max:255',
             'category_id'       => 'required|integer|exists:product_categories,id',
-            'description'       => 'required|string',
-            'discount'          => 'required|numeric',
-            'stock_price'       => 'required|numeric',
+            'description'       => 'nullable|string',
+            'discount'          => 'nullable|numeric',
+            'stock_price'       => 'nullable|numeric',
             'sale_price'        => 'required|numeric',
             'available_stock'   => 'required|numeric',
-            'color'             => 'required',
-            'image.*'           => 'required|image|max:6024', // max size 1MB
-            'size'              => 'required|string', // max size 10MB
+            'color'             => 'nullable',
+            'image.*'           => 'nullable|image|max:6024', // max size 1MB
+            'size'              => 'nullable|string', // max size 10MB
             'si_unit'           => 'nullable|string',
-            'weight'            => 'required|numeric|min:0',
+            'weight'            => 'nullable|numeric|min:0',
         ]);
         // Log::error('An unexpected error occurred: ');
         if (ModelsProduct::where('name', $this->name)->where('client_id', Auth::user()->client_id)->count() > 0) {
@@ -121,18 +122,20 @@ class Product extends Component
             );
             return;
         }
-        if ($this->sale_price <= $this->stock_price) {
-            $this->alert(
-                'info',
-                'Oops! Sale price most be greater than the stock price.',
-                [
-                    'position' => 'center',
-                    'toast' => 1,
-                    'showConfirmButton' => true,
-                    'timer' => null
-                ]
-            );
-            return;
+        if ($this->stock_price) {
+            if ($this->sale_price <= $this->stock_price) {
+                $this->alert(
+                    'info',
+                    'Oops! Sale price most be greater than the stock price.',
+                    [
+                        'position' => 'center',
+                        'toast' => 1,
+                        'showConfirmButton' => true,
+                        'timer' => null
+                    ]
+                );
+                return;
+            }
         }
         DB::beginTransaction();
         try {
@@ -144,32 +147,34 @@ class Product extends Component
                 'brand' => $this->brand,
                 'sub_title' => $this->sub_title,
                 'category_id' => $this->category_id,
-                'description' => $this->description,
-                'stock_price' => $this->stock_price,
+                'description' => $this->description ?? 'Not Available',
+                'stock_price' => $this->stock_price > 0 ? $this->stock_price : $this->sale_price,
                 'sale_price' => $this->sale_price,
                 'available_stock' => $this->available_stock,
-                'color' => $this->color,
-                'size' => $this->size,
-                'discount' => $this->discount,
-                'si_unit' => $this->si_unit,
-                'weight' => $this->weight,
+                'color' => $this->color ?? '#fff',
+                'size' => $this->size ?? '',
+                'discount' => $this->discount > 0 ? $this->discount : 0  ?? 0,
+                'si_unit' => $this->si_unit ?? 'g',
+                'weight' => $this->weight ?? 0,
             ]);
 
             // Save product images
-            foreach ($this->image as $file) {
-                $file_name = $file->store('products', 'public');
+            if ($this->image > 0) {
+                foreach ($this->image as $file) {
+                    $file_name = $file->store('products', 'public');
 
-                File::create([
-                    'label' => $this->product->id,
-                    'path' => $file_name,
-                    'description' => 'Product Image: ' . $this->product->name,
-                    'visibility' => 'public',
-                    'info' => 'Product Image: ' . $this->product->name,
-                    'mimes' => Storage::mimeType($file_name),
-                    'type' => 'product_image',
-                    'user_id' => Auth::user()->id,
-                    'client_id' => Auth::user()->client_id,
-                ]);
+                    File::create([
+                        'label' => $this->product->id,
+                        'path' => $file_name,
+                        'description' => 'Product Image: ' . $this->product->name,
+                        'visibility' => 'public',
+                        'info' => 'Product Image: ' . $this->product->name,
+                        'mimes' => Storage::mimeType($file_name),
+                        'type' => 'product_image',
+                        'user_id' => Auth::user()->id,
+                        'client_id' => Auth::user()->client_id,
+                    ]);
+                }
             }
 
 
@@ -219,29 +224,31 @@ class Product extends Component
             'brand'             => 'required|string|max:100',
             'sub_title'         => 'required|string|max:255',
             'category_id'       => 'required|integer|exists:product_categories,id',
-            'description'       => 'required|string',
-            'discount'          => 'required|numeric',
-            'stock_price'       => 'required|numeric',
+            'description'       => 'nullable|string',
+            'discount'          => 'nullable|numeric',
+            'stock_price'       => 'nullable|numeric',
             'sale_price'        => 'required|numeric',
             'available_stock'   => 'required|numeric',
-            'color'             => 'required',
-            // 'image.*'           => 'nullable|image|max:6024', // max size 1MB
-            'size'              => 'required|string', // max size 10MB
+            'color'             => 'nullable',
+            'image.*'           => 'nullable|image|max:6024', // max size 1MB
+            'size'              => 'nullable|string', // max size 10MB
             'si_unit'           => 'nullable|string',
-            'weight'            => 'required|numeric|min:0',
+            'weight'            => 'nullable|numeric|min:0',
         ]);
-        if ($this->sale_price <= $this->stock_price) {
-            $this->alert(
-                'info',
-                'Oops! Sale price most be greater than the stock price.',
-                [
-                    'position' => 'center',
-                    'toast' => 1,
-                    'showConfirmButton' => true,
-                    'timer' => null
-                ]
-            );
-            return;
+        if ($this->stock_price > 0) {
+            if ($this->sale_price <= $this->stock_price) {
+                $this->alert(
+                    'info',
+                    'Oops! Sale price most be greater than the stock price.',
+                    [
+                        'position' => 'center',
+                        'toast' => 1,
+                        'showConfirmButton' => true,
+                        'timer' => null
+                    ]
+                );
+                return;
+            }
         }
         DB::beginTransaction();
         try {
@@ -268,17 +275,17 @@ class Product extends Component
                 'brand' => $this->brand,
                 'sub_title' => $this->sub_title,
                 'category_id' => $this->category_id,
-                'description' => $this->description,
-                'stock_price' => $this->stock_price,
+                'description' => $this->description ?? 'Not Available',
+                'stock_price' => $this->stock_price > 0 ? $this->stock_price : $this->sale_price,
                 'sale_price' => $this->sale_price,
                 'available_stock' => $this->available_stock,
-                'color' => $this->color,
-                'size' => $this->size,
-                'discount' => $this->discount,
-                'si_unit' => $this->si_unit,
-                'weight' => $this->weight,
+                'color' => $this->color ?? '#fff',
+                'size' => $this->size ?? '',
+                'discount' => $this->discount > 0 ? $this->discount : 0,
+                'si_unit' => $this->si_unit ?? 'g',
+                'weight' => $this->weight ?? 0,
                 'status' => $this->status,
-                'sold' => $this->sold,
+                // 'sold' => $this->sold,
             ]);
             // Save product images
             if ($this->image) {
