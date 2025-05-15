@@ -23,6 +23,7 @@
       </div>
       <div class="col-md-6">
         <p class="text-muted small mb-1">{{ $product->sub_title }}</p>
+        <p class="text-muted small mb-1">Available: {{ $product->available_stock }}</p>
 
         <div class="mt-2">
           <h3>

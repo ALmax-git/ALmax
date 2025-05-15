@@ -545,7 +545,20 @@ class DatabaseSeeder extends Seeder
                 'label' => 'client_wallet_access',
                 'description' => 'This allow user to access client wallet menu and also view them with details',
                 'status' => 'active',
-            ]
+            ],
+            [
+                'title' => 'Sales Access',
+                'label' => 'sales_access',
+                'description' => 'This allow user to access sales menu and also view them with details',
+                'status' => 'active',
+            ],
+            [
+                'title' => 'Manage Sales',
+                'label' => 'manage_sales',
+                'description' => 'This allow user to manage sales of a client.',
+                'status' => 'active',
+            ],
+
         ];
 
         Permission::insert($permissions);
@@ -560,15 +573,22 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
             'type' => 'client', # client or user
         ]);
-
-        Asset::create([
-            'wallet_id' => 1,
-            'label' => 'Naira',
-            'symbol' => 'N',
-            'amount' => 1000,
-            'type' => 'currency',
-            'is_verified' => true,
-            'value' => 1000,
-        ]);
+        $assets = [
+            [
+                'label' => 'Naira',
+                'symbol' => '₦',
+                'type' => 'currency',
+                'is_verified' => true,
+                'value' => 1,
+            ],
+            [
+                'label' => 'Dollar',
+                'symbol' => '$',
+                'type' => 'currency',
+                'is_verified' => true,
+                'value' => 1500,
+            ],
+        ];
+        Asset::insert($assets);
     }
 }

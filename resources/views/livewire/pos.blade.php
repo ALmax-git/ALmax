@@ -22,6 +22,12 @@
       <a class="navbar-brand d-flex d-lg-none me-4" href="/">
         <h2 class="text-primary mb-0 text-right"><i class="bi bi-user-edit"></i></h2>
       </a>
+      <a class="navbar-brand fa-2x mx-4" href="/">
+        <i class="bi bi-boxes text-black"
+          style="background-color: black; color: white !important;  border: 3px solid black;"></i><span
+          style="background-color: black; color: white !important; border: 3px solid black;">Node</span><span
+          style="border: 3px solid black;">Pulse</span>
+      </a>
       <style>
         .clock {
           position: relative;
@@ -152,11 +158,12 @@
           </div>
       </div>
     </nav>
-    <div class="container-fluid px-4 pt-4">
-      <div class="vh-100">
-        @livewire('app.clients.product')
-      </div>
-    </div>
+    @if (user_can_access('product_access'))
+      @livewire('app.clients.product')
+    @endif
+    @if (user_can_access('sales_access') || user_can_access('manage_sales'))
+      @livewire('app.client.sales', ['sale_list_view' => true])
+    @endif
     @if ($profile_view)
       <div class="modal" tabindex="-1" style="display:block;">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -172,7 +179,6 @@
         </div>
       </div>
     @endif
-    @livewire('app.client.sales')
     <!-- Footer Start -->
     <div class="container-fluid px-4 pt-4">
       <div class="bg-secondary rounded-top mt-2 p-4">

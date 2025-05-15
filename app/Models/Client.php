@@ -101,4 +101,9 @@ class Client extends Model
     {
         return $this->hasOne(Wallet::class, 'client_id')->where('type', 'client');
     }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }

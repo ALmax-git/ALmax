@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALmax - Empowering Digital Business</title>
+    <title>International Conference on Flood Management 2025</title>
     <meta name="title" content="ALmax - Empowering Digital Business">
     <meta name="description" content="{{ _app('almax_desc') }}">
     <meta name="keywords"
@@ -117,11 +117,11 @@
               </div>
               <div class="col-lg-3">
                 <h3>Where</h3>
-                <p>Muhammad Indimi International Conference Center, University of Maiduguri</p>
+                <p>Muhammadu Indimi International Conference Center, University of Maiduguri</p>
               </div>
               <div class="col-lg-3">
                 <h3>When</h3>
-                <p>22 July 2025 by 10:00 AM</p>
+                <p>22 June 2025 by 10:00 AM</p>
               </div>
             </div>
           </div>
@@ -144,72 +144,52 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
               <div class="member">
-                <img class="img-fluid" src="build/assets/img/speakers/speaker-1.jpg" alt="">
+                <img class="img-fluid" src="" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4><a href="speaker-details.html">Walter White</a></h4>
-                    <span>Quas alias incidunt</span>
+                    <h4><a href="speaker-details.html">Dr. Iliya Garba</a></h4>
+                    <span></span>
                   </div>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
+
                 </div>
               </div>
             </div><!-- End Team Member -->
 
             <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
               <div class="member">
-                <img class="img-fluid" src="build/assets/img/speakers/speaker-2.jpg" alt="">
+                <img class="img-fluid" src="" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4><a href="speaker-details.html">Hubert Hirthe</a></h4>
+                    <h4><a href="speaker-details.html">-----------</a></h4>
                     <span>Consequuntur odio aut</span>
                   </div>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
+
                 </div>
               </div>
             </div><!-- End Team Member -->
 
             <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
               <div class="member">
-                <img class="img-fluid" src="build/assets/img/speakers/speaker-3.jpg" alt="">
+                <img class="img-fluid" src="" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4><a href="speaker-details.html">Amanda Jepson</a></h4>
+                    <h4><a href="speaker-details.html">-----------</a></h4>
                     <span>Fugiat laborum et</span>
                   </div>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
+
                 </div>
               </div>
             </div><!-- End Team Member -->
 
             <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
               <div class="member">
-                <img class="img-fluid" src="build/assets/img/speakers/speaker-4.jpg" alt="">
+                <img class="img-fluid" src="" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4><a href="speaker-details.html">William Anderson</a></h4>
+                    <h4><a href="speaker-details.html">----------</a></h4>
                     <span>Debitis iure vero</span>
                   </div>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
+
                 </div>
               </div>
             </div><!-- End Team Member -->
@@ -226,7 +206,6 @@
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
           <h2>Event Schedule<br></h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -245,28 +224,21 @@
 
           <div class="tab-content row justify-content-center" data-aos="fade-up" data-aos-delay="200">
 
-            <h3 class="sub-heading">Voluptatem nulla veniam soluta et corrupti consequatur neque eveniet officia. Eius
-              necessitatibus voluptatem quis labore perspiciatis quia.</h3>
-
             <!-- Schdule Day 1 -->
             <div class="col-lg-9 tab-pane fade show active" id="day-1" role="tabpanel">
 
               <div class="row schedule-item">
-                <div class="col-md-2"><time>09:30 AM</time></div>
-                <div class="col-md-10">
-                  <h4>Registration</h4>
-                  <p>Fugit voluptas iusto maiores temporibus autem numquam magnam.</p>
-                </div>
+
               </div>
 
               <div class="row schedule-item">
                 <div class="col-md-2"><time>10:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-1-2.jpg" alt="Brenden Legros">
+                    <img src="" alt="Brenden Legros">
                   </div>
-                  <h4>Keynote <span>Brenden Legros</span></h4>
-                  <p>Facere provident incidunt quos voluptas.</p>
+                  <h4>---------<span>-------------</span></h4>
+                  <p>-------------.</p>
                 </div>
               </div>
 
@@ -274,10 +246,10 @@
                 <div class="col-md-2"><time>11:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-2-2.jpg" alt="Hubert Hirthe">
+                    <img src="" alt="Hubert Hirthe">
                   </div>
-                  <h4>Et voluptatem iusto dicta nobis. <span>Hubert Hirthe</span></h4>
-                  <p>Maiores dignissimos neque qui cum accusantium ut sit sint inventore.</p>
+                  <h4>-------------. <span>-------------</span></h4>
+                  <p>-------------.</p>
                 </div>
               </div>
 
@@ -285,10 +257,10 @@
                 <div class="col-md-2"><time>12:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-3-2.jpg" alt="Cole Emmerich">
+                    <img src="" alt="Cole Emmerich">
                   </div>
-                  <h4>Explicabo et rerum quis et ut ea. <span>Cole Emmerich</span></h4>
-                  <p>Veniam accusantium laborum nihil eos eaque accusantium aspernatur.</p>
+                  <h4>------------- <span>-------------</span></h4>
+                  <p>-------------.</p>
                 </div>
               </div>
 
@@ -296,10 +268,10 @@
                 <div class="col-md-2"><time>02:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-4-2.jpg" alt="Jack Christiansen">
+                    <img src="" alt="Jack Christiansen">
                   </div>
-                  <h4>Qui non qui vel amet culpa sequi. <span>Jack Christiansen</span></h4>
-                  <p>Nam ex distinctio voluptatem doloremque suscipit iusto.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -307,10 +279,10 @@
                 <div class="col-md-2"><time>03:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-5.jpg" alt="Alejandrin Littel">
+                    <img src="" alt="Alejandrin Littel">
                   </div>
-                  <h4>Quos ratione neque expedita asperiores. <span>Alejandrin Littel</span></h4>
-                  <p>Eligendi quo eveniet est nobis et ad temporibus odio quo.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------.</p>
                 </div>
               </div>
 
@@ -318,10 +290,10 @@
                 <div class="col-md-2"><time>04:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-6.jpg" alt="Willow Trantow">
+                    <img src="" alt="Willow Trantow">
                   </div>
-                  <h4>Quo qui praesentium nesciunt <span>Willow Trantow</span></h4>
-                  <p>Voluptatem et alias dolorum est aut sit enim neque veritatis.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------.</p>
                 </div>
               </div>
 
@@ -334,10 +306,10 @@
                 <div class="col-md-2"><time>10:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-1-2.jpg" alt="Brenden Legros">
+                    <img src="" alt="Brenden Legros">
                   </div>
-                  <h4>Libero corrupti explicabo itaque. <span>Brenden Legros</span></h4>
-                  <p>Facere provident incidunt quos voluptas.</p>
+                  <h4>L------------. <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -345,10 +317,10 @@
                 <div class="col-md-2"><time>11:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-2-2.jpg" alt="Hubert Hirthe">
+                    <img src="" alt="Hubert Hirthe">
                   </div>
-                  <h4>Et voluptatem iusto dicta nobis. <span>Hubert Hirthe</span></h4>
-                  <p>Maiores dignissimos neque qui cum accusantium ut sit sint inventore.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------.</p>
                 </div>
               </div>
 
@@ -356,10 +328,10 @@
                 <div class="col-md-2"><time>12:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-3-2.jpg" alt="Cole Emmerich">
+                    <img src="" alt="Cole Emmerich">
                   </div>
-                  <h4>Explicabo et rerum quis et ut ea. <span>Cole Emmerich</span></h4>
-                  <p>Veniam accusantium laborum nihil eos eaque accusantium aspernatur.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>V------------.</p>
                 </div>
               </div>
 
@@ -367,10 +339,10 @@
                 <div class="col-md-2"><time>02:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-4-2.jpg" alt="Jack Christiansen">
+                    <img src="" alt="Jack Christiansen">
                   </div>
-                  <h4>Qui non qui vel amet culpa sequi. <span>Jack Christiansen</span></h4>
-                  <p>Nam ex distinctio voluptatem doloremque suscipit iusto.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -378,10 +350,10 @@
                 <div class="col-md-2"><time>03:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-5.jpg" alt="Alejandrin Littel">
+                    <img src="" alt="Alejandrin Littel">
                   </div>
-                  <h4>Quos ratione neque expedita asperiores. <span>Alejandrin Littel</span></h4>
-                  <p>Eligendi quo eveniet est nobis et ad temporibus odio quo.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -389,10 +361,10 @@
                 <div class="col-md-2"><time>04:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-6.jpg" alt="Willow Trantow">
+                    <img src="" alt="Willow Trantow">
                   </div>
-                  <h4>Quo qui praesentium nesciunt <span>Willow Trantow</span></h4>
-                  <p>Voluptatem et alias dolorum est aut sit enim neque veritatis.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------.</p>
                 </div>
               </div>
 
@@ -405,10 +377,10 @@
                 <div class="col-md-2"><time>10:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-2-2.jpg" alt="Hubert Hirthe">
+                    <img src="" alt="Hubert Hirthe">
                   </div>
-                  <h4>Et voluptatem iusto dicta nobis. <span>Hubert Hirthe</span></h4>
-                  <p>Maiores dignissimos neque qui cum accusantium ut sit sint inventore.</p>
+                  <h4>E------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -416,10 +388,10 @@
                 <div class="col-md-2"><time>11:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-3-2.jpg" alt="Cole Emmerich">
+                    <img src="" alt="Cole Emmerich">
                   </div>
-                  <h4>Explicabo et rerum quis et ut ea. <span>Cole Emmerich</span></h4>
-                  <p>Veniam accusantium laborum nihil eos eaque accusantium aspernatur.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -427,10 +399,10 @@
                 <div class="col-md-2"><time>12:00 AM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-1-2.jpg" alt="Brenden Legros">
+                    <img src="" alt="Brenden Legros">
                   </div>
-                  <h4>Libero corrupti explicabo itaque. <span>Brenden Legros</span></h4>
-                  <p>Facere provident incidunt quos voluptas.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------.</p>
                 </div>
               </div>
 
@@ -438,10 +410,10 @@
                 <div class="col-md-2"><time>02:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-4-2.jpg" alt="Jack Christiansen">
+                    <img src="" alt="Jack Christiansen">
                   </div>
-                  <h4>Qui non qui vel amet culpa sequi. <span>Jack Christiansen</span></h4>
-                  <p>Nam ex distinctio voluptatem doloremque suscipit iusto.</p>
+                  <h4>------------ <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -449,10 +421,10 @@
                 <div class="col-md-2"><time>03:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-5.jpg" alt="Alejandrin Littel">
+                    <img src="" alt="Alejandrin Littel">
                   </div>
-                  <h4>Quos ratione neque expedita asperiores. <span>Alejandrin Littel</span></h4>
-                  <p>Eligendi quo eveniet est nobis et ad temporibus odio quo.</p>
+                  <h4>------------. <span>------------</span></h4>
+                  <p>------------</p>
                 </div>
               </div>
 
@@ -460,10 +432,10 @@
                 <div class="col-md-2"><time>04:00 PM</time></div>
                 <div class="col-md-10">
                   <div class="speaker">
-                    <img src="build/assets/img/speakers/speaker-6.jpg" alt="Willow Trantow">
+                    <img src="" alt="Willow Trantow">
                   </div>
-                  <h4>Quo qui praesentium nesciunt <span>Willow Trantow</span></h4>
-                  <p>Voluptatem et alias dolorum est aut sit enim neque veritatis.</p>
+                  <h4>Q------------ <span>------------</span></h4>
+                  <p>V------------.</p>
                 </div>
               </div>
 
@@ -480,7 +452,7 @@
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
           <h2>Event Venue<br></h2>
-          <p>Muhammad Indimi International Conference Hall, University of Maiduguri.</h3>
+          <p>Muhammadu Indimi International Conference Hall, University of Maiduguri.</h3>
           <p>We wait for you at the International Conference on flood Management 2025</p>
         </div><!-- End Section Title -->
 
@@ -497,91 +469,13 @@
               <div class="row justify-content-center">
                 <div class="col-11 col-lg-8 position-relative">
                   <h3>Borno State, Nigeria</h3>
-                  <p>Muhammad Indimi International Conference Hall, University of Maiduguri.</h3>
+                  <p>Muhammadu Indimi International Conference Hall, University of Maiduguri.</h3>
                   <p>We wait for you at the International Conference on flood Management 2025.</p>
                 </div>
               </div>
             </div>
           </div>
 
-        </div>
-
-        <div class="container-fluid venue-gallery-container" data-aos="fade-up" data-aos-delay="100">
-          <div class="row g-0">
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-1.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-1.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-2.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-2.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-3.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-3.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-4.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-4.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-5.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-5.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-6.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-6.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-7.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-7.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-4">
-              <div class="venue-gallery">
-                <a class="glightbox" data-gall="venue-gallery"
-                  href=build/assets/img/venue-gallery/venue-gallery-8.jpg">
-                  <img class="img-fluid" src="build/assets/img/venue-gallery/venue-gallery-8.jpg" alt="">
-                </a>
-              </div>
-            </div>
-
-          </div>
         </div>
 
       </section><!-- /Venue Section -->
@@ -641,88 +535,18 @@
 
       </section><!-- /Hotels Section --> --}}
 
-      <!-- Gallery Section -->
-      <section class="gallery section" id="gallery">
-
-        <!-- Section Title -->
-        <div class="section-title container" data-aos="fade-up">
-          <h2>Gallery</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div><!-- End Section Title -->
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-          <div class="swiper init-swiper">
-            <script type="application/json" class="swiper-config">
-            {
-              "loop": true,
-              "speed": 600,
-              "autoplay": {
-                "delay": 5000
-              },
-              "slidesPerView": "auto",
-              "centeredSlides": true,
-              "pagination": {
-                "el": ".swiper-pagination",
-                "type": "bullets",
-                "clickable": true
-              },
-              "breakpoints": {
-                "320": {
-                  "slidesPerView": 1,
-                  "spaceBetween": 0
-                },
-                "768": {
-                  "slidesPerView": 3,
-                  "spaceBetween": 20
-                },
-                "1200": {
-                  "slidesPerView": 5,
-                  "spaceBetween": 20
-                }
-              }
-            }
-          </script>
-            <div class="swiper-wrapper align-items-center">
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-1.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-1.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-2.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-2.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-3.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-3.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-4.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-4.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-5.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-5.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-6.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-6.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-7.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-7.jpg" alt=""></a></div>
-              <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                  href=build/assets/img/event-gallery/event-gallery-8.jpg"><img class="img-fluid"
-                    src="build/assets/img/event-gallery/event-gallery-8.jpg" alt=""></a></div>
-            </div>
-            <div class="swiper-pagination"></div>
-          </div>
-
-        </div>
-
-      </section><!-- /Gallery Section -->
-
-      <!-- Sponsors Section -->
+      <!-- Sponsors Section
+    
+      LAKE CHAD DEVELOMENT CENTER
+      BOSEPA
+        
+      
+      -->
       <section class="sponsors section light-background" id="sponsors">
 
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
-          <h2>Sponsors</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+          <h2>Collaborators</h2>
         </div><!-- End Section Title -->
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -737,30 +561,6 @@
               <img class="img-fluid" src="build/assets/img/clients/client-2.png" alt="">
             </div><!-- End Client Item -->
 
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-3.png" alt="">
-            </div><!-- End Client Item -->
-
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-4.png" alt="">
-            </div><!-- End Client Item -->
-
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-5.png" alt="">
-            </div><!-- End Client Item -->
-
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-6.png" alt="">
-            </div><!-- End Client Item -->
-
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-7.png" alt="">
-            </div><!-- End Client Item -->
-
-            <div class="col-xl-3 col-md-4 client-logo">
-              <img class="img-fluid" src="build/assets/img/clients/client-8.png" alt="">
-            </div><!-- End Client Item -->
-
           </div>
 
         </div>
@@ -773,7 +573,6 @@
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
           <h2>Frequently Asked Questions</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
         </div><!-- End Section Title -->
 
         <div class="container">
@@ -797,7 +596,7 @@
                 <div class="faq-item">
                   <h3>What payment methods are accepted?</h3>
                   <div class="faq-content">
-                    <p>We accept online payments via Paystack, which allows you to pay using ATM cards (Visa,
+                    <p>We accept online payments via Flutterwave, which allows you to pay using ATM cards (Visa,
                       Mastercard, Verve) and bank transfers. All transactions are secure and encrypted.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
@@ -815,7 +614,7 @@
                 <div class="faq-item">
                   <h3>Can I get a refund if I can’t attend the conference?</h3>
                   <div class="faq-content">
-                    <p>You can't refund your money after making payment.</p>
+                    <p>We can't refund your money after making payment.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
@@ -823,8 +622,7 @@
                 <div class="faq-item">
                   <h3>Do I need to create an account to make a reservation?</h3>
                   <div class="faq-content">
-                    <p>No, you do not need to create an account. You can simply fill in your details, make the payment,
-                      and receive your confirmation instantly.</p>
+                    <p>Yes, you need to create an account.</p>
                   </div>
                   <i class="faq-toggle bi bi-chevron-right"></i>
                 </div><!-- End Faq item-->
@@ -856,7 +654,6 @@
         <!-- Section Title -->
         <div class="section-title container" data-aos="fade-up">
           <h2>Contact</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
         </div><!-- End Section Title -->
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -868,7 +665,7 @@
                 data-aos-delay="200">
                 <i class="bi bi-geo-alt"></i>
                 <h3>Address</h3>
-                <p>Cock Center at Ramat Polytechnic Maiduguri</p>
+                <p>Muhammadu Indimi International Conference Hall, University of Maiduguri.</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -877,7 +674,7 @@
                 data-aos-delay="300">
                 <i class="bi bi-telephone"></i>
                 <h3>Call Us</h3>
-                <p>+234 81 6514 1519</p>
+                <p>+234 8065628845/ +234 8033892837</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -886,7 +683,7 @@
                 data-aos-delay="400">
                 <i class="bi bi-envelope"></i>
                 <h3>Email Us</h3>
-                <p>abituho7s@mozmail.com</p>
+                <p>nwrcbncic025@gmail.com</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -954,9 +751,9 @@
               </a>
               <div class="footer-contact pt-3">
                 <p>Borno State Nigeria</p>
-                <p>Cock Center at Ramat Polytechnic Maiduguri</p>
-                <p class="mt-3"><strong>Phone:</strong> <span>+234 81 6514 1519</span></p>
-                <p><strong>Email:</strong> <span>abituho7s@mozmail.com</span></p>
+                <p>Muhammadu Indimi International Conference Hall, University of Maiduguri</p>
+                <p class="mt-3"><strong>Phone:</strong> <span>+234 7068116201</span></p>
+                <p><strong>Email:</strong> <span>nwrcbncic025@gmail.com</span></p>
               </div>
             </div>
 
@@ -968,17 +765,6 @@
                 <li><a href="#">Services</a></li>
                 <li><a href="#">Terms of service</a></li>
                 <li><a href="#">Privacy policy</a></li>
-              </ul>
-            </div>
-
-            <div class="col-lg-2 col-md-3 footer-links">
-              <h4>Our Services</h4>
-              <ul>
-                <li><a href="#">Web Design</a></li>
-                <li><a href="#">Web Development</a></li>
-                <li><a href="#">Product Management</a></li>
-                <li><a href="#">Marketing</a></li>
-                <li><a href="#">Graphic Design</a></li>
               </ul>
             </div>
 

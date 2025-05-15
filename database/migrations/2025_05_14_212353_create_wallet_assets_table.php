@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('wallet_assets', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
-            $table->string('symbol');
-            $table->enum('type', ['currency', 'document', 'software', 'others'])->default('Fiat');
-            $table->boolean('is_verified');
-            $table->double('value')->default(0);
+            $table->foreignId('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->foreignId('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->double('amount')->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('wallet_assets');
     }
 };

@@ -1,5 +1,5 @@
-<div class="container-fluid pt-4" style="min-height: 80vh;">
-  <div class="h-100 bg-secondary p-3">
+<div class="container-fluid rounded px-4 pt-4">
+  <div class="h-100 bg-secondary rounded p-3">
     <h2>{{ _app('Product') }}</h2>
     <div class="d-flex">
       <input class="form-control me-2" type="text" wire:model.live="search" placeholder="🔍 {{ _app('search') }}">
@@ -12,8 +12,8 @@
       @endif
     </div>
   </div>
-  @if (user_can_access('product_access'))
-    <div class="table-responsive bg-secondary p-4">
+  @if (user_can_access('product_access') || user_can_access('product_management'))
+    <div class="table-responsive bg-secondary rounded p-4">
 
       <table class="table-hover table bg-black" id="table-1">
         <thead class="table-black">

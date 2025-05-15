@@ -129,7 +129,7 @@
           <th>{{ _app('description') }}</th>
           <th>{{ _app('permissions') }}</th>
           <th>{{ _app('status') }}</th>
-          <th>{{ _app('action') }}</th>
+          <th style="text-align: end;">{{ _app('action') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -149,7 +149,7 @@
               </div>
             </td>
             <td>{{ _app($Role->status) }}</td>
-            <td style="width: 10vw;">
+            <td style="width: 10vw;" style="text-align: end;">
               <button class="btn btn-sm btn-outline-success" wire:click='add_permission("{{ write($Role->id) }}")'><i
                   class="bi bi-plus"></i>{{ _app('access') }} </button>
               <button class="btn btn-sm btn-info" wire:click='edit_role("{{ write($Role->id) }}")'>
@@ -256,7 +256,7 @@
           <th>{{ _app('description') }}</th>
           <th>{{ _app('Roles') }}</th>
           <th>{{ _app('status') }}</th>
-          <th>{{ _app('action') }}</th>
+          <th style="text-align: end;">{{ _app('action') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -267,7 +267,7 @@
             <td>{{ $Permission->description }}</td>
             <td>{{ $Permission->roles->count() }}</td>
             <td>{{ _app($Permission->status) }}</td>
-            <td>
+            <td style="text-align: end;">
               <button class="btn btn-sm btn-info" wire:click='edit_permission("{{ write($Permission->id) }}")'><i
                   class="bi bi-pen"></i></button>
               <button class="btn btn-sm btn-danger" wire:click='delete_permission("{{ write($Permission->id) }}")'><i

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Asset extends Model
+class WalletAsset extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,15 +12,17 @@ class Asset extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'label',
-        'symbol',
-        'type',
-        'is_verified',
-        'value',
+        'wallet_id',
+        'asset_id',
+        'amount',
     ];
 
+    public function origin()
+    {
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
     public function wallet()
     {
-        return    $this->belongsTo(Wallet::class);
+        return $this->belongsTo(Wallet::class, 'wallet_id');
     }
 }

@@ -137,168 +137,168 @@ if (!function_exists('validate_transaction_hash')) {
 }
 
 
-// if (!function_exists('system_exchange_rate')) {
+if (!function_exists('system_exchange_rate')) {
 
-//     function system_exchange_rate($base_currency, $target_currency, $amount)
-//     {
-//         if (!is_string($base_currency) || !is_string($target_currency) || !is_numeric($amount)) {
-//             Log::error('Invalid parameters provided to system_exchange_rate', [
-//                 'base_currency' => $base_currency,
-//                 'target_currency' => $target_currency,
-//                 'amount' => $amount,
-//             ]);
-//             return null;
-//         }
-//         if ($base_currency == $target_currency) {
+    function system_exchange_rate($base_currency, $target_currency, $amount)
+    {
+        if (!is_string($base_currency) || !is_string($target_currency) || !is_numeric($amount)) {
+            Log::error('Invalid parameters provided to system_exchange_rate', [
+                'base_currency' => $base_currency,
+                'target_currency' => $target_currency,
+                'amount' => $amount,
+            ]);
+            return null;
+        }
+        if ($base_currency == $target_currency) {
 
-//             // Perform calculations
-//             $rate = 1;
-//             $tokens = $amount * $rate;
-//             $vas = $tokens * 0.0211; // Calculate the base fee
-//             $vat = $tokens * 0.0321;   // Calculate the VAT (7.5%)
-//             $fee = $vas + $vat; // Total fee including VAT
+            // Perform calculations
+            $rate = 1;
+            $tokens = $amount * $rate;
+            $vas = $tokens * 0.0211; // Calculate the base fee
+            $vat = $tokens * 0.0321;   // Calculate the VAT (7.5%)
+            $fee = $vas + $vat; // Total fee including VAT
 
-//             // Apply discounts based on the token range
-//             if ($tokens > 5000 && $tokens <= 10000) {
-//                 $discountedFee = $fee - ($fee * 0.05);
-//                 $fee = ($discountedFee < 200) ? 200 : $discountedFee;
-//             } elseif ($tokens > 10000 && $tokens <= 50000) {
-//                 $discountedFee = $fee - ($fee * 0.1);
-//                 $fee = ($discountedFee < 250) ? 250 : $discountedFee;
-//             } elseif ($tokens > 50000 && $tokens <= 70000) {
-//                 $discountedFee = $fee - ($fee * 0.2);
-//                 $fee = ($discountedFee < 500) ? 500 : $discountedFee;
-//             } elseif ($tokens > 70000 && $tokens <= 100000) {
-//                 $discountedFee = $fee - ($fee * 0.3);
-//                 $fee = ($discountedFee < 750) ? 750 : $discountedFee;
-//             } elseif ($tokens > 100000 && $tokens <= 200000) {
-//                 $discountedFee = $fee - ($fee * 0.4);
-//                 $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
-//             } elseif ($tokens > 200000 && $tokens <= 500000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
-//             } elseif ($tokens > 500000 && $tokens <= 1000000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
-//             } elseif ($tokens > 1000000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
-//             }
-//             $total = $tokens - $fee;
+            // Apply discounts based on the token range
+            if ($tokens > 5000 && $tokens <= 10000) {
+                $discountedFee = $fee - ($fee * 0.05);
+                $fee = ($discountedFee < 200) ? 200 : $discountedFee;
+            } elseif ($tokens > 10000 && $tokens <= 50000) {
+                $discountedFee = $fee - ($fee * 0.1);
+                $fee = ($discountedFee < 250) ? 250 : $discountedFee;
+            } elseif ($tokens > 50000 && $tokens <= 70000) {
+                $discountedFee = $fee - ($fee * 0.2);
+                $fee = ($discountedFee < 500) ? 500 : $discountedFee;
+            } elseif ($tokens > 70000 && $tokens <= 100000) {
+                $discountedFee = $fee - ($fee * 0.3);
+                $fee = ($discountedFee < 750) ? 750 : $discountedFee;
+            } elseif ($tokens > 100000 && $tokens <= 200000) {
+                $discountedFee = $fee - ($fee * 0.4);
+                $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
+            } elseif ($tokens > 200000 && $tokens <= 500000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
+            } elseif ($tokens > 500000 && $tokens <= 1000000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
+            } elseif ($tokens > 1000000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
+            }
+            $total = $tokens - $fee;
 
-//             return [
-//                 'rate' => $rate,
-//                 'from' => $base_currency,
-//                 'to' => $target_currency,
-//                 'amount' => $amount,
-//                 'tokens' => $tokens,
-//                 'fee' => $fee,
-//                 'total' => $total,
-//             ];
-//         }
-//         try {
-//             // Check if the exchange rate exists and is recent (less than 1 hour old)
-//             $existingRate = ExchangeRate::where('base_currency', $base_currency)
-//                 ->where('target_currency', $target_currency)
-//                 ->where('updated_at', '>=', Carbon::now()->subHour())
-//                 ->first();
+            return [
+                'rate' => $rate,
+                'from' => $base_currency,
+                'to' => $target_currency,
+                'amount' => $amount,
+                'tokens' => $tokens,
+                'fee' => $fee,
+                'total' => $total,
+            ];
+        }
+        try {
+            // Check if the exchange rate exists and is recent (less than 1 hour old)
+            $existingRate = ExchangeRate::where('base_currency', $base_currency)
+                ->where('target_currency', $target_currency)
+                ->where('updated_at', '>=', Carbon::now()->subHour())
+                ->first();
 
-//             if ($existingRate) {
-//                 $rate = $existingRate->rate; // Use cached rate
-//             } else {
-//                 // Fetch new rate from the API
-//                 $api_key = env('EXCHANGE_RATE_API_KEY', null);
+            if ($existingRate) {
+                $rate = $existingRate->rate; // Use cached rate
+            } else {
+                // Fetch new rate from the API
+                $api_key = env('EXCHANGE_RATE_API_KEY', null);
 
-//                 if (empty($api_key)) {
-//                     Log::error('Exchange Rate API key is not set in .env');
-//                     return null;
-//                 }
+                if (empty($api_key)) {
+                    Log::error('Exchange Rate API key is not set in .env');
+                    return null;
+                }
 
-//                 $response = Http::get("https://v6.exchangerate-api.com/v6/{$api_key}/pair/{$base_currency}/{$target_currency}");
+                $response = Http::get("https://v6.exchangerate-api.com/v6/{$api_key}/pair/{$base_currency}/{$target_currency}");
 
-//                 if ($response->successful()) {
-//                     $data = $response->json();
-//                     $rate = $data['conversion_rate'] ?? 0;
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $rate = $data['conversion_rate'] ?? 0;
 
-//                     if ($rate > 0) {
-//                         // Store the new rate in the database
-//                         ExchangeRate::updateOrCreate(
-//                             ['base_currency' => $base_currency, 'target_currency' => $target_currency],
-//                             ['rate' => $rate]
-//                         );
-//                     } else {
-//                         Log::warning('Invalid exchange rate fetched', [
-//                             'base_currency' => $base_currency,
-//                             'target_currency' => $target_currency,
-//                             'rate' => $rate,
-//                         ]);
-//                         return null;
-//                     }
-//                 } else {
-//                     Log::error('Failed to fetch exchange rate from API', [
-//                         'base_currency' => $base_currency,
-//                         'target_currency' => $target_currency,
-//                         'response_status' => $response->status(),
-//                     ]);
-//                     return null;
-//                 }
-//             }
+                    if ($rate > 0) {
+                        // Store the new rate in the database
+                        ExchangeRate::updateOrCreate(
+                            ['base_currency' => $base_currency, 'target_currency' => $target_currency],
+                            ['rate' => $rate]
+                        );
+                    } else {
+                        Log::warning('Invalid exchange rate fetched', [
+                            'base_currency' => $base_currency,
+                            'target_currency' => $target_currency,
+                            'rate' => $rate,
+                        ]);
+                        return null;
+                    }
+                } else {
+                    Log::error('Failed to fetch exchange rate from API', [
+                        'base_currency' => $base_currency,
+                        'target_currency' => $target_currency,
+                        'response_status' => $response->status(),
+                    ]);
+                    return null;
+                }
+            }
 
-//             // Perform calculations
-//             $tokens = $amount * $rate;
+            // Perform calculations
+            $tokens = $amount * $rate;
 
-//             $vas = $tokens * 0.0211; // Calculate the base fee
-//             $vat = $tokens * 0.0321;   // Calculate the VAT (7.5%)
-//             $fee = $vas + $vat; // Total fee including VAT
+            $vas = $tokens * 0.0211; // Calculate the base fee
+            $vat = $tokens * 0.0321;   // Calculate the VAT (7.5%)
+            $fee = $vas + $vat; // Total fee including VAT
 
-//             // Apply discounts based on the token range
-//             if ($tokens > 5000 && $tokens <= 10000) {
-//                 $discountedFee = $fee - ($fee * 0.05);
-//                 $fee = ($discountedFee < 200) ? 200 : $discountedFee;
-//             } elseif ($tokens > 10000 && $tokens <= 50000) {
-//                 $discountedFee = $fee - ($fee * 0.1);
-//                 $fee = ($discountedFee < 250) ? 250 : $discountedFee;
-//             } elseif ($tokens > 50000 && $tokens <= 70000) {
-//                 $discountedFee = $fee - ($fee * 0.2);
-//                 $fee = ($discountedFee < 500) ? 500 : $discountedFee;
-//             } elseif ($tokens > 70000 && $tokens <= 100000) {
-//                 $discountedFee = $fee - ($fee * 0.3);
-//                 $fee = ($discountedFee < 750) ? 750 : $discountedFee;
-//             } elseif ($tokens > 100000 && $tokens <= 200000) {
-//                 $discountedFee = $fee - ($fee * 0.4);
-//                 $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
-//             } elseif ($tokens > 200000 && $tokens <= 500000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
-//             } elseif ($tokens > 500000 && $tokens <= 1000000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
-//             } elseif ($tokens > 1000000) {
-//                 $discountedFee = $fee - ($fee / 0.5);
-//                 $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
-//             }
-//             $total = $tokens - $fee;
+            // Apply discounts based on the token range
+            if ($tokens > 5000 && $tokens <= 10000) {
+                $discountedFee = $fee - ($fee * 0.05);
+                $fee = ($discountedFee < 200) ? 200 : $discountedFee;
+            } elseif ($tokens > 10000 && $tokens <= 50000) {
+                $discountedFee = $fee - ($fee * 0.1);
+                $fee = ($discountedFee < 250) ? 250 : $discountedFee;
+            } elseif ($tokens > 50000 && $tokens <= 70000) {
+                $discountedFee = $fee - ($fee * 0.2);
+                $fee = ($discountedFee < 500) ? 500 : $discountedFee;
+            } elseif ($tokens > 70000 && $tokens <= 100000) {
+                $discountedFee = $fee - ($fee * 0.3);
+                $fee = ($discountedFee < 750) ? 750 : $discountedFee;
+            } elseif ($tokens > 100000 && $tokens <= 200000) {
+                $discountedFee = $fee - ($fee * 0.4);
+                $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
+            } elseif ($tokens > 200000 && $tokens <= 500000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
+            } elseif ($tokens > 500000 && $tokens <= 1000000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
+            } elseif ($tokens > 1000000) {
+                $discountedFee = $fee - ($fee / 0.5);
+                $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
+            }
+            $total = $tokens - $fee;
 
-//             return [
-//                 'rate' => $rate,
-//                 'from' => $base_currency,
-//                 'to' => $target_currency,
-//                 'amount' => $amount,
-//                 'tokens' => $tokens,
-//                 'fee' => $fee,
-//                 'total' => $total,
-//             ];
-//         } catch (\Exception $e) {
-//             Log::error('Fatal error in system_exchange_rate', [
-//                 'base_currency' => $base_currency,
-//                 'target_currency' => $target_currency,
-//                 'amount' => $amount,
-//                 'error_message' => $e->getMessage(),
-//             ]);
-//             return null;
-//         }
-//     }
-// }
+            return [
+                'rate' => $rate,
+                'from' => $base_currency,
+                'to' => $target_currency,
+                'amount' => $amount,
+                'tokens' => $tokens,
+                'fee' => $fee,
+                'total' => $total,
+            ];
+        } catch (\Exception $e) {
+            Log::error('Fatal error in system_exchange_rate', [
+                'base_currency' => $base_currency,
+                'target_currency' => $target_currency,
+                'amount' => $amount,
+                'error_message' => $e->getMessage(),
+            ]);
+            return null;
+        }
+    }
+}
 
 if (!function_exists('system_product_state')) {
     /**

@@ -78,6 +78,7 @@
               <h5 class="card-title"> {{ $product->client->country->flag }} {{ $product->name }}</h5>
               <p class="text-muted small mb-1">{{ $product->sub_title }}</p>
               <p class="flex-grow-1">{{ Str::limit($product->description, 80) }}</p>
+              <p class="text-muted small mb-1">Available: {{ $product->available_stock }}</p>
 
               <div class="mt-2">
                 @if ($product->discount > 0)

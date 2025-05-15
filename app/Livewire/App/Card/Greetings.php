@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Card;
+namespace App\Livewire\App\Card;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -52,6 +52,6 @@ class Greetings extends Component
 
     public function render()
     {
-        return view('livewire.card.greetings');
+        return view('livewire.app.card.greetings');
     }
 }

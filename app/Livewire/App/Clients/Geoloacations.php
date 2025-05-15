@@ -240,7 +240,9 @@ class Geoloacations extends Component
     public function switchTab($tab)
     {
         $this->tab = $tab;
-        $this->resetPage(); // resets pagination
+        // $this->resetPage(); // resets pagination
+        $this->update_links();
+        // $this->reset();
     }
 
     public function render()

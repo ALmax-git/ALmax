@@ -10,10 +10,12 @@
 
   <form class="mb-3" id="formAuthentication" method="POST" action="{{ route('login') }}">
     @csrf
-    <h2>Hay there! {{ session('username') ?? '' }}👋</h2>
+    @if (url('/') != env('NodePulse_url'))
+      <h2>Hay there! {{ session('username') ?? '' }}👋</h2>
+    @endif
     <p>Please sign-in to your account and start the adventure </p>
     <div>
-      {{-- <x-label for="email" value="{{ __('Email') }}" /> --}}
+      <x-label for="email" value="{{ __('Email') }}" />
       <x-input class="form-control" id="email" name="email" type="{{ session('email') != '' ? 'hidden' : 'email' }}"
         value="{{ session('email') ?? '' }}" required />
     </div>

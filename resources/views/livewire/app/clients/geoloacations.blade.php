@@ -6,7 +6,7 @@
     <!-- Countries Dropdown -->
     <select class="form-control me-2" wire:model.live="selectedCountry">
       <option value="">{{ _app('select_country') }}</option>
-      @foreach ($countries as $country)
+      @foreach (App\Models\Country::orderBy('name')->get() as $country)
         <option value="{{ $country->id }}">{{ $country->name }} ({{ $country->code }})</option>
       @endforeach
     </select>
@@ -14,7 +14,7 @@
     <!-- States Dropdown -->
     <select class="form-control me-2" wire:model.live="selectedState">
       <option value="">{{ _app('select_state') }}</option>
-      @foreach ($states as $state)
+      @foreach (App\Models\State::orderBy('name')->get() as $state)
         <option value="{{ $state->id }}">{{ $state->name }}</option>
       @endforeach
     </select>
@@ -50,7 +50,7 @@
             <th>{{ _app('status') }}</th>
             <th>{{ _app('State') }}</th>
             <th>{{ _app('country') }}</th>
-            <th>{{ _app('action') }}</th>
+            <th style="text-align: end;">{{ _app('action') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,7 +61,7 @@
               <td>{{ $City->status }}</td>
               <td>{{ $City->state->name }}</td>
               <td>{{ $City->state->country->name }}</td>
-              <td>
+              <td style="text-align: end;">
                 @php
                   $id = $City->id;
                 @endphp
@@ -85,7 +85,7 @@
             <th>{{ _app('City') }}</th>
             <th>{{ _app('status') }}</th>
             <th>{{ _app('country') }}</th>
-            <th>{{ _app('action') }}</th>
+            <th style="text-align: end;">{{ _app('action') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@
               <td>{{ $current_state->cities->count() }}</td>
               <td>{{ $current_state->status }}</td>
               <td>{{ $current_state->country->name }}</td>
-              <td>
+              <td style="text-align: end;">
                 @php
                   $current_state_id = $current_state->id;
                 @endphp
@@ -124,7 +124,7 @@
             <th>{{ _app('Currency') }}</th>
             <th>{{ _app('status') }}</th>
             <th>{{ _app('State') }}</th>
-            <th>{{ _app('action') }}</th>
+            <th style="text-align: end;">{{ _app('action') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -142,7 +142,7 @@
                 </span>
               </td>
               <td>{{ $Country->states->count() }}</td>
-              <td>
+              <td style="text-align: end;">
                 <button class="btn btn-info btn-sm" wire:click='edit_country("{{ write($Country->id) }}")'><i
                     class="bi bi-pen"></i></button>
                 <button class="btn btn-danger btn-sm" wire:click='delete_country("{{ write($Country->id) }}")'><i
@@ -163,7 +163,19 @@
 
   <!-- Pagination -->
   <div class="mt-4">
-    {{ $cities->links() }}
+    @switch($tab)
+      @case('City')
+        {{ $cities->links() }}
+      @break
+
+      @case('State')
+        {{ $states->links() }}
+      @break
+
+      @case('Country')
+        {{ $countries->links() }}
+      @break
+    @endswitch
   </div>
 
   <!-- Delete Confirmation Modal -->

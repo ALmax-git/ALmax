@@ -103,7 +103,7 @@
                   <th>{{ _app('language') }}</th>
                   <th>{{ _app('city') }}</th>
                   <th>{{ _app('role') }}</th>
-                  <th>{{ _app('action') }}</th>
+                  <th style="text-align: end;">{{ _app('action') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +149,7 @@
                         @endforeach
                       </div>
                     </td>
-                    <td style="width: 10vw;">
+                    <td style="width: 10vw;" style="text-align: end;">
 
                       <button class="btn btn-sm btn-outline-info"
                         wire:click='view_profile("{{ write($user->id) }}")'><i class="bi bi-eye"></i></button>

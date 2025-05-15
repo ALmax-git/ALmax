@@ -4,25 +4,27 @@
       transform: scale(1.02);
     }
   </style>
-  <div class="progress-appp-2">
+  <div class="progress-appp-2 min-h-75">
     <main class="progress-container w-100 p-4">
       <div class="progress-panel p-4">
         <div class="panel-header">
           <div class="system-status">
             <span class="status-indicator"></span>
-            <span class="status-text">{{ $wallet->address }}</span>
+            <span class="status-text">{{ $wallet->label }}</span>
           </div>
         </div>
-        <div class="panel-header">
+        {{-- <div class="panel-header">
           <span class="status-text">{{ $wallet->label }}</span>
-        </div>
+        </div> <!--₦--> --}}
         <div class="progress-section">
           <div class="progress-wrapper">
-            <div class="progress-bar" role="progressbar" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40">
+            <div class="progress-bar" role="progressbar" aria-valuemax="100" aria-valuemin="0"
+              aria-valuenow="{{ (float) $wallet->balance / 100 }}">
               <div class="progress-line"></div>
-              <div class="progress-particles text-warning">
+              <div class="progress-particles text-shadow-dark text-white">
                 <span class="fa-2x">
-                  <button class="rounded-circle tn btn-lg rounded-pill btn-warning text-white">₦</button>
+                  <button class="rounded-circle tn btn-lg rounded-pill btn-dark text-white"
+                    style="cursor: -moz-grabbing;"><i class="bi bi-dot"></i></button>
                   {{ $wallet->balance }}
                 </span>
               </div>
@@ -31,7 +33,7 @@
 
           <div class="align-center justify-center text-center">
             {{-- <div class="col-lg-6"> --}}
-            <button class="btn btn-lg rounded-pill btn-outline-warning m-2" type="button"
+            <button class="btn btn-lg rounded-pill btn-outline-info m-2" type="button"
               wire:click='open_transfer_modal'>
               <i class="bi bi-telegram"></i>
             </button>
@@ -53,6 +55,30 @@
               <i class="bi bi-qr-code"></i>
             </button>
             {{-- </div> --}}
+          </div>
+          <div class="h-100 scrollable p-2">
+            <ul class="m-0 p-0">
+              @foreach ($wallet->assets as $asset)
+                <li class="d-flex asset-card mb-4 rounded p-2"
+                  style="border-inline: 2px solid rgb(0, 0, 107);
+                background-color: rgba(151, 153, 162, 0.246);
+                border-block: 1px solid gray;
+                ">
+                  <div class="avatar fw-bold me-3 flex-shrink-0">
+                    {!! $asset->symbol !!}
+                  </div>
+                  <div class="d-flex w-100 align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">{{ $asset->label }}</h6>
+                      <small class="text-muted"> ~ {{ $asset->value }}</small>
+                    </div>
+                    <div class="user-progress">
+                      <small class="fw-semibold">{{ $asset->amount }}</small>
+                    </div>
+                  </div>
+                </li>
+              @endforeach
+            </ul>
           </div>
           <div class="h-100 scrollable p-2">
             <ul class="m-0 p-0">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
   @if (Auth::user())
-    @if ($model == 'pos')
+    @if ($model == 'NodePulse')
       <livewire:pos />
     @else
       @if (isset($email))

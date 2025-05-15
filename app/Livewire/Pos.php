@@ -28,6 +28,12 @@ class Pos extends Component
 
     public function render()
     {
-        return view('livewire.pos');
+        $sales = Auth::user()->client->sales()
+            ->with(['user', 'client', 'product'])
+            ->latest()
+            ->paginate(10);
+        return view('livewire.pos', [
+            'sales' => $sales,
+        ]);
     }
 }

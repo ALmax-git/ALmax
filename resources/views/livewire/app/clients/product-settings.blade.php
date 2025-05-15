@@ -53,7 +53,7 @@
         <th>{{ _app('Category') }}</th>
         <th>{{ _app('Status') }}</th>
         <th>{{ _app('Products') }}</th>
-        <th>{{ _app('action') }}</th>
+        <th style="text-align: end;">{{ _app('action') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -62,7 +62,7 @@
           <td>{{ $category->title }}</td>
           <td>{{ $category->status }}</td>
           <td>{{ $category->products->count() }}</td>
-          <td>
+          <td style="text-align: end;">
             <button class="btn btn-info" wire:click='edit_product_category_modal("{{ write($category->id) }}")'><i
                 class="bi bi-pen"></i></button>
             <button class="btn btn-danger" wire:click='delete_product_category("{{ write($category->id) }}")'><i

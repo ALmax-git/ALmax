@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('disputes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
+            $table->string('reason');
+            $table->text('description')->nullable();
+            $table->enum('status', ['pending', 'resolved', 'rejected'])->default('pending');
+            $table->string('evidence')->nullable();
+            $table->string('resolution')->nullable();
+            $table->text('resolution_description')->nullable();
+            $table->string('resolution_evidence')->nullable();
+            $table->enum('resolution_status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

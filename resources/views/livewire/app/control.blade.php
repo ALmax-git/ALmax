@@ -20,6 +20,9 @@
           data-bs-toggle="tab" data-bs-target="#nav-Role And Permission" type="button" role="tab"
           aria-controls="nav-Role-And-Permission" aria-selected="true"
           wire:click='toggle_c_tab("Role And Permission")'>{{ _app('Role And Permission') }}</button>
+        <button class="nav-link {{ $tab == 'Assets' ? 'active' : '' }}" id="nav-Assets-tab" data-bs-toggle="tab"
+          data-bs-target="#nav-Assets" type="button" role="tab" aria-controls="nav-Assets" aria-selected="true"
+          wire:click='toggle_c_tab("Assets")'>{{ _app('Assets') }}</button>
       </div>
     </nav>
     <div class="tab-content pt-3" id="nav-tabContent">
@@ -43,6 +46,10 @@
 
           @case('Role And Permission')
             @livewire('app.clients.role-and-permission')
+          @break
+
+          @case('Assets')
+            @livewire('app.clients.assets')
           @break
 
           @default

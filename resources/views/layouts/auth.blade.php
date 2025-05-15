@@ -17,6 +17,7 @@
     <link class="template-customizer-theme-css" href="{{ asset('build/assets/vendor/css/theme-default.css') }}"
       rel="stylesheet" />
     <link href="{{ asset('build/assets/css/demo.css') }}" rel="stylesheet" />
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('build/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" rel="stylesheet" />
     <link href="{{ asset('build/assets/vendor/css/pages/page-auth.css') }}" rel="stylesheet" />
     <script src="{{ asset('build/assets/vendor/js/helpers.js') }}"></script>
@@ -39,9 +40,13 @@
             <div class="card-body">
               <div class="app-brand justify-content-center">
                 <a class="app-brand-link" href="/">
-                  <h1 class="fw-bolder"><u>ALmax</u> {{-- 🔒 --}}</h1>
+                  <h1 class="fw-bolder"><b>{!! url('/') == env('NodePulse_url')
+                      ? '<i class="bi bi-boxes fa-2x text-black" style="background-color: black; color: white !important;  border: 3px solid black;"></i><span style="background-color: black; color: white !important; border: 3px solid black;">Node</span><span style="border: 3px solid black;">Pulse</span> '
+                      : 'ALmax' !!}</b>
+                    {{-- 🔒 --}}</h1>
                 </a>
               </div>
+              <hr style="color: black;">
               @yield('content')
             </div>
           </div>

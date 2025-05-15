@@ -27,10 +27,13 @@
   <!-- Sidebar Start -->
   <div class="sidebar pb-3 pe-4">
     <nav class="navbar bg-secondary navbar-dark">
-      <a class="navbar-brand mx-4 mb-3" href="/">
-        <h3 class="text-primary"><i class="fa bi-boxes me-2"></i>ALmax</h3>
+      <a class="navbar-brand fa-2x mx-4" href="/">
+        <i class="bi bi-boxes text-black"
+          style="background-color: black; color: white !important;  border: 3px solid black;"></i><span
+          style="background-color: black; color: white !important; border: 3px solid black;">Node</span><span
+          style="border: 3px solid black;">Pulse</span>
       </a>
-      <div class="d-flex align-items-center mb-4 ms-4" style="cursor: pointer;" wire:click='toggle_profile_model'>
+      <div class="d-flex align-items-center ms-4 mt-2" style="cursor: pointer;" wire:click='toggle_profile_model'>
         <div class="position-relative">
           <img class="rounded-circle" src="{{ Auth::user()->client->logo() }}" alt=""
             style="width: 40px; height: 40px;" loading="lazy">
@@ -347,12 +350,14 @@
     </nav>
     <!-- Navbar End -->
 
-    @livewire('app.client.sales')
     @switch($tab)
       @case('Todo')
         <div class="container-fluid px-4 pt-4">
           @livewire('component.todo')
         </div>
+        @if (user_can_access('sales_access') || user_can_access('manage_sales'))
+          @livewire('app.client.sales', ['sale_list_view' => true])
+        @endif
       @break
 
       @case('New')
@@ -367,6 +372,9 @@
         @if (user_can_access('product_access'))
           @livewire('app.clients.product')
         @endif
+        @if (user_can_access('sales_access') || user_can_access('manage_sales'))
+          @livewire('app.client.sales', ['sale_list_view' => true])
+        @endif
       @break
 
       @case('System')
@@ -375,6 +383,9 @@
 
       @case('Market')
         @livewire('app.market')
+        @if (user_can_access('sales_access') || user_can_access('manage_sales'))
+          @livewire('app.client.sales', ['sale_list_view' => true])
+        @endif
       @break
 
       @case('Cart')
@@ -419,6 +430,7 @@
             {{ session('error') }}
           </div>
         @endif
+
         @if (user_can_access('dashboad_view'))
           <!-- Sale & Revenue Start -->
           <div class="container-fluid px-4 pt-4" wire:lazy>
@@ -467,7 +479,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-xl-3">
+              {{-- <div class="col-sm-6 col-xl-3">
                 <div class="bg-secondary d-flex align-items-center justify-content-between rounded p-4">
                   <i class="fa bi-building fa-3x text-primary"></i>
                   <div class="ms-3">
@@ -477,95 +489,101 @@
                       {{ \App\Models\Client::where('is_verified', true)->count() }} Varified</h6>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
           </div>
           <div class="container-fluid px-4 pt-4">
             @livewire('component.chart.server-request')
           </div>
         @endif
-
-        <div class="container-fluid px-4 pt-4" lazy>
-          <div class="bg-secondary rounded-top mt-2 p-4">
-
-            <!-- Section Title -->
-            <div class="section-title container" data-aos="fade-up">
-              <h2>🎟️ Buy Tickets<br></h2>
-              <p>Secure your spot at the International Conference on Flood Management 2025 — where action meets awareness.
-              </p>
-            </div><!-- End Section Title -->
-            @if ($ticket_modal)
-              <div class="modal" tabindex="-1" style="display:block;">
-                <div class="modal-dialog">
-                  <div class="modal-content bg-secondary">
-                    <div class="modal-header d-flex align-items-center justify-content-between">
-                      <h5 class="modal-title">{{ _app('buy_ticket') }}</h5>
-                      <button class="close" type="button" wire:click="close_buy_ticket">
-                        <span>&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body scrollable scroll">
-                      <h1>{{ $event->title }}</h1>
-
-                      <p>
-                        {{ \Carbon\Carbon::parse($event->starting_day)->format('jS M Y') }}
-                        to
-                        {{ \Carbon\Carbon::parse($event->closing_day)->format('jS M Y') }}
-                      </p>
-                      <p>
-                        {{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }}
-                        to
-                        {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A') }}
-                      </p>
-                      <div>
-                        {!! $event->description !!}
-                      </div>
-                      <h2>{{ $event->price }} </h2>
-                    </div>
-                    <div class="modal-footer">
-                      <button class="btn btn-secondary" type="button"
-                        wire:click="close_buy_ticket">{{ _app('cancel') }}</button>
-                      <form action="{{ route('new_ticket') }}" method="post">
-                        @csrf
-                        <input name="event_id" type="hidden" value="{{ $id }}">
-                        <input name="tx_ref" type="hidden" value="{{ $tx_ref }}">
-                        <button class="btn btn-primary" type="submit">{{ _app('buy_ticket') }}</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            @endif
-            <div class="container-fluid">
-              @foreach ($events as $event)
-                <div class="row gy-4 pricing-item featured mt-4" data-aos="fade-up" data-aos-delay="100">
-                  <div class="col-lg-3 d-flex align-items-center justify-content-center">
-                    <h3>{{ $event->title }}<br></h3>
-                  </div>
-                  <div class="col-lg-3 d-flex align-items-center justify-content-center">
-                    <h4><sup>NGN</sup>{{ $event->price }}<span> /
-                        ({{ $event->starting_day->diffForHumans($event->closing_day) }})
-                      </span></h4>
-                  </div>
-                  <div class="col-lg-3 d-flex align-items-center justify-content-center">
-                    {!! $event->description !!}
-                  </div>
-                  <div class="col-lg-3 d-flex align-items-center justify-content-center"
-                    wire:click='buy_ticket("{{ write($event->id) }}")'>
-                    <div class="text-center"><a class="btn btn-primaty buy-btn">Buy Now</a>
-                    </div>
-                  </div>
-                </div><!-- End Pricing Item -->
-              @endforeach
-            </div>
-
-          </div>
-        </div>
-
-        <livewire:app.client.people lazy />
+        <livewire:app.card.greetings lazy />
+        @if (user_can_access('sales_access') || user_can_access('manage_sales'))
+          @livewire('app.client.sales', ['sale_list_view' => true])
+        @endif
       @break
 
     @endswitch
+    @if ($tab == 'Dashboard' || $tab == 'Community')
+      <livewire:app.client.people lazy />
+    @endif
+    @if ($events->count() > 0 && ($tab == 'Dashboard' || $tab == 'Community' || $tab == 'Market'))
+      <div class="container-fluid px-4 pt-4" lazy>
+        <div class="bg-secondary rounded-top mt-2 p-4">
+
+          <!-- Section Title -->
+          <div class="section-title container" data-aos="fade-up">
+            <h2>🎟️ Buy Tickets<br></h2>
+            <p>Secure your spot at ALmax Ecosystem
+            </p>
+          </div><!-- End Section Title -->
+          @if ($ticket_modal)
+            <div class="modal" tabindex="-1" style="display:block;">
+              <div class="modal-dialog">
+                <div class="modal-content bg-secondary">
+                  <div class="modal-header d-flex align-items-center justify-content-between">
+                    <h5 class="modal-title">{{ _app('buy_ticket') }}</h5>
+                    <button class="close" type="button" wire:click="close_buy_ticket">
+                      <span>&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body scrollable scroll">
+                    <h1>{{ $event->title }}</h1>
+
+                    <p>
+                      {{ \Carbon\Carbon::parse($event->starting_day)->format('jS M Y') }}
+                      to
+                      {{ \Carbon\Carbon::parse($event->closing_day)->format('jS M Y') }}
+                    </p>
+                    <p>
+                      {{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }}
+                      to
+                      {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A') }}
+                    </p>
+                    <div>
+                      {!! $event->description !!}
+                    </div>
+                    <h2>{{ $event->price }} </h2>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button"
+                      wire:click="close_buy_ticket">{{ _app('cancel') }}</button>
+                    <form action="{{ route('new_ticket') }}" method="post">
+                      @csrf
+                      <input name="event_id" type="hidden" value="{{ $id }}">
+                      <input name="tx_ref" type="hidden" value="{{ $tx_ref }}">
+                      <button class="btn btn-primary" type="submit">{{ _app('buy_ticket') }}</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endif
+          <div class="container-fluid">
+            @foreach ($events as $event)
+              <div class="row gy-4 pricing-item featured mt-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-3 d-flex align-items-center justify-content-center">
+                  <h3>{{ $event->title }}<br></h3>
+                </div>
+                <div class="col-lg-3 d-flex align-items-center justify-content-center">
+                  <h4><sup>NGN</sup>{{ $event->price }}<span> /
+                      ({{ $event->starting_day->diffForHumans($event->closing_day) }})
+                    </span></h4>
+                </div>
+                <div class="col-lg-3 d-flex align-items-center justify-content-center">
+                  {!! $event->description !!}
+                </div>
+                <div class="col-lg-3 d-flex align-items-center justify-content-center"
+                  wire:click='buy_ticket("{{ write($event->id) }}")'>
+                  <div class="text-center"><a class="btn btn-primaty buy-btn">Buy Now</a>
+                  </div>
+                </div>
+              </div><!-- End Pricing Item -->
+            @endforeach
+          </div>
+
+        </div>
+      </div>
+    @endif
     @if ($view_wallet)
       <div class="modal" tabindex="-1" style="display:block;">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">

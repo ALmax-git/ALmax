@@ -10,8 +10,8 @@ use Flutterwave\Flutterwave;
 
 Route::get('/', function () {
     $model = '';
-    if (url('/') == 'http://pos.localhost') {
-        $model = 'pos';
+    if (url('/') ==  env('NodePulse_url')) {
+        $model = 'NodePulse';
     }
     if (Auth::user()) {
         return view(
@@ -22,13 +22,12 @@ Route::get('/', function () {
         );
     } else {
         switch (url('/')) {
-            case 'http://pos.localhost':
+            case env('NodePulse_url'):
                 return redirect()->route('login');
-            case 'http://eventpulse.localhost':
+            case env('EventPulse_url'):
                 return view('app.event.welcome');
                 break;
-
-            case 'http://kycspot.localhost':
+            case env('kycspot_url'):
                 return view('app.KYCspot.welcome');
                 break;
             default:

@@ -149,6 +149,29 @@ if (!function_exists('generate_wallet_address')) {
     }
 }
 
+
+if (!function_exists('system_define_assets')) {
+    /**
+     * Generate a unique 20-character wallet address that starts with "0x" and includes the user ID.
+     *
+     * @param int $userId
+     * @return string
+     */
+    function system_define_assets()
+    {
+        $assets = [
+            [
+                'label',
+                'symbol',
+                'amount',
+                'type',
+                'is_veried',
+                'value',
+            ],
+        ];
+        return $assets;
+    }
+}
 if (!function_exists('generate_tx_ref')) {
     /**
      * Generate a unique transaction reference.

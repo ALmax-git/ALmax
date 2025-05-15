@@ -778,7 +778,7 @@ class Product extends Component
             }
         }
 
-        $this->alert('success', 'Labels synchronized successfully!', ['position' => 'center']);
+        $this->alert('success', 'synchronized successfully!', ['position' => 'center']);
     }
     protected function syncProductLabels($product)
     {
