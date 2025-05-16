@@ -13,14 +13,14 @@
           transform: scale(1.01);
         }
       </style>
-      @foreach ($assets as $asset)
+      @foreach ($assets as $Asset)
         <div class="col-sm-6 col-xl-3 asset" style="cursor: pointer;"
-          wire:click='edit_asset("{{ write($asset->id) }}")'>
+          wire:click='edit_asset("{{ write($Asset->id) }}")'>
           <div class="bg-secondary d-flex align-items-center justify-content-between rounded p-4">
-            <i class="fa bi-boxes fa-3x text-{{ $asset->is_verified ? 'success' : 'danger' }}"></i>
+            <i class="fa bi-boxes fa-3x text-{{ $Asset->is_verified ? 'success' : 'danger' }}"></i>
             <div class="ms-3">
-              <p class="mb-2">{{ _app($asset->label) }}</p>
-              <h6 class="mb-0 text-right">{{ $asset->value }}</h6>
+              <p class="mb-2">{{ _app($Asset->label) }}</p>
+              <h6 class="mb-0 text-right">{{ $Asset->value }}</h6>
             </div>
           </div>
         </div>
@@ -46,12 +46,19 @@
             @error('label')
               <span class="text-danger">{{ $message }}</span>
             @enderror
+            <label class="form-label" for="sign">{{ _app('sign') }}</label>
+            <input class="form-control" type="text" wire:model.live="sign" placeholder="{{ _app('sign') }}">
+            @error('sign')
+              <span class="text-danger">{{ $message }}</span>
+            @enderror
             <label class="form-label" for="type">{{ _app('type') }}</label>
             <select class="form-control" id="type" name="type" wire:model.live='type'>
               <option value="">{{ _app('choose') }}</option>
+              <option value="crypto">{{ _app('crypto') }}</option>
               <option value="currency">{{ _app('currency') }}</option>
-              <option value="document">{{ _app('document') }}</option>
-              <option value="software">{{ _app('software') }}</option>
+              <option value="fiat">{{ _app('fiat') }}</option>
+              <option value="NFTs">{{ _app('NFTs') }}</option>
+              <option value="stock">{{ _app('stock') }}</option>
               <option value="others">{{ _app('others') }}</option>
             </select>
             @error('type')

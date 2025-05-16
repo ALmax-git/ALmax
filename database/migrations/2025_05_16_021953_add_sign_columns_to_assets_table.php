@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('assets', function (Blueprint $table) {
-            $table->enum('type', ['currency', 'document', 'software', 'others'])->default('others');
-            $table->boolean('is_verified')->default(false);
-            $table->double('value');
+            $table->string('sign')->after('id')->nullable();
         });
     }
 

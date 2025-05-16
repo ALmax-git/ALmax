@@ -26,35 +26,6 @@ class Sales extends Component
     {
         $this->sale_list_view = $sale_list_view;
     }
-    public function render()
-    {
-        $sales = user_can_access('manage_sales') ?
-            Auth::user()->client->sales()
-            ->with(['user', 'client', 'product'])
-            ->latest()
-            ->paginate(5)
-            :
-            Auth::user()->sales()
-            ->with(['user', 'client', 'product'])
-            ->latest()
-            ->paginate(5);
-
-        $products = Product::where('name', 'like', '%' . $this->search . '%')
-            ->limit(15)
-            ->orderBy('name')
-            ->get();
-        $totalSales = Sale::where('client_id', Auth::user()->client->id)
-            ->sum('total');
-        $totalDiscount = Sale::where('client_id', Auth::user()->client->id)
-            ->sum('discount');
-        return view('livewire.app.client.sales', [
-            'sales' => $sales,
-            'products' => $products,
-            'totalSales' => $totalSales,
-            'totalDiscount' => $totalDiscount,
-        ]);
-    }
-
     public function add_new_sale_modal()
     {
         $this->reset(['selectedProducts', 'quantities', 'discount']);
@@ -136,5 +107,33 @@ class Sales extends Component
     {
         $this->sale = null;
         $this->detail_modal = false;
+    }
+    public function render()
+    {
+        $sales = user_can_access('manage_sales') ?
+            Auth::user()->client->sales()
+            ->with(['user', 'client', 'product'])
+            ->latest()
+            ->paginate(5)
+            :
+            Auth::user()->sales()
+            ->with(['user', 'client', 'product'])
+            ->latest()
+            ->paginate(5);
+
+        $products = Product::where('name', 'like', '%' . $this->search . '%')
+            ->limit(15)
+            ->orderBy('name')
+            ->get();
+        $totalSales = Sale::where('client_id', Auth::user()->client->id)
+            ->sum('total');
+        $totalDiscount = Sale::where('client_id', Auth::user()->client->id)
+            ->sum('discount');
+        return view('livewire.app.client.sales', [
+            'sales' => $sales,
+            'products' => $products,
+            'totalSales' => $totalSales,
+            'totalDiscount' => $totalDiscount,
+        ]);
     }
 }

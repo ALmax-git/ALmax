@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Livewire\Card\Project;
+namespace App\Livewire\App\Card\Project;
 
 use App\Models\project_request_form;
+use App\Models\SupportRequest;
 use Illuminate\Support\Facades\Http;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -106,7 +107,7 @@ class RequestForm extends Component
     public function save()
     {
         $this->validate();
-        project_request_form::create([
+        SupportRequest::create([
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
@@ -129,6 +130,6 @@ class RequestForm extends Component
 
     public function render()
     {
-        return view('livewire.card.project.request-form');
+        return view('livewire.app.card.project.request-form');
     }
 }

@@ -12,15 +12,11 @@ class Asset extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'sign',
         'label',
         'symbol',
         'type',
         'is_verified',
         'value',
     ];
-
-    public function wallet()
-    {
-        return    $this->belongsTo(Wallet::class);
-    }
 }

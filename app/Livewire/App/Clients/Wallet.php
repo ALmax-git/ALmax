@@ -12,9 +12,12 @@ class Wallet extends Component
 {
     use LivewireAlert;
     public $transfer_modal = false;
+    public $funding_modal = false;
+    public $withdraw_modal = false;
+    public $settings_modal = false;
     public ?ModelsWallet $wallet;
+    public $amount, $pin = '', $pin_confirm = '';
     public String $wallet_address;
-    public $amount;
 
     public function init_account()
     {
@@ -47,12 +50,23 @@ class Wallet extends Component
             $this->wallet = Auth::user()->wallet;
         }
     }
+    public function refresh()
+    {
+        $this->mount();
+    }
     public function close_transfer_modal()
     {
         $this->transfer_modal = false;
-        // $this->reset();
     }
 
+    public function open_funding_modal()
+    {
+        $this->funding_modal = true;
+    }
+    public function close_funding_modal()
+    {
+        $this->funding_modal = false;
+    }
     public function render()
     {
         return view('livewire.app.clients.wallet');

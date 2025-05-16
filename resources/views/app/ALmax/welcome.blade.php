@@ -738,8 +738,7 @@
             </div>
           </div>
           <div class="col-12 col-lg-6 text-dark bg-white p-3 shadow">
-            {{-- <livewire:app.card.project.requestForm /> --}}
-            {{-- @livewire('card.project.request-form') --}}
+            <livewire:app.card.project.requestForm />
           </div>
         </div>
       </div>

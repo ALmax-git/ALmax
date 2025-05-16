@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('label');
             $table->string('symbol');
-            $table->enum('type', ['currency', 'document', 'software', 'others'])->default('Fiat');
+            $table->enum('type', ['currency', 'fiat', 'crypto', 'stock',  'NFTs', 'others'])->default('fiat');
             $table->boolean('is_verified');
             $table->double('value')->default(0);
             $table->timestamps();

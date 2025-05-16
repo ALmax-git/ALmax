@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FlutterwaveController;
+use App\Http\Controllers\FundController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,9 @@ Route::middleware([
 
         Route::post('/checkout', [FlutterwaveController::class, 'checkout'])->name('checkout');
         Route::get('/checkout', [FlutterwaveController::class, 'checkout_fallback'])->name('checkout_fallback');
+
+        Route::post('/fund', [FundController::class, 'fund_wallet'])->name('fund_wallet');
+        Route::get('/fund', [FundController::class, 'fund_wallet_callback'])->name('fund_wallet_callback');
     }
 );
 

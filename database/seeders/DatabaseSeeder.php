@@ -16,6 +16,7 @@ use App\Models\State;
 use App\Models\User;
 use App\Models\UserClient;
 use App\Models\Wallet;
+use App\Models\WalletAsset;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -568,7 +569,7 @@ class DatabaseSeeder extends Seeder
             'client_id' => 1,
             'label' => 'System Wallet',
             'address' => '0xFF1RkuxfXxYnyZviSOPQBTxltJc1Yx4xyY',
-            'balance' => 0,
+            'balance' => 1000000,
             'pin' => null,
             'status' => 'active',
             'type' => 'client', # client or user
@@ -576,19 +577,31 @@ class DatabaseSeeder extends Seeder
         $assets = [
             [
                 'label' => 'Naira',
+                'sign' => 'NGN',
                 'symbol' => '₦',
                 'type' => 'currency',
                 'is_verified' => true,
-                'value' => 1,
+                'value' => 0,
             ],
             [
                 'label' => 'Dollar',
+                'sign' => 'USD',
                 'symbol' => '$',
                 'type' => 'currency',
                 'is_verified' => true,
-                'value' => 1500,
+                'value' => 0,
             ],
         ];
         Asset::insert($assets);
+        WalletAsset::create([
+            'wallet_id' => 1,
+            'asset_id' => 1,
+            'amount' => 0,
+        ]);
+        WalletAsset::create([
+            'wallet_id' => 1,
+            'asset_id' => 2,
+            'amount' => 0,
+        ]);
     }
 }

@@ -84,7 +84,7 @@ if (!function_exists('system_support')) {
         return true;
     }
 }
-if (!function_exists('generate_transaction_hash')) {
+if (!function_exists('hash_fields')) {
     function hash_fields()
     {
         return ['user_id', 'amount', 'currency', 'created_at', 'sending_addresss', 'recieving_addresss'];
@@ -160,29 +160,29 @@ if (!function_exists('system_exchange_rate')) {
 
             // Apply discounts based on the token range
             if ($tokens > 5000 && $tokens <= 10000) {
-                $discountedFee = $fee - ($fee * 0.05);
-                $fee = ($discountedFee < 200) ? 200 : $discountedFee;
+                $discountedFee = $fee - ($fee * 0.1);
+                $fee = ($discountedFee > 200) ? 200 : $discountedFee;
             } elseif ($tokens > 10000 && $tokens <= 50000) {
                 $discountedFee = $fee - ($fee * 0.1);
-                $fee = ($discountedFee < 250) ? 250 : $discountedFee;
+                $fee = ($discountedFee > 250) ? 250 : $discountedFee;
             } elseif ($tokens > 50000 && $tokens <= 70000) {
                 $discountedFee = $fee - ($fee * 0.2);
-                $fee = ($discountedFee < 500) ? 500 : $discountedFee;
+                $fee = ($discountedFee > 300) ? 300 : $discountedFee;
             } elseif ($tokens > 70000 && $tokens <= 100000) {
                 $discountedFee = $fee - ($fee * 0.3);
-                $fee = ($discountedFee < 750) ? 750 : $discountedFee;
+                $fee = ($discountedFee > 450) ? 450 : $discountedFee;
             } elseif ($tokens > 100000 && $tokens <= 200000) {
                 $discountedFee = $fee - ($fee * 0.4);
-                $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
+                $fee = ($discountedFee > 600) ? 600 : $discountedFee;
             } elseif ($tokens > 200000 && $tokens <= 500000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
+                $fee = ($discountedFee > 800) ? 800 : $discountedFee;
             } elseif ($tokens > 500000 && $tokens <= 1000000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
+                $fee = ($discountedFee > 1000) ? 1000 : $discountedFee;
             } elseif ($tokens > 1000000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
+                $fee = ($discountedFee > 2000) ? 2000 : $discountedFee;
             }
             $total = $tokens - $fee;
 
@@ -253,29 +253,29 @@ if (!function_exists('system_exchange_rate')) {
 
             // Apply discounts based on the token range
             if ($tokens > 5000 && $tokens <= 10000) {
-                $discountedFee = $fee - ($fee * 0.05);
-                $fee = ($discountedFee < 200) ? 200 : $discountedFee;
+                $discountedFee = $fee - ($fee * 0.1);
+                $fee = ($discountedFee > 200) ? 200 : $discountedFee;
             } elseif ($tokens > 10000 && $tokens <= 50000) {
                 $discountedFee = $fee - ($fee * 0.1);
-                $fee = ($discountedFee < 250) ? 250 : $discountedFee;
+                $fee = ($discountedFee > 250) ? 250 : $discountedFee;
             } elseif ($tokens > 50000 && $tokens <= 70000) {
                 $discountedFee = $fee - ($fee * 0.2);
-                $fee = ($discountedFee < 500) ? 500 : $discountedFee;
+                $fee = ($discountedFee > 300) ? 300 : $discountedFee;
             } elseif ($tokens > 70000 && $tokens <= 100000) {
                 $discountedFee = $fee - ($fee * 0.3);
-                $fee = ($discountedFee < 750) ? 750 : $discountedFee;
+                $fee = ($discountedFee > 450) ? 450 : $discountedFee;
             } elseif ($tokens > 100000 && $tokens <= 200000) {
                 $discountedFee = $fee - ($fee * 0.4);
-                $fee = ($discountedFee < 1000) ? 1000 : $discountedFee;
+                $fee = ($discountedFee > 600) ? 600 : $discountedFee;
             } elseif ($tokens > 200000 && $tokens <= 500000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 2000) ? 2000 : $discountedFee;
+                $fee = ($discountedFee > 800) ? 800 : $discountedFee;
             } elseif ($tokens > 500000 && $tokens <= 1000000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 5000) ? 5000 : $discountedFee;
+                $fee = ($discountedFee > 1000) ? 1000 : $discountedFee;
             } elseif ($tokens > 1000000) {
                 $discountedFee = $fee - ($fee / 0.5);
-                $fee = ($discountedFee < 10000) ? 10000 : $discountedFee;
+                $fee = ($discountedFee > 2000) ? 2000 : $discountedFee;
             }
             $total = $tokens - $fee;
 

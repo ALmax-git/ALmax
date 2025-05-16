@@ -45,10 +45,11 @@
             <button class="btn btn-lg rounded-pill btn-outline-info m-2" type="button">
               <i class="bi bi-gear"></i>
             </button>
-            <button class="btn btn-lg rounded-pill btn-outline-light m-2" type="button">
+            <button class="btn btn-lg rounded-pill btn-outline-light m-2" type="button" wire:click='refresh'>
               <i class="fa fa-refresh"></i>
             </button>
-            <button class="btn btn-lg rounded-pill btn-outline-success m-2" type="button">
+            <button class="btn btn-lg rounded-pill btn-outline-success m-2" type="button"
+              wire:click='open_funding_modal'>
               <i class="bi bi-plus"></i>
             </button>
             <button class="btn btn-lg rounded-pill btn-outline-white m-2" type="button">
@@ -65,12 +66,12 @@
                 border-block: 1px solid gray;
                 ">
                   <div class="avatar fw-bold me-3 flex-shrink-0">
-                    {!! $asset->symbol !!}
+                    {!! $asset->origin->symbol !!}
                   </div>
                   <div class="d-flex w-100 align-items-center justify-content-between flex-wrap gap-2">
                     <div class="me-2">
-                      <h6 class="mb-0">{{ $asset->label }}</h6>
-                      <small class="text-muted"> ~ {{ $asset->value }}</small>
+                      <h6 class="mb-0">{{ $asset->origin->label }}</h6>
+                      <small class="text-muted"> ~ {{ $asset->origin->value }}</small>
                     </div>
                     <div class="user-progress">
                       <small class="fw-semibold">{{ $asset->amount }}</small>
@@ -121,7 +122,7 @@
           </div>
           <div class="modal-body">
             @if ($wallet)
-              <h3 class="text-primary text-center">{{ $wallet->user->name }}</h3>
+              <h3 class="text-primary text-center">{{ $wallet->label }}</h3>
             @endif
             <label for="wallet_address">{{ _app('wallet_address') }}</label>
             <input class="form-control" type="text" wire:change='init_account' wire:model.live="wallet_address"
@@ -141,6 +142,38 @@
             <button class="btn btn-danger" type="button" wire:click="send">{{ _app('Send') }}</button>
           </div>
         </div>
+      </div>
+    </div>
+  @endif
+  @if ($funding_modal)
+    <div class="modal" tabindex="-1" style="display:block;">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <form class="modal-content bg-secondary" method="POST" action="{{ route('fund_wallet') }}">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ Auth::user()->wallet->label }}</h5>
+            <button class="close" type="button" wire:click="close_funding_modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            @csrf
+            @if ($wallet)
+              <h3 class="text-primary text-center">{{ $wallet->label }}</h3>
+            @endif
+            <label for="amount">{{ _app('amount') }}</label>
+            <input class="form-control" name="amount" type="text" wire:model.live="amount"
+              placeholder="Amount">
+            @error($amount)
+              <span>{{ $message }}</span>
+            @enderror
+            <input name="wallet_id" type="hidden" value="{{ write($wallet->id) }}">
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"
+              wire:click="close_funding_modal">{{ _app('cancel') }}</button>
+            <button class="btn btn-danger" type="submit">{{ _app('Fund') }}</button>
+          </div>
+        </form>
       </div>
     </div>
   @endif

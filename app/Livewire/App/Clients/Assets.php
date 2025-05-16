@@ -14,7 +14,7 @@ class Assets extends Component
     public $search = '';
     public $asset_modal = false;
     public $comfirm_action_modal = false;
-    public $asset, $label, $symbol, $type, $is_verified, $value, $action, $password;
+    public $asset, $label, $symbol, $type, $sign, $is_verified, $value, $action, $password;
     public function open_new_asset()
     {
         $this->asset =  new Asset();
@@ -25,12 +25,13 @@ class Assets extends Component
         $this->value = 0;
         $this->action = 'create';
         $this->password = '';
+        $this->sign = '';
         $this->comfirm_action_modal = false;
         $this->asset_modal = true;
     }
     public function close_asset_modal()
     {
-        $this->reset(['action', 'asset', 'label', 'symbol', 'type', 'is_verified', 'value', 'password']);
+        $this->reset(['action', 'asset', 'sign', 'label', 'symbol', 'type', 'is_verified', 'value', 'password']);
         $this->asset_modal = false;
         $this->comfirm_action_modal = false;
     }
@@ -40,8 +41,9 @@ class Assets extends Component
         $this->asset->symbol = $this->symbol;
         $this->asset->type = $this->type;
         $this->asset->is_verified = $this->is_verified;
-        dd($this->asset);
+        // dd($this);
         $this->asset->value = $this->value;
+        $this->asset->sign = $this->sign;
 
         $this->asset_modal = false;
         $this->comfirm_action_modal = true;
@@ -54,6 +56,7 @@ class Assets extends Component
         $this->type = $this->asset->type;
         $this->value = $this->asset->value;
         $this->is_verified = $this->asset->is_verified;
+        $this->sign = $this->asset->sign;
         $this->comfirm_action_modal = false;
         $this->action = 'update';
         $this->asset_modal = true;
@@ -69,21 +72,40 @@ class Assets extends Component
                 case 'delete':
                     $this->asset->delete();
                     break;
+
                 case 'update':
+                    $this->asset->fill([
+                        'label' => $this->label,
+                        'symbol' => $this->symbol,
+                        'type' => $this->type,
+                        'is_verified' => $this->is_verified,
+                        'value' => $this->value,
+                        'sign' => $this->sign,
+                    ]);
                     $this->asset->save();
-                    $this->alert('success', 'Asset saved successfully!');
+                    $this->alert('success', 'Asset updated successfully!');
                     break;
+
                 default:
+                    $this->asset->fill([
+                        'label' => $this->label,
+                        'symbol' => $this->symbol,
+                        'type' => $this->type,
+                        'is_verified' => $this->is_verified,
+                        'value' => $this->value,
+                        'sign' => $this->sign,
+                    ]);
                     $this->asset->save();
-                    $this->alert('success', 'Asset saved successfully!');
+                    $this->alert('success', 'Asset created successfully!');
                     break;
             }
+
             $this->close_asset_modal();
         } else {
             $this->alert('error', 'Incorrect password.');
-            return;
         }
     }
+
     public function render()
     {
         $assets = Asset::orderBy('value')
