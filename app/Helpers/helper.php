@@ -9,7 +9,7 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
 use App\Models\User;
-
+use App\Models\Wallet;
 use Flutterwave\Controller\PaymentController;
 use Flutterwave\EventHandlers\ModalEventHandler as PaymentHandler;
 use Flutterwave\Flutterwave;
@@ -468,5 +468,46 @@ if (!function_exists('system_new_licence')) {
                 'data' => $e->getMessage()
             ]);
         }
+    }
+}
+
+if (!function_exists('airdrop')) {
+    function airdrop($address)
+    {
+        $wallet = Wallet::where('address', $address)->first();
+        if ($wallet) {
+            $base_wallet = Wallet::find(1);
+            if ($base_wallet->balance > (0.3 * 1000000)) {
+                $transferAmount = 0.005;
+                if ($wallet->balance < $transferAmount) {
+                    DB::transaction(function () use ($wallet, $base_wallet, $transferAmount) {
+                        $wallet->balance += $transferAmount;
+                        $base_wallet->balance -= $transferAmount;
+                        $wallet->save();
+                        $base_wallet->save();
+                        $wallet->history()->create([
+                            'amount' => $transferAmount,
+                            'tx_ref' => generate_tx_ref(),
+                            'status' => 'completed',
+                            'type' => 'credit',
+                            'description' => "Airdrop",
+                            'currency' => 'FADA',
+                        ]);
+                        $base_wallet->history()->create([
+                            'amount' => $transferAmount,
+                            'tx_ref' => generate_tx_ref(),
+                            'status' => 'completed',
+                            'type' => 'debit',
+                            'description' => "Airdrop",
+                            'currency' => 'FADA',
+                        ]);
+                    });
+                }
+            }
+            return true;
+        } else {
+            Log::error('Wallet not found for address: ' . $address);
+        }
+        return false;
     }
 }

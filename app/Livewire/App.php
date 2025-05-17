@@ -300,6 +300,16 @@ class App extends Component
             $this->alert('error', 'White paper not found');
         }
     }
+    public function placeholder()
+    {
+        return <<<'HTML'
+                            <div class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center" id="spinner">
+                                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div> 
+        HTML;
+    }
     /**
      * Render the main app dashboard and track usage.
      */

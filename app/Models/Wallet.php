@@ -32,14 +32,22 @@ class Wallet extends Model
     }
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class)
+            ->orderBy('created_at', 'desc')
+            ->limit(20)
+        ;
     }
     public function assets()
     {
-        return $this->hasMany(WalletAsset::class);
+        return $this->hasMany(WalletAsset::class)
+            ->orderBy('created_at', 'desc')
+        ;
     }
     public function history()
     {
-        return $this->hasMany(TransactionHistory::class);
+        return $this->hasMany(TransactionHistory::class)
+            ->orderBy('created_at', 'desc')
+            ->limit(20)
+        ;
     }
 }

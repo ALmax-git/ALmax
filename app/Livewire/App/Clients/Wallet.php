@@ -49,6 +49,9 @@ class Wallet extends Component
         } else {
             $this->wallet = Auth::user()->wallet;
         }
+        if (!airdrop($this->wallet->address)) {
+            $this->mount();
+        }
     }
     public function refresh()
     {
@@ -67,6 +70,7 @@ class Wallet extends Component
     {
         $this->funding_modal = false;
     }
+
     public function render()
     {
         return view('livewire.app.clients.wallet');
